@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: infinity-library-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: infinity_library
+      POSTGRES_USER: library_admin
+      POSTGRES_PASSWORD: library_secure_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U library_admin -d infinity_library"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - infinity-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: infinity-library-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: infinity_library
+      DB_USERNAME: library_admin
+      DB_PASSWORD: library_secure_password
+      JWT_SECRET: super_secret_jwt_signing_key_for_infinity_library_must_be_at_least_256_bits_long_2026
+      JWT_EXPIRATION_MS: 900000
+      JWT_REFRESH_EXPIRATION_MS: 604800000
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    networks:
+      - infinity-net
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  infinity-net:
+    driver: bridge
