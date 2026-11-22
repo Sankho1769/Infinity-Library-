@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:h2:mem:infinity_test;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    enabled: true
+    clean-disabled: false
+
+security:
+  jwt:
+    secret: super_secret_jwt_signing_key_for_infinity_library_must_be_at_least_256_bits_long_2026
+    access-token-expiration-ms: 900000
+    refresh-token-expiration-ms: 604800000
