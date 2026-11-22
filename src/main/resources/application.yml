@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: infinity-library
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:prod}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 25
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Security JWT Settings
+security:
+  jwt:
+    secret: ${JWT_SECRET:super_secret_jwt_signing_key_for_infinity_library_must_be_at_least_256_bits_long_2026}
+    access-token-expiration-ms: ${JWT_EXPIRATION_MS:900000}
+    # 15 minutes
+    refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+    # 7 days
+
+# Springdoc OpenAPI / Swagger UI Configuration
+springdoc:
+  api-docs:
+    path: /api/docs
+  swagger-ui:
+    path: /swagger-ui.html
+    custom-css: /swagger-ui/custom.css
+    operations-sorter: alpha
+    tags-sorter: alpha
+    display-request-duration: true
+
+# Spring Boot Actuator Observability
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: ADMIN
