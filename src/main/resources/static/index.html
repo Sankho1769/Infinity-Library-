@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Infinity Library — Intuitive digital catalog, circulation desk, and patron self-service system.">
-  <title>Infinity Library — Central Management Platform</title>
+  <meta name="description" content="Infinity Library — Unified digital platform for patrons, librarians, and administrative leadership.">
+  <title>Infinity Library — Unified Management Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,7 +18,8 @@
       --navy-surface: #103C59;
       --navy-dark: #072233;
       --neon-lime: #B9F12F;
-      --lime-glow: rgba(185, 241, 47, 0.28);
+      --lime-glow: rgba(185, 241, 47, 0.35);
+      --lime-soft: rgba(185, 241, 47, 0.12);
       --off-white: #F4F2EC;
       --surface-white: #FFFFFF;
       --surface-muted: #EAE7DE;
@@ -33,14 +34,21 @@
       --success-bg: #E3F7EB;
       --warning: #D97706;
       --warning-bg: #FEF3C7;
+      --info: #0284C7;
+      --info-bg: #E0F2FE;
       --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
       --radius-full: 9999px;
-      --shadow-sm: 0 2px 8px rgba(11, 48, 72, 0.04);
-      --shadow-md: 0 6px 20px rgba(11, 48, 72, 0.08);
-      --shadow-lg: 0 14px 40px rgba(11, 48, 72, 0.12);
-      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-xs: 0 1px 3px rgba(11, 48, 72, 0.05);
+      --shadow-sm: 0 4px 12px rgba(11, 48, 72, 0.06);
+      --shadow-md: 0 8px 24px rgba(11, 48, 72, 0.09);
+      --shadow-lg: 0 16px 48px rgba(11, 48, 72, 0.14);
+      --shadow-glow: 0 0 24px var(--lime-glow);
+      --transition-fast: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-smooth: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-bounce: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,6 +62,26 @@
       overflow-x: hidden;
       padding-bottom: env(safe-area-inset-bottom);
       -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* Ambient animated background mesh */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      right: -10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(185, 241, 47, 0.07) 0%, rgba(42, 83, 68, 0.04) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: ambientFloat 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-60px, 80px) scale(1.15); }
     }
 
     .tabular-nums { font-variant-numeric: tabular-nums; }
@@ -64,10 +92,22 @@
       outline-offset: 2px;
     }
 
-    /* Sidebar Navigation */
+    /* Canvas Confetti Layer */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99999;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR NAVIGATION (Responsive with animated glow)
+       ========================================================================== */
     .app-sidebar {
-      width: 280px;
-      background: var(--deep-navy);
+      width: 290px;
+      background: linear-gradient(180deg, var(--deep-navy) 0%, var(--navy-dark) 100%);
       color: var(--off-white);
       display: flex;
       flex-direction: column;
@@ -77,31 +117,39 @@
       top: 0;
       height: 100vh;
       z-index: 100;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: var(--transition-smooth);
+      box-shadow: 4px 0 24px rgba(7, 34, 51, 0.15);
     }
 
     .sidebar-brand {
       padding: 1.5rem 1.4rem;
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.95rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
     }
     .brand-symbol {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       background: var(--neon-lime);
       color: var(--deep-navy);
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       font-weight: 800;
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 16px var(--lime-glow);
+      box-shadow: 0 0 20px var(--lime-glow);
+      animation: symbolPulse 4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes symbolPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 16px var(--lime-glow); }
+      50% { transform: scale(1.05); box-shadow: 0 0 28px var(--lime-glow); }
     }
     .brand-meta h1 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       line-height: 1.1;
@@ -110,14 +158,59 @@
     .brand-tagline {
       font-size: 0.72rem;
       color: var(--neon-lime);
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
+    }
+
+    /* Role Indicator Badge in Sidebar */
+    .role-profile-badge {
+      margin: 1rem 1rem 0.25rem;
+      padding: 0.85rem 1rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: var(--transition-smooth);
+    }
+    .role-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--primary-teal);
+      color: var(--neon-lime);
+      font-weight: 800;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--neon-lime);
+      box-shadow: 0 0 10px var(--lime-glow);
+      flex-shrink: 0;
+      transition: var(--transition-bounce);
+    }
+    .role-info { flex: 1; overflow: hidden; }
+    .role-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .role-subtitle {
+      font-size: 0.7rem;
+      color: var(--neon-lime);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .sidebar-nav {
       flex: 1;
-      padding: 1.25rem 0.85rem;
+      padding: 1rem 0.85rem;
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
@@ -125,11 +218,14 @@
     }
     .nav-label {
       font-size: 0.68rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-subtle);
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 0.85rem 0.75rem 0.35rem;
+      padding: 0.95rem 0.75rem 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .nav-item {
       display: flex;
@@ -143,122 +239,127 @@
       font-weight: 600;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: var(--transition);
+      transition: var(--transition-fast);
       min-height: 46px;
+      position: relative;
+      overflow: hidden;
+    }
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--neon-lime);
+      opacity: 0;
+      transition: var(--transition-fast);
+      border-radius: 0 4px 4px 0;
     }
     .nav-item:hover {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.07);
       color: #FFFFFF;
+      transform: translateX(3px);
     }
     .nav-item.active {
       background: var(--primary-teal);
       color: #FFFFFF;
       border: 1px solid rgba(185, 241, 47, 0.35);
-      box-shadow: 0 4px 14px rgba(42, 83, 68, 0.4);
+      box-shadow: 0 4px 16px rgba(42, 83, 68, 0.45);
     }
+    .nav-item.active::before { opacity: 1; }
     .nav-item.active .nav-icon {
       color: var(--neon-lime);
+      transform: scale(1.15);
     }
     .nav-icon {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 24px;
+      transition: var(--transition-bounce);
     }
     .nav-badge {
       margin-left: auto;
       font-size: 0.72rem;
       font-weight: 700;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.14);
       color: #FFFFFF;
       padding: 0.15rem 0.55rem;
       border-radius: var(--radius-full);
+      transition: var(--transition-fast);
     }
     .nav-badge.active-alert {
       background: var(--neon-lime);
       color: var(--deep-navy);
+      font-weight: 800;
+      box-shadow: 0 0 10px var(--lime-glow);
     }
 
     .sidebar-footer {
-      padding: 1.25rem;
+      padding: 1.15rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       background: var(--navy-dark);
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-    }
-    .active-session-card {
-      display: flex;
-      align-items: center;
       gap: 0.75rem;
     }
-    .session-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary-teal);
-      color: var(--neon-lime);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      border: 2px solid var(--neon-lime);
-      flex-shrink: 0;
-    }
-    .session-info { flex: 1; overflow: hidden; }
-    .session-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      color: #FFFFFF;
-    }
-    .session-role {
-      font-size: 0.72rem;
-      color: var(--neon-lime);
-      font-weight: 600;
-    }
 
-    .switch-mode-btn {
+    /* Switch Persona Buttons in Sidebar */
+    .persona-switch-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .persona-btn {
       width: 100%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: var(--off-white);
-      padding: 0.65rem 0.85rem;
-      border-radius: var(--radius-md);
-      font-size: 0.82rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #CAD5CF;
+      padding: 0.6rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
       font-weight: 700;
       font-family: inherit;
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: var(--transition);
-      min-height: 44px;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+      min-height: 40px;
     }
-    .switch-mode-btn:hover {
+    .persona-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .persona-btn.active-persona {
       background: var(--neon-lime);
       color: var(--deep-navy);
       border-color: var(--neon-lime);
-      box-shadow: 0 0 12px var(--lime-glow);
+      box-shadow: 0 0 14px var(--lime-glow);
+      font-weight: 800;
     }
 
-    /* Main Content Area */
+    /* ==========================================================================
+       MAIN APP CONTAINER & HEADER
+       ========================================================================== */
     .app-main {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-width: 0;
       background: var(--off-white);
+      position: relative;
+      z-index: 1;
     }
 
     .top-header {
-      background: var(--surface-white);
-      min-height: 72px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      min-height: 74px;
       padding: 0.75rem 2rem;
       display: flex;
       align-items: center;
@@ -267,7 +368,7 @@
       position: sticky;
       top: 0;
       z-index: 90;
-      gap: 1rem;
+      gap: 1.25rem;
       flex-wrap: wrap;
     }
 
@@ -278,14 +379,20 @@
     }
     .mobile-menu-toggle {
       display: none;
-      background: transparent;
+      background: var(--surface-muted);
       border: none;
-      font-size: 1.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 1.4rem;
       cursor: pointer;
       color: var(--deep-navy);
       padding: 0.5rem;
       min-height: 44px;
       min-width: 44px;
+      transition: var(--transition-fast);
+    }
+    .mobile-menu-toggle:hover {
+      background: var(--primary-teal);
+      color: #FFFFFF;
     }
 
     .header-breadcrumb {
@@ -296,7 +403,53 @@
       font-weight: 600;
     }
     .header-breadcrumb span { color: var(--text-muted); }
-    .header-breadcrumb strong { color: var(--deep-navy); font-size: 1.1rem; }
+    .header-breadcrumb strong {
+      color: var(--deep-navy);
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    /* Top Segmented Persona Controller (The 3 Parts) */
+    .persona-segmented-control {
+      display: inline-flex;
+      background: var(--surface-muted);
+      padding: 4px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      box-shadow: inset 0 1px 3px rgba(11, 48, 72, 0.06);
+    }
+    .persona-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      transition: var(--transition-smooth);
+      white-space: nowrap;
+    }
+    .persona-tab:hover {
+      color: var(--deep-navy);
+    }
+    .persona-tab.active {
+      background: var(--deep-navy);
+      color: var(--neon-lime);
+      box-shadow: 0 2px 10px rgba(11, 48, 72, 0.2);
+    }
+    .persona-tab.active.patron-tab {
+      background: var(--primary-teal);
+      color: #FFFFFF;
+    }
+    .persona-tab.active.admin-tab {
+      background: #78350F;
+      color: #FEF3C7;
+    }
 
     .header-actions {
       display: flex;
@@ -305,51 +458,34 @@
       flex-wrap: wrap;
     }
 
-    .top-role-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--teal-subtle);
-      border: 1px solid rgba(42, 83, 68, 0.25);
-      color: var(--primary-teal);
-      padding: 0.45rem 0.9rem;
-      border-radius: var(--radius-full);
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-    .top-role-pill .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-    }
-
     .cmd-trigger-btn {
       display: flex;
       align-items: center;
       gap: 0.65rem;
-      background: var(--off-white);
+      background: var(--surface-white);
       border: 1.5px solid var(--border-color);
-      padding: 0.55rem 1rem;
+      padding: 0.55rem 1.1rem;
       border-radius: var(--radius-full);
       font-size: 0.88rem;
       color: var(--text-muted);
       cursor: pointer;
       font-family: inherit;
-      transition: var(--transition);
+      transition: var(--transition-smooth);
       min-height: 42px;
+      box-shadow: var(--shadow-xs);
     }
     .cmd-trigger-btn:hover {
       border-color: var(--primary-teal);
       background: #FFFFFF;
-      box-shadow: 0 0 0 3px rgba(42, 83, 68, 0.08);
+      box-shadow: 0 0 0 3px rgba(42, 83, 68, 0.1);
       color: var(--deep-navy);
+      transform: translateY(-1px);
     }
     .kbd-shortcut {
-      background: var(--surface-white);
+      background: var(--off-white);
       border: 1px solid var(--border-color);
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
       font-weight: 700;
@@ -357,141 +493,336 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
 
-    .api-docs-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--deep-navy);
-      color: var(--neon-lime);
-      border: 1px solid var(--neon-lime);
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-full);
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: var(--transition);
-      min-height: 42px;
-    }
-    .api-docs-link:hover {
-      background: var(--neon-lime);
-      color: var(--deep-navy);
-      box-shadow: 0 0 14px var(--lime-glow);
-    }
-
     /* Content Area */
     .content-body {
-      padding: 2rem;
+      padding: 2.2rem;
       flex: 1;
-      max-width: 1300px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
     }
 
-    /* Hero Banner */
+    /* ==========================================================================
+       ANIMATIONS & TRANSITIONS
+       ========================================================================== */
+    .animate-fadeInUp {
+      animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-stagger-1 { animation-delay: 0.05s; }
+    .animate-stagger-2 { animation-delay: 0.1s; }
+    .animate-stagger-3 { animation-delay: 0.15s; }
+    .animate-stagger-4 { animation-delay: 0.2s; }
+
+    /* Animated Hero Banners */
     .hero-banner {
-      background: linear-gradient(135deg, var(--deep-navy) 0%, var(--primary-teal) 100%);
       color: var(--off-white);
-      padding: 2.2rem;
+      padding: 2.4rem;
       border-radius: var(--radius-lg);
       margin-bottom: 2rem;
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(185, 241, 47, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: var(--transition-smooth);
+    }
+    .hero-patron {
+      background: linear-gradient(135deg, #103C59 0%, #1A372D 60%, #2A5344 100%);
+      border-color: rgba(185, 241, 47, 0.25);
+    }
+    .hero-librarian {
+      background: linear-gradient(135deg, var(--deep-navy) 0%, var(--primary-teal) 100%);
+      border-color: rgba(185, 241, 47, 0.25);
+    }
+    .hero-admin {
+      background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #451A03 100%);
+      border-color: rgba(251, 191, 36, 0.3);
     }
     .hero-banner::after {
       content: '∞';
       position: absolute;
-      right: -20px;
-      bottom: -60px;
-      font-size: 16rem;
+      right: -25px;
+      bottom: -70px;
+      font-size: 18rem;
       font-weight: 900;
-      color: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.04);
       line-height: 1;
       pointer-events: none;
+      transition: var(--transition-smooth);
     }
+    .hero-banner:hover::after {
+      transform: scale(1.08) rotate(4deg);
+    }
+
     .hero-title {
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       font-weight: 800;
       margin-bottom: 0.5rem;
       letter-spacing: -0.02em;
     }
     .hero-desc {
-      font-size: 0.98rem;
-      max-width: 720px;
-      opacity: 0.95;
+      font-size: 1rem;
+      max-width: 760px;
+      opacity: 0.94;
       line-height: 1.6;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.5rem;
     }
     .hero-tags {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.65rem;
       flex-wrap: wrap;
     }
     .hero-tag {
       font-size: 0.78rem;
       font-weight: 700;
-      padding: 0.35rem 0.85rem;
+      padding: 0.35rem 0.9rem;
       border-radius: var(--radius-full);
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      transition: var(--transition-fast);
+    }
+    .hero-tag:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
     }
     .hero-tag.highlight {
       background: var(--neon-lime);
       color: var(--deep-navy);
       border: none;
+      box-shadow: 0 0 14px var(--lime-glow);
+    }
+    .hero-tag.gold {
+      background: #FBBF24;
+      color: #78350F;
+      border: none;
     }
 
-    /* Friendly Quick Actions Grid */
+    /* ==========================================================================
+       HOLOGRAPHIC DIGITAL LIBRARY CARD (Normal User / Patron)
+       ========================================================================== */
+    .digital-pass-card {
+      background: linear-gradient(135deg, var(--deep-navy) 0%, #124364 50%, #1A372D 100%);
+      color: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 2.2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1.5px solid rgba(185, 241, 47, 0.3);
+      margin-bottom: 2.2rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-bounce);
+    }
+    .digital-pass-card:hover {
+      transform: translateY(-4px) scale(1.008);
+      box-shadow: 0 20px 60px rgba(11, 48, 72, 0.22);
+    }
+    .digital-pass-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(185, 241, 47, 0.08) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(185, 241, 47, 0.08) 55%,
+        transparent 70%
+      );
+      transform: rotate(30deg);
+      animation: holoShimmer 7s infinite ease-in-out;
+      pointer-events: none;
+    }
+    @keyframes holoShimmer {
+      0% { transform: translateY(-100%) rotate(30deg); }
+      100% { transform: translateY(100%) rotate(30deg); }
+    }
+
+    .pass-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .pass-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-lime);
+    }
+    .pass-chip {
+      width: 44px;
+      height: 32px;
+      background: linear-gradient(135deg, #FDE68A 0%, #D97706 100%);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .pass-chip::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(0,0,0,0.25);
+      border-radius: 3px;
+    }
+
+    .pass-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .pass-user-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .pass-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--neon-lime);
+      color: var(--deep-navy);
+      font-size: 1.6rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px var(--lime-glow);
+      flex-shrink: 0;
+      border: 3px solid rgba(255, 255, 255, 0.4);
+    }
+    .pass-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.01em;
+    }
+    .pass-id {
+      font-size: 0.88rem;
+      color: #CAD5CF;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .pass-quota-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      padding: 1.15rem 1.4rem;
+      min-width: 280px;
+      backdrop-filter: blur(8px);
+    }
+    .pass-quota-title {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .pass-quota-track {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+    .pass-quota-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #1E874B, var(--neon-lime));
+      border-radius: var(--radius-full);
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 12px var(--lime-glow);
+    }
+
+    /* ==========================================================================
+       QUICK ACTION CARDS & KPI METRICS (Animated Micro-interactions)
+       ========================================================================== */
     .quick-actions-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.2rem;
     }
     .quick-action-card {
       background: var(--surface-white);
       border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem 1.4rem;
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.5rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.15rem;
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-bounce);
       box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .quick-action-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--neon-lime);
+      opacity: 0;
+      transition: var(--transition-fast);
     }
     .quick-action-card:hover {
-      border-color: var(--primary-teal);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-md);
-      background: #FFFFFF;
+      border-color: var(--primary-teal);
+    }
+    .quick-action-card:hover::after { opacity: 1; }
+    .quick-action-card:active {
+      transform: scale(0.97);
     }
     .qa-icon-wrap {
-      width: 44px;
-      height: 44px;
+      width: 50px;
+      height: 50px;
       border-radius: var(--radius-md);
       background: var(--teal-subtle);
       color: var(--primary-teal);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       flex-shrink: 0;
+      transition: var(--transition-bounce);
     }
     .quick-action-card:hover .qa-icon-wrap {
       background: var(--neon-lime);
       color: var(--deep-navy);
+      transform: scale(1.1) rotate(6deg);
     }
     .qa-text h4 {
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 1rem;
+      font-weight: 800;
       color: var(--deep-navy);
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.2rem;
     }
     .qa-text p {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
+      line-height: 1.4;
     }
 
     /* KPI Metrics Cards Grid */
@@ -499,24 +830,25 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.25rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.2rem;
     }
     .metric-card {
       background: var(--surface-white);
       border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.4rem;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
       box-shadow: var(--shadow-sm);
-      transition: var(--transition);
+      transition: var(--transition-bounce);
       position: relative;
       overflow: hidden;
       cursor: pointer;
     }
     .metric-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-md);
       border-color: var(--primary-teal);
     }
+    .metric-card:active { transform: scale(0.98); }
     .metric-card::before {
       content: '';
       position: absolute;
@@ -525,10 +857,12 @@
       right: 0;
       height: 4px;
       background: var(--primary-teal);
+      transition: var(--transition-fast);
     }
     .metric-card.alert-top::before { background: var(--warning); }
     .metric-card.success-top::before { background: var(--neon-lime); }
     .metric-card.danger-top::before { background: var(--danger); }
+    .metric-card.info-top::before { background: var(--info); }
 
     .metric-header {
       display: flex;
@@ -538,21 +872,22 @@
     }
     .metric-title {
       font-size: 0.82rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .metric-value {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 800;
       color: var(--deep-navy);
       letter-spacing: -0.03em;
       line-height: 1;
       margin-bottom: 0.35rem;
+      transition: var(--transition-fast);
     }
     .metric-subtitle {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       font-weight: 500;
     }
@@ -560,22 +895,26 @@
     /* Views / Panes */
     .view-pane {
       display: none;
-      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .view-pane.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .view-pane.active {
+      display: block;
+      animation: paneEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes paneEnter {
+      from { opacity: 0; transform: translateY(10px) scale(0.995); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     /* Cards & Panels */
     .panel-card {
       background: var(--surface-white);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
+      border-radius: var(--radius-xl);
+      padding: 2.2rem;
       box-shadow: var(--shadow-sm);
-      margin-bottom: 2rem;
+      margin-bottom: 2.2rem;
+      position: relative;
+      transition: var(--transition-smooth);
     }
     .panel-header {
       display: flex;
@@ -588,20 +927,20 @@
       gap: 1rem;
     }
     .panel-header h3 {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--deep-navy);
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
     }
     .panel-header p {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
       margin-top: 0.25rem;
     }
 
-    /* Friendly Form Elements */
+    /* Form Elements */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -618,21 +957,21 @@
       color: var(--deep-navy);
     }
     .form-field input, .form-field select, .form-field textarea {
-      padding: 0.8rem 1rem;
+      padding: 0.85rem 1.1rem;
       border: 1.5px solid var(--border-color);
       border-radius: var(--radius-md);
       font-family: inherit;
       font-size: 0.95rem;
       background: #FCFCFA;
       color: var(--text-main);
-      transition: var(--transition);
-      min-height: 46px;
+      transition: var(--transition-fast);
+      min-height: 48px;
     }
     .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
       outline: none;
       border-color: var(--primary-teal);
       background: #FFFFFF;
-      box-shadow: 0 0 0 3px rgba(42, 83, 68, 0.12);
+      box-shadow: 0 0 0 4px rgba(42, 83, 68, 0.12);
     }
     .form-hint {
       font-size: 0.78rem;
@@ -649,41 +988,44 @@
       flex-wrap: wrap;
     }
 
-    /* Quick Fill Bar for forms */
+    /* Quick Fill Bar */
     .quick-fill-bar {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       flex-wrap: wrap;
       margin-bottom: 1.5rem;
-      padding: 0.85rem 1.15rem;
+      padding: 0.95rem 1.25rem;
       background: var(--off-white);
       border-radius: var(--radius-md);
       border: 1px dashed var(--border-color);
+      transition: var(--transition-fast);
     }
     .quick-fill-label {
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.82rem;
+      font-weight: 800;
       color: var(--primary-teal);
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
     }
     .quick-fill-pill {
       background: var(--surface-white);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-full);
-      padding: 0.3rem 0.75rem;
-      font-size: 0.78rem;
-      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 700;
       color: var(--deep-navy);
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-bounce);
     }
     .quick-fill-pill:hover {
       background: var(--neon-lime);
       border-color: var(--neon-lime);
       color: var(--deep-navy);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 4px 12px var(--lime-glow);
     }
 
     /* Buttons */
@@ -692,19 +1034,20 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
+      padding: 0.8rem 1.6rem;
       border-radius: var(--radius-md);
       font-family: inherit;
       font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: var(--transition);
+      transition: var(--transition-bounce);
       text-decoration: none;
-      min-height: 46px;
+      min-height: 48px;
     }
+    .btn:active { transform: scale(0.96); }
     .btn-sm {
-      padding: 0.45rem 0.9rem;
+      padding: 0.45rem 0.95rem;
       font-size: 0.82rem;
       min-height: 38px;
       border-radius: var(--radius-sm);
@@ -717,7 +1060,7 @@
     .btn-primary:hover {
       background: var(--teal-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(42, 83, 68, 0.35);
+      box-shadow: 0 8px 24px rgba(42, 83, 68, 0.35);
     }
     .btn-lime {
       background: var(--neon-lime);
@@ -727,16 +1070,17 @@
     .btn-lime:hover {
       background: #C8F747;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(185, 241, 47, 0.4);
+      box-shadow: 0 8px 24px rgba(185, 241, 47, 0.45);
     }
     .btn-secondary {
-      background: transparent;
+      background: var(--surface-white);
       border: 1.5px solid var(--border-color);
       color: var(--text-main);
     }
     .btn-secondary:hover {
       background: var(--surface-muted);
       border-color: var(--deep-navy);
+      transform: translateY(-2px);
     }
     .btn-danger {
       background: var(--danger-bg);
@@ -746,15 +1090,26 @@
     .btn-danger:hover {
       background: var(--danger);
       color: #FFFFFF;
+      transform: translateY(-2px);
+    }
+    .btn-amber {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid rgba(217, 119, 6, 0.25);
+    }
+    .btn-amber:hover {
+      background: var(--warning);
+      color: #FFFFFF;
+      transform: translateY(-2px);
     }
 
-    /* Search & Filter Toolbar */
+    /* Filter Toolbar */
     .filter-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
       flex-wrap: wrap;
     }
     .search-box-wrap {
@@ -764,27 +1119,28 @@
     }
     .search-box-wrap input {
       width: 100%;
-      padding: 0.75rem 1rem 0.75rem 2.6rem;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
       border: 1.5px solid var(--border-color);
       border-radius: var(--radius-full);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-family: inherit;
       background: var(--surface-white);
-      transition: var(--transition);
-      min-height: 44px;
+      transition: var(--transition-fast);
+      min-height: 48px;
+      box-shadow: var(--shadow-xs);
     }
     .search-box-wrap input:focus {
       outline: none;
       border-color: var(--primary-teal);
-      box-shadow: 0 0 0 3px rgba(42, 83, 68, 0.1);
+      box-shadow: 0 0 0 4px rgba(42, 83, 68, 0.1);
     }
     .search-box-icon {
       position: absolute;
-      left: 1rem;
+      left: 1.1rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
-      font-size: 1rem;
+      font-size: 1.1rem;
       pointer-events: none;
     }
     .filter-chips {
@@ -795,67 +1151,69 @@
     .filter-chip {
       background: var(--surface-white);
       border: 1.5px solid var(--border-color);
-      padding: 0.4rem 0.9rem;
+      padding: 0.45rem 1rem;
       border-radius: var(--radius-full);
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: var(--text-muted);
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-bounce);
     }
     .filter-chip:hover {
       border-color: var(--primary-teal);
       color: var(--primary-teal);
+      transform: translateY(-2px);
     }
     .filter-chip.active {
       background: var(--primary-teal);
       border-color: var(--primary-teal);
       color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(42, 83, 68, 0.25);
     }
 
-    /* Book Cards Grid */
+    /* Book Cards Grid with Card Entrance Stagger */
     .books-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
+      gap: 1.6rem;
     }
     .book-card {
       background: var(--surface-white);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      padding: 1.6rem;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: var(--transition);
+      transition: var(--transition-bounce);
       position: relative;
     }
     .book-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
       border-color: var(--primary-teal);
     }
     .book-badge-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.95rem;
     }
     .genre-pill {
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--primary-teal);
       background: var(--teal-subtle);
-      padding: 0.25rem 0.65rem;
+      padding: 0.28rem 0.75rem;
       border-radius: var(--radius-full);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .avail-badge {
       font-size: 0.78rem;
-      font-weight: 700;
-      padding: 0.25rem 0.7rem;
+      font-weight: 800;
+      padding: 0.28rem 0.75rem;
       border-radius: var(--radius-full);
       display: inline-flex;
       align-items: center;
@@ -872,23 +1230,23 @@
       border: 1px solid rgba(224, 49, 55, 0.2);
     }
     .book-title {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: var(--deep-navy);
       line-height: 1.3;
       margin-bottom: 0.35rem;
     }
     .book-author {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.95rem;
       font-weight: 500;
     }
     .book-desc {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 1.25rem;
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -896,11 +1254,11 @@
     }
     .book-meta-footer {
       border-top: 1px dashed var(--border-color);
-      padding-top: 1rem;
+      padding-top: 1.1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-subtle);
       gap: 0.5rem;
       flex-wrap: wrap;
@@ -911,193 +1269,64 @@
       align-items: center;
     }
 
-    /* Active Loans Table (Super Friendly Return Desk) */
+    /* Tables (Clean & Responsive) */
     .table-responsive {
       width: 100%;
       overflow-x: auto;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
       margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-xs);
     }
     .friendly-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       background: var(--surface-white);
     }
     .friendly-table th {
       background: var(--off-white);
       color: var(--deep-navy);
-      font-weight: 700;
-      padding: 0.9rem 1.2rem;
+      font-weight: 800;
+      padding: 1rem 1.3rem;
       border-bottom: 1.5px solid var(--border-color);
       text-transform: uppercase;
       font-size: 0.75rem;
       letter-spacing: 0.05em;
     }
     .friendly-table td {
-      padding: 1rem 1.2rem;
+      padding: 1rem 1.3rem;
       border-bottom: 1px solid var(--border-light);
       color: var(--text-main);
       vertical-align: middle;
+      transition: var(--transition-fast);
     }
-    .friendly-table tr:last-child td {
-      border-bottom: none;
-    }
-    .friendly-table tr:hover {
-      background: #FAFAF7;
-    }
+    .friendly-table tr:last-child td { border-bottom: none; }
+    .friendly-table tr:hover td { background: #FAFAF7; }
 
-    /* Digital Library Card (Patron View) */
-    .patron-card-widget {
-      background: linear-gradient(135deg, var(--deep-navy) 0%, #154566 100%);
-      color: #FFFFFF;
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      box-shadow: var(--shadow-md);
-      border: 1px solid rgba(185, 241, 47, 0.25);
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-    .patron-card-left {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-    }
-    .patron-card-avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--neon-lime);
-      color: var(--deep-navy);
-      font-size: 1.4rem;
+    /* Admin Member Status Pills */
+    .status-pill {
+      font-size: 0.75rem;
       font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 16px var(--lime-glow);
-    }
-    .patron-card-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 0.2rem;
-    }
-    .patron-card-sub {
-      font-size: 0.85rem;
-      color: #CAD5CF;
-    }
-    .patron-meter-wrap {
-      min-width: 260px;
-    }
-    .meter-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-    .meter-track {
-      height: 10px;
-      background: rgba(255, 255, 255, 0.15);
+      padding: 0.25rem 0.65rem;
       border-radius: var(--radius-full);
-      overflow: hidden;
-    }
-    .meter-fill {
-      height: 100%;
-      background: var(--neon-lime);
-      border-radius: var(--radius-full);
-      transition: width 0.4s ease;
-    }
-
-    /* Privacy Simulator Visual Card */
-    .privacy-card {
-      background: var(--surface-white);
-      border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .privacy-simulation-box {
-      background: var(--off-white);
-      border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+      gap: 0.35rem;
     }
-    .sim-user {
-      text-align: center;
+    .status-active {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(30, 135, 75, 0.2);
     }
-    .sim-avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.2rem;
-      margin: 0 auto 0.5rem;
-    }
-    .sim-arrow {
-      font-size: 1.8rem;
+    .status-suspended {
+      background: var(--danger-bg);
       color: var(--danger);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .sim-outcome {
-      background: var(--surface-white);
-      border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1rem 1.25rem;
-      margin-top: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      border: 1px solid rgba(217, 56, 58, 0.2);
     }
 
-    /* Skeletons */
-    .skeleton-card {
-      background: var(--surface-white);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
-    .skeleton-line {
-      height: 14px;
-      border-radius: 4px;
-      background: #E5E1D5;
-      animation: skeletonPulse 1.5s ease-in-out infinite;
-    }
-    .skeleton-title { height: 22px; width: 75%; }
-    .skeleton-subtitle { height: 14px; width: 45%; }
-    .skeleton-text { height: 36px; width: 100%; }
-
-    @keyframes skeletonPulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .skeleton-line { animation: none; opacity: 0.8; }
-      .view-pane { animation: none; }
-      * { transition-duration: 0.01ms !important; }
-    }
-
-    /* Floating Toasts */
+    /* Toast Container */
     .toast-container {
       position: fixed;
       bottom: 24px;
@@ -1105,45 +1334,46 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      z-index: 1000;
+      z-index: 10000;
       pointer-events: none;
     }
     .toast {
       background: var(--deep-navy);
       color: var(--off-white);
-      padding: 0.95rem 1.4rem;
+      padding: 1rem 1.5rem;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-lg);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border-left: 4px solid var(--neon-lime);
-      animation: slideInToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-left: 5px solid var(--neon-lime);
+      animation: slideInToast 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: auto;
-      max-width: 460px;
+      max-width: 480px;
     }
     .toast.error { border-left-color: var(--danger); }
     .toast-undo-btn {
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: var(--neon-lime);
-      padding: 0.3rem 0.75rem;
-      border-radius: 4px;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
       font-family: inherit;
       font-size: 0.8rem;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-bounce);
     }
     .toast-undo-btn:hover {
       background: var(--neon-lime);
       color: var(--deep-navy);
+      transform: scale(1.05);
     }
     @keyframes slideInToast {
-      from { transform: translateX(100%); opacity: 0; }
+      from { transform: translateX(110%); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
     }
 
@@ -1151,13 +1381,14 @@
     .cmd-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(7, 34, 51, 0.65);
-      backdrop-filter: blur(4px);
+      background: rgba(7, 34, 51, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 10000;
       display: none;
       align-items: flex-start;
       justify-content: center;
-      padding-top: 12vh;
+      padding-top: 14vh;
     }
     .cmd-modal-backdrop.open {
       display: flex;
@@ -1165,17 +1396,22 @@
     }
     .cmd-modal {
       background: var(--surface-white);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-xl);
       width: 100%;
-      max-width: 580px;
+      max-width: 600px;
       box-shadow: var(--shadow-lg);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
     .cmd-search-header {
-      padding: 1.15rem 1.4rem;
+      padding: 1.25rem 1.5rem;
       display: flex;
       align-items: center;
       gap: 0.85rem;
@@ -1187,69 +1423,140 @@
       border: none;
       background: transparent;
       font-family: inherit;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--text-main);
-      font-weight: 600;
+      font-weight: 700;
     }
     .cmd-search-header input:focus { outline: none; }
     .cmd-list {
-      max-height: 340px;
+      max-height: 360px;
       overflow-y: auto;
-      padding: 0.65rem;
+      padding: 0.75rem;
     }
     .cmd-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1rem;
+      padding: 0.85rem 1.15rem;
       border-radius: var(--radius-md);
       cursor: pointer;
-      font-size: 0.92rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 700;
       color: var(--deep-navy);
-      transition: background 0.15s;
+      transition: var(--transition-fast);
     }
     .cmd-item:hover {
       background: var(--surface-muted);
       color: var(--primary-teal);
+      transform: translateX(4px);
     }
     .cmd-footer {
-      padding: 0.75rem 1.25rem;
+      padding: 0.85rem 1.5rem;
       background: var(--off-white);
       border-top: 1px solid var(--border-color);
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       display: flex;
       justify-content: space-between;
     }
 
-    /* Empty State Styling */
+    /* Mobile Bottom Navigation Bar */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-color);
+      padding: 0.5rem 1rem env(safe-area-inset-bottom);
+      z-index: 95;
+      justify-content: space-around;
+      box-shadow: 0 -4px 20px rgba(11, 48, 72, 0.08);
+    }
+    .bottom-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-fast);
+      min-height: 44px;
+    }
+    .bottom-nav-btn.active {
+      color: var(--primary-teal);
+    }
+    .bottom-nav-btn .b-icon {
+      font-size: 1.25rem;
+    }
+
+    /* Empty States */
     .empty-state {
       text-align: center;
-      padding: 3rem 1.5rem;
+      padding: 3.5rem 1.5rem;
       color: var(--text-muted);
       grid-column: 1 / -1;
     }
     .empty-icon {
-      font-size: 3rem;
+      font-size: 3.2rem;
       margin-bottom: 0.75rem;
-      opacity: 0.8;
+      animation: floatingIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatingIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
     .empty-state h4 {
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 1.25rem;
+      font-weight: 800;
       color: var(--deep-navy);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.45rem;
     }
     .empty-state p {
-      font-size: 0.9rem;
-      max-width: 420px;
-      margin: 0 auto 1.25rem;
-      line-height: 1.5;
+      font-size: 0.92rem;
+      max-width: 440px;
+      margin: 0 auto 1.4rem;
+      line-height: 1.6;
     }
 
-    /* Responsive */
-    @media (max-width: 900px) {
+    /* Skeleton loaders */
+    .skeleton-card {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+    }
+    .skeleton-line {
+      height: 14px;
+      border-radius: 4px;
+      background: #E5E1D5;
+      animation: skeletonPulse 1.5s ease-in-out infinite;
+    }
+    .skeleton-title { height: 24px; width: 75%; }
+    .skeleton-subtitle { height: 16px; width: 45%; }
+    .skeleton-text { height: 40px; width: 100%; }
+
+    @keyframes skeletonPulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1024px) {
       .app-sidebar {
         position: fixed;
         left: 0;
@@ -1257,21 +1564,32 @@
         bottom: 0;
         transform: translateX(-100%);
       }
-      .app-sidebar.mobile-open { transform: translateX(0); }
+      .app-sidebar.mobile-open {
+        transform: translateX(0);
+      }
       .mobile-menu-toggle { display: block; }
       .top-header { padding: 0.75rem 1.25rem; }
-      .content-body { padding: 1.25rem; }
+      .content-body { padding: 1.5rem 1.25rem 5rem; }
+      .mobile-bottom-nav { display: flex; }
     }
-    @media (max-width: 600px) {
-      .hero-banner { padding: 1.5rem; }
-      .hero-title { font-size: 1.4rem; }
-      .panel-card { padding: 1.25rem; }
+
+    @media (max-width: 640px) {
+      .hero-banner { padding: 1.6rem; }
+      .hero-title { font-size: 1.45rem; }
+      .panel-card { padding: 1.35rem; }
+      .persona-tab span { display: none; }
+      .persona-tab { padding: 0.5rem 0.75rem; }
       .form-actions button { width: 100%; }
-      .patron-card-widget { padding: 1.25rem; }
+      .digital-pass-card { padding: 1.5rem; }
+      .pass-name { font-size: 1.25rem; }
+      .pass-quota-box { min-width: 100%; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Confetti Canvas Layer -->
+  <canvas id="confetti-canvas"></canvas>
 
   <!-- LEFT NAVIGATION SIDEBAR -->
   <aside class="app-sidebar" id="app-sidebar">
@@ -1283,59 +1601,37 @@
       </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <div class="nav-label">Circulation Desk</div>
-      <div class="nav-item active" onclick="switchView('dashboard')">
-        <span class="nav-icon">📊</span>
-        <span>Dashboard</span>
+    <!-- Active Persona Profile Badge in Sidebar -->
+    <div class="role-profile-badge">
+      <div class="role-avatar" id="avatar-initials">LJ</div>
+      <div class="role-info">
+        <div class="role-title" id="session-user-name">Librarian Jane</div>
+        <div class="role-subtitle" id="session-user-role">Librarian Staff</div>
       </div>
-      <div class="nav-item" onclick="switchView('issue')">
-        <span class="nav-icon">📤</span>
-        <span>Issue Book</span>
-      </div>
-      <div class="nav-item" onclick="switchView('return')">
-        <span class="nav-icon">📥</span>
-        <span>Return Desk</span>
-        <span class="nav-badge" id="sidebar-loans-count">0</span>
-      </div>
-      <div class="nav-item" onclick="switchView('add-book')">
-        <span class="nav-icon">📖</span>
-        <span>Register New Book</span>
-      </div>
-      <div class="nav-item" onclick="switchView('new-member')">
-        <span class="nav-icon">🎓</span>
-        <span>Register Member</span>
-      </div>
+    </div>
 
-      <div class="nav-label">Collection & Patron</div>
-      <div class="nav-item" onclick="switchView('catalog')">
-        <span class="nav-icon">📚</span>
-        <span>Browse Catalog</span>
-        <span class="nav-badge" id="sidebar-catalog-count">0</span>
-      </div>
-      <div class="nav-item" onclick="switchView('patron')">
-        <span class="nav-icon">👤</span>
-        <span>Patron Portal</span>
-      </div>
-      <div class="nav-item" onclick="switchView('security')">
-        <span class="nav-icon">🛡️</span>
-        <span>Data Protection</span>
-        <span class="nav-badge active-alert">SEC</span>
-      </div>
+    <!-- Dynamic Role-Specific Navigation Links -->
+    <nav class="sidebar-nav" id="sidebar-nav-container">
+      <!-- Injected via JavaScript based on active persona -->
     </nav>
 
+    <!-- Sidebar Footer with Persona Quick Toggles -->
     <div class="sidebar-footer">
-      <div class="active-session-card">
-        <div class="session-avatar" id="avatar-initials">LJ</div>
-        <div class="session-info">
-          <div class="session-name" id="session-user-name">Librarian Jane</div>
-          <div class="session-role" id="session-user-role">Staff Account</div>
-        </div>
+      <div class="nav-label" style="padding: 0 0 0.5rem; color: #879B92;">Switch Role</div>
+      <div class="persona-switch-group">
+        <button class="persona-btn" id="btn-switch-patron" onclick="switchPersona('MEMBER')">
+          <span>🎓 Normal User (Patron)</span>
+          <span style="font-size:0.75rem; opacity:0.8;">Elena</span>
+        </button>
+        <button class="persona-btn active-persona" id="btn-switch-librarian" onclick="switchPersona('LIBRARIAN')">
+          <span>📚 Librarian (Staff)</span>
+          <span style="font-size:0.75rem; opacity:0.8;">Jane</span>
+        </button>
+        <button class="persona-btn" id="btn-switch-admin" onclick="switchPersona('ADMIN')">
+          <span>⚡ Administrator</span>
+          <span style="font-size:0.75rem; opacity:0.8;">Director</span>
+        </button>
       </div>
-      <button class="switch-mode-btn" onclick="toggleRole()">
-        <span>⇄</span>
-        <span id="switch-role-label">Switch to Patron (Elena)</span>
-      </button>
     </div>
   </aside>
 
@@ -1348,130 +1644,289 @@
           <span>Infinity Central</span> / <strong id="breadcrumb-current">Dashboard</strong>
         </div>
       </div>
+
+      <!-- Segmented Persona Controller (Top Center) -->
+      <div class="persona-segmented-control" role="tablist" aria-label="Select User Role">
+        <button class="persona-tab patron-tab" id="tab-role-patron" onclick="switchPersona('MEMBER')">
+          🎓 <span>Normal User</span>
+        </button>
+        <button class="persona-tab active" id="tab-role-librarian" onclick="switchPersona('LIBRARIAN')">
+          📚 <span>Librarian</span>
+        </button>
+        <button class="persona-tab admin-tab" id="tab-role-admin" onclick="switchPersona('ADMIN')">
+          ⚡ <span>Admin</span>
+        </button>
+      </div>
+
       <div class="header-actions">
-        <div class="top-role-pill" id="top-role-indicator">
-          <span class="dot"></span>
-          <span id="top-role-text">Viewing as: <strong>Librarian Jane (Staff)</strong></span>
-        </div>
         <button class="cmd-trigger-btn" onclick="openCommandModal()">
-          <span>🔍 Quick Search or Jump...</span>
+          <span>🔍 Quick Search...</span>
           <span class="kbd-shortcut">Ctrl K</span>
         </button>
-        <a href="/swagger-ui.html" target="_blank" class="api-docs-link">
-          <span>API Reference</span> ↗
-        </a>
       </div>
     </header>
 
     <div class="content-body">
 
-      <!-- VIEW 1: DASHBOARD -->
-      <section class="view-pane active" id="view-dashboard">
-        <div class="hero-banner">
-          <h2 class="hero-title">Central Library Management Platform</h2>
-          <p class="hero-desc">Welcome to your central library workspace. Check shelf availability, issue and return books with a single click, manage reservations, and review patron borrowing limits.</p>
-          <div class="hero-tags">
-            <span class="hero-tag highlight">Central Library Collection</span>
-            <span class="hero-tag">Live Shelf Inventory</span>
-            <span class="hero-tag">Automated Waitlist Queue</span>
-            <span class="hero-tag">Protected Patron Privacy</span>
+      <!-- ================================================================== -->
+      <!-- PART 1: NORMAL USER (PATRON) VIEWS                                 -->
+      <!-- ================================================================== -->
+      
+      <!-- PATRON DASHBOARD & PASS -->
+      <section class="view-pane" id="view-patron-home">
+        <!-- Holographic Digital Library Pass Card -->
+        <div class="digital-pass-card animate-fadeInUp">
+          <div class="pass-header">
+            <div class="pass-brand">
+              <span>∞ Central Library Membership</span>
+            </div>
+            <div class="pass-chip"></div>
+          </div>
+          <div class="pass-body">
+            <div class="pass-user-info">
+              <div class="pass-avatar">ER</div>
+              <div>
+                <div class="pass-name">Dr. Elena Rostova</div>
+                <div class="pass-id">CARD ID: MEM-2026-0001 &bull; Active Patron</div>
+              </div>
+            </div>
+            <div class="pass-quota-box">
+              <div class="pass-quota-title">
+                <span>Borrowing Quota</span>
+                <span id="patron-quota-text" class="tabular-nums">0 / 5 Books Borrowed</span>
+              </div>
+              <div class="pass-quota-track">
+                <div class="pass-quota-bar" id="patron-quota-bar" style="width: 0%;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Friendly Quick Action Hub -->
-        <div class="quick-actions-bar">
+        <!-- Patron Metric Counters -->
+        <div class="metrics-row animate-fadeInUp animate-stagger-1">
+          <div class="metric-card success-top" onclick="switchView('patron-loans')">
+            <div class="metric-header">
+              <span class="metric-title">Active Borrowed Books</span>
+              <span>📖</span>
+            </div>
+            <div class="metric-value tabular-nums" id="patron-kpi-loans">0</div>
+            <div class="metric-subtitle">Currently in your possession</div>
+          </div>
+          <div class="metric-card info-top" onclick="switchView('patron-reservations')">
+            <div class="metric-header">
+              <span class="metric-title">Queued Holds</span>
+              <span>🔖</span>
+            </div>
+            <div class="metric-value tabular-nums" id="patron-kpi-holds">0</div>
+            <div class="metric-subtitle">Awaiting shelf return for pickup</div>
+          </div>
+          <div class="metric-card alert-top" onclick="switchView('patron-fines')">
+            <div class="metric-header">
+              <span class="metric-title">Outstanding Fines</span>
+              <span>💳</span>
+            </div>
+            <div class="metric-value tabular-nums" id="patron-kpi-fines">$0.00</div>
+            <div class="metric-subtitle">Clear standing balance</div>
+          </div>
+        </div>
+
+        <!-- Patron Quick Navigation Actions -->
+        <div class="quick-actions-bar animate-fadeInUp animate-stagger-2">
+          <div class="quick-action-card" onclick="switchView('catalog')">
+            <div class="qa-icon-wrap">📚</div>
+            <div class="qa-text">
+              <h4>Browse Catalog</h4>
+              <p>Explore titles & place holds</p>
+            </div>
+          </div>
+          <div class="quick-action-card" onclick="switchView('patron-loans')">
+            <div class="qa-icon-wrap">📖</div>
+            <div class="qa-text">
+              <h4>My Borrowed Books</h4>
+              <p>Due dates & early return</p>
+            </div>
+          </div>
+          <div class="quick-action-card" onclick="switchView('patron-reservations')">
+            <div class="qa-icon-wrap">🔖</div>
+            <div class="qa-text">
+              <h4>Hold Queue</h4>
+              <p>Check waitlist status</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Recent Books in Patron View -->
+        <div class="panel-card animate-fadeInUp animate-stagger-3">
+          <div class="panel-header">
+            <div>
+              <h3>📚 Recommended Acquisitions</h3>
+              <p>Popular library volumes available for checkout or reservation</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="switchView('catalog')">View Full Catalog ↗</button>
+          </div>
+          <div class="books-grid" id="patron-featured-books">
+            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div></div>
+            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PATRON VIEW: MY BORROWED BOOKS -->
+      <section class="view-pane" id="view-patron-loans">
+        <div class="panel-card animate-fadeInUp">
+          <div class="panel-header">
+            <div>
+              <h3>📖 My Active Borrowed Books</h3>
+              <p>Volumes currently issued to Dr. Elena Rostova with due date tracking</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="switchView('catalog')">+ Borrow Another Book</button>
+          </div>
+          <div class="books-grid" id="patron-loans-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- PATRON VIEW: MY RESERVATIONS -->
+      <section class="view-pane" id="view-patron-reservations">
+        <div class="panel-card animate-fadeInUp">
+          <div class="panel-header">
+            <div>
+              <h3>🔖 My Hold Queue & Reservations</h3>
+              <p>Track your position in line for volumes currently borrowed by others</p>
+            </div>
+          </div>
+          <div class="books-grid" id="patron-res-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- PATRON VIEW: FINES & STATEMENT -->
+      <section class="view-pane" id="view-patron-fines">
+        <div class="panel-card animate-fadeInUp">
+          <div class="panel-header">
+            <div>
+              <h3>💳 Account Balance & Fine Statement</h3>
+              <p>Transparent itemization of overdue assessments and payment history</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="friendly-table" id="patron-fines-table">
+              <thead>
+                <tr>
+                  <th>Assessment ID</th>
+                  <th>Reason / Details</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Accrual Date</th>
+                </tr>
+              </thead>
+              <tbody id="patron-fines-tbody">
+                <tr><td colspan="5" style="text-align:center; padding:2rem;">No outstanding penalties on file. Your account is in good standing!</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================================================================== -->
+      <!-- PART 2: LIBRARIAN VIEWS                                            -->
+      <!-- ================================================================== -->
+
+      <!-- LIBRARIAN DASHBOARD -->
+      <section class="view-pane active" id="view-librarian-dashboard">
+        <div class="hero-banner hero-librarian animate-fadeInUp">
+          <h2 class="hero-title">Librarian Circulation & Catalog Workspace</h2>
+          <p class="hero-desc">Manage physical inventory accessions, rapid book checkouts, one-click return desk processing, and patron registrations with automated borrowing limits.</p>
+          <div class="hero-tags">
+            <span class="hero-tag highlight">Circulation Desk Active</span>
+            <span class="hero-tag">Live Physical Inventory</span>
+            <span class="hero-tag">Instant Barcode Returns</span>
+          </div>
+        </div>
+
+        <div class="quick-actions-bar animate-fadeInUp animate-stagger-1">
           <div class="quick-action-card" onclick="switchView('issue')">
             <div class="qa-icon-wrap">📤</div>
             <div class="qa-text">
               <h4>Issue Book</h4>
-              <p>Check out books to patrons</p>
+              <p>Check out items to patrons</p>
             </div>
           </div>
           <div class="quick-action-card" onclick="switchView('return')">
             <div class="qa-icon-wrap">📥</div>
             <div class="qa-text">
               <h4>Return Desk</h4>
-              <p>1-Click return active loans</p>
+              <p>1-Click return & overdues</p>
             </div>
           </div>
-          <div class="quick-action-card" onclick="switchView('catalog')">
-            <div class="qa-icon-wrap">📚</div>
+          <div class="quick-action-card" onclick="switchView('add-book')">
+            <div class="qa-icon-wrap">📖</div>
             <div class="qa-text">
-              <h4>Browse Catalog</h4>
-              <p>Search & reserve titles</p>
+              <h4>Register Book</h4>
+              <p>Add bibliographic titles & copies</p>
             </div>
           </div>
-          <div class="quick-action-card" onclick="switchView('patron')">
-            <div class="qa-icon-wrap">👤</div>
+          <div class="quick-action-card" onclick="switchView('new-member')">
+            <div class="qa-icon-wrap">🎓</div>
             <div class="qa-text">
-              <h4>Patron Portal</h4>
-              <p>Personal loan history & card</p>
+              <h4>Register Member</h4>
+              <p>Enroll new library patrons</p>
             </div>
           </div>
         </div>
 
-        <div class="metrics-row">
+        <div class="metrics-row animate-fadeInUp animate-stagger-2">
           <div class="metric-card success-top" onclick="switchView('catalog')">
-            <div class="metric-header">
-              <span class="metric-title">Available Copies</span>
-              <span>🟢</span>
-            </div>
-            <div class="metric-value tabular-nums" id="kpi-available">-</div>
-            <div class="metric-subtitle">Ready on library shelves (Click to browse)</div>
+            <div class="metric-header"><span class="metric-title">Available Copies</span><span>🟢</span></div>
+            <div class="metric-value tabular-nums" id="lib-kpi-available">-</div>
+            <div class="metric-subtitle">Ready on library shelves</div>
           </div>
           <div class="metric-card" onclick="switchView('catalog')">
-            <div class="metric-header">
-              <span class="metric-title">Total Holdings</span>
-              <span>📦</span>
-            </div>
-            <div class="metric-value tabular-nums" id="kpi-total">-</div>
-            <div class="metric-subtitle">Cataloged physical inventory copies</div>
+            <div class="metric-header"><span class="metric-title">Total Holdings</span><span>📦</span></div>
+            <div class="metric-value tabular-nums" id="lib-kpi-total">-</div>
+            <div class="metric-subtitle">Cataloged physical inventory</div>
           </div>
           <div class="metric-card alert-top" onclick="switchView('return')">
-            <div class="metric-header">
-              <span class="metric-title">Active Loans</span>
-              <span>📤</span>
-            </div>
-            <div class="metric-value tabular-nums" id="kpi-loans">-</div>
-            <div class="metric-subtitle">Currently borrowed (Click to manage)</div>
+            <div class="metric-header"><span class="metric-title">Active Loans</span><span>📤</span></div>
+            <div class="metric-value tabular-nums" id="lib-kpi-loans">-</div>
+            <div class="metric-subtitle">Currently checked out</div>
           </div>
-          <div class="metric-card danger-top" onclick="switchView('patron')">
-            <div class="metric-header">
-              <span class="metric-title">Queued Holds</span>
-              <span>🔖</span>
-            </div>
-            <div class="metric-value tabular-nums" id="kpi-reserved">-</div>
-            <div class="metric-subtitle">Held for pickup reservation windows</div>
+          <div class="metric-card danger-top" onclick="switchView('catalog')">
+            <div class="metric-header"><span class="metric-title">Queued Holds</span><span>🔖</span></div>
+            <div class="metric-value tabular-nums" id="lib-kpi-reserved">-</div>
+            <div class="metric-subtitle">Waiting in hold pickup window</div>
           </div>
         </div>
 
-        <div class="panel-card">
+        <div class="panel-card animate-fadeInUp animate-stagger-3">
           <div class="panel-header">
             <div>
               <h3>📚 Recently Cataloged Titles</h3>
-              <p>Explore recently acquired volumes and live on-shelf copy availability</p>
+              <p>Recent acquisitions with physical shelf copy inventory</p>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="switchView('catalog')">View All Books ↗</button>
+            <button class="btn btn-secondary btn-sm" onclick="switchView('catalog')">View All Collections ↗</button>
           </div>
-          <div class="books-grid" id="dashboard-recent-books">
-            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div><div class="skeleton-line skeleton-text"></div></div>
-            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div><div class="skeleton-line skeleton-text"></div></div>
+          <div class="books-grid" id="librarian-recent-books">
+            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div></div>
+            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div></div>
           </div>
         </div>
       </section>
 
-      <!-- VIEW 2: ISSUE PHYSICAL BOOK COPY -->
+      <!-- LIBRARIAN VIEW: ISSUE BOOK -->
       <section class="view-pane" id="view-issue">
-        <div class="panel-card">
+        <div class="panel-card animate-fadeInUp">
           <div class="panel-header">
             <div>
               <h3>📤 Issue Book Copy</h3>
-              <p>Select an available book and a registered patron, or type a barcode</p>
+              <p>Select an available volume and patron or scan a physical barcode</p>
             </div>
             <span class="hero-tag highlight">Instant Shelf Check</span>
           </div>
 
-          <!-- Quick Fill Demo Bar -->
           <div class="quick-fill-bar">
             <span class="quick-fill-label">⚡ 1-Click Quick Select:</span>
             <button class="quick-fill-pill" onclick="quickFillIssue('CA-CPY-001', 1, 'Clean Architecture')">Clean Architecture &rarr; Dr. Elena (#1)</button>
@@ -1483,7 +1938,7 @@
             <div class="form-field">
               <label for="issue-book-select">Choose Available Book *</label>
               <select id="issue-book-select" onchange="onIssueBookSelected(this.value)">
-                <option value="">-- Select a Book from Collection --</option>
+                <option value="">-- Choose Available Book --</option>
               </select>
               <span class="form-hint">Select a title to automatically load its physical copy barcode</span>
             </div>
@@ -1491,13 +1946,13 @@
             <div class="form-field">
               <label for="issue-barcode">Physical Copy Barcode *</label>
               <input type="text" id="issue-barcode" placeholder="e.g. CA-CPY-001" value="CA-CPY-001">
-              <span class="form-hint">Accession barcode printed on the book item</span>
+              <span class="form-hint">Accession barcode printed on the book cover</span>
             </div>
 
             <div class="form-field">
-              <label for="issue-member-select">Choose Registered Member *</label>
+              <label for="issue-member-select">Choose Registered Patron *</label>
               <select id="issue-member-select" onchange="onIssueMemberSelected(this.value)">
-                <option value="">-- Select Registered Patron --</option>
+                <option value="">-- Choose Registered Patron --</option>
               </select>
               <span class="form-hint">Choose patron to auto-fill member ID</span>
             </div>
@@ -1509,15 +1964,6 @@
             </div>
           </div>
 
-          <div style="margin-top:1.5rem; background: var(--off-white); border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid var(--border-color);">
-            <h4 style="font-size:0.92rem; font-weight:700; margin-bottom:0.5rem; color:var(--deep-navy);">📋 Automated Circulation Rules:</h4>
-            <ul style="font-size:0.86rem; color:var(--text-muted); line-height:1.6; padding-left:1.25rem;">
-              <li>Ensures the physical copy is on-shelf and not held for another member's pickup.</li>
-              <li>Verifies patron account is active and borrowing total is under quota (maximum 5 concurrent loans).</li>
-              <li>Records standard 14-day checkout with automatic due date computation.</li>
-            </ul>
-          </div>
-
           <div class="form-actions">
             <button class="btn btn-secondary" onclick="resetIssueForm()">Reset Form</button>
             <button class="btn btn-primary" onclick="handleIssueSubmit()">Confirm & Issue Book</button>
@@ -1525,9 +1971,9 @@
         </div>
       </section>
 
-      <!-- VIEW 3: PROCESS RETURN & OVERDUE -->
+      <!-- LIBRARIAN VIEW: RETURN DESK -->
       <section class="view-pane" id="view-return">
-        <div class="panel-card">
+        <div class="panel-card animate-fadeInUp">
           <div class="panel-header">
             <div>
               <h3>📥 Book Return Desk</h3>
@@ -1536,9 +1982,8 @@
             <button class="btn btn-secondary btn-sm" onclick="loadReturnDeskLoans()">↻ Refresh Active Loans</button>
           </div>
 
-          <!-- Super Friendly 1-Click Active Loans Table -->
           <div style="margin-bottom: 2rem;">
-            <h4 style="font-size:1rem; font-weight:800; color:var(--deep-navy); margin-bottom:0.85rem;">Currently Checked Out Books (Awaiting Return)</h4>
+            <h4 style="font-size:1.05rem; font-weight:800; color:var(--deep-navy); margin-bottom:0.95rem;">Currently Checked Out Books (Awaiting Return)</h4>
             <div class="table-responsive">
               <table class="friendly-table" id="return-loans-table">
                 <thead>
@@ -1548,7 +1993,7 @@
                     <th>Borrowed By</th>
                     <th>Due Date</th>
                     <th>Status</th>
-                    <th>Quick Action</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody id="return-loans-tbody">
@@ -1559,20 +2004,18 @@
           </div>
 
           <div style="border-top: 1px dashed var(--border-color); padding-top: 1.5rem;">
-            <h4 style="font-size:0.95rem; font-weight:700; color:var(--deep-navy); margin-bottom:0.5rem;">Scan Physical Barcode Manually</h4>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Or scan/type an accession barcode directly from the physical book:</p>
-            
+            <h4 style="font-size:0.95rem; font-weight:700; color:var(--deep-navy); margin-bottom:0.5rem;">Manual Barcode Scan</h4>
             <div style="display:flex; gap:1rem; flex-wrap:wrap; max-width:600px;">
-              <input type="text" id="return-barcode" placeholder="e.g. CA-CPY-001" style="flex:1; padding:0.75rem 1rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; font-size:0.95rem; min-height:46px;">
+              <input type="text" id="return-barcode" placeholder="Scan or type barcode (e.g. CA-CPY-001)" style="flex:1; padding:0.75rem 1rem; border:1.5px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; min-height:46px;">
               <button class="btn btn-primary" onclick="handleReturnSubmit()">Process Return</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- VIEW 4: REGISTER NEW BOOK TITLE -->
+      <!-- LIBRARIAN VIEW: REGISTER BOOK -->
       <section class="view-pane" id="view-add-book">
-        <div class="panel-card">
+        <div class="panel-card animate-fadeInUp">
           <div class="panel-header">
             <div>
               <h3>📖 Register New Book Title</h3>
@@ -1625,13 +2068,13 @@
         </div>
       </section>
 
-      <!-- VIEW 5: REGISTER NEW MEMBER -->
+      <!-- LIBRARIAN VIEW: REGISTER MEMBER -->
       <section class="view-pane" id="view-new-member">
-        <div class="panel-card">
+        <div class="panel-card animate-fadeInUp">
           <div class="panel-header">
             <div>
-              <h3>🎓 Register New Library Member</h3>
-              <p>Create a patron borrowing account with unique membership credentials</p>
+              <h3>🎓 Register New Library Patron</h3>
+              <p>Enroll a new patron account with borrowing privileges</p>
             </div>
           </div>
 
@@ -1662,9 +2105,223 @@
         </div>
       </section>
 
-      <!-- VIEW 6: BROWSE COMPLETE CATALOG -->
+
+      <!-- ================================================================== -->
+      <!-- PART 3: ADMIN (DIRECTOR) VIEWS                                     -->
+      <!-- ================================================================== -->
+
+      <!-- ADMIN EXECUTIVE OVERVIEW -->
+      <section class="view-pane" id="view-admin-dashboard">
+        <div class="hero-banner hero-admin animate-fadeInUp">
+          <h2 class="hero-title">Executive Administration & Policy Suite</h2>
+          <p class="hero-desc">Institutional governance, operational policy configuration, patron privilege enforcement, and financial audit reconciliation.</p>
+          <div class="hero-tags">
+            <span class="hero-tag gold">Executive Director Mode</span>
+            <span class="hero-tag">Policy Configuration</span>
+            <span class="hero-tag">Financial Reconciliation</span>
+          </div>
+        </div>
+
+        <div class="quick-actions-bar animate-fadeInUp animate-stagger-1">
+          <div class="quick-action-card" onclick="switchView('admin-policies')">
+            <div class="qa-icon-wrap" style="background:#FEF3C7; color:#D97706;">⚙️</div>
+            <div class="qa-text">
+              <h4>Policy Controls</h4>
+              <p>Configure fines, quotas & loan days</p>
+            </div>
+          </div>
+          <div class="quick-action-card" onclick="switchView('admin-members')">
+            <div class="qa-icon-wrap" style="background:#E0F2FE; color:#0284C7;">👥</div>
+            <div class="qa-text">
+              <h4>Member Governance</h4>
+              <p>Suspend or reactivate accounts</p>
+            </div>
+          </div>
+          <div class="quick-action-card" onclick="switchView('admin-reports')">
+            <div class="qa-icon-wrap" style="background:#DCFCE7; color:#16A34A;">📊</div>
+            <div class="qa-text">
+              <h4>Audit & Analytics</h4>
+              <p>Circulation volume & fine auditing</p>
+            </div>
+          </div>
+          <div class="quick-action-card" onclick="switchView('security')">
+            <div class="qa-icon-wrap" style="background:#FEE2E2; color:#DC2626;">🛡️</div>
+            <div class="qa-text">
+              <h4>Privacy Guard</h4>
+              <p>Verify data protection policy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Overview Metrics Row -->
+        <div class="metrics-row animate-fadeInUp animate-stagger-2">
+          <div class="metric-card success-top" onclick="switchView('admin-reports')">
+            <div class="metric-header"><span class="metric-title">Circulation Health</span><span>📈</span></div>
+            <div class="metric-value tabular-nums" id="adm-kpi-circ">-</div>
+            <div class="metric-subtitle">Total historical loan transactions</div>
+          </div>
+          <div class="metric-card alert-top" onclick="switchView('admin-reports')">
+            <div class="metric-header"><span class="metric-title">Overdue Penalties</span><span>💳</span></div>
+            <div class="metric-value tabular-nums" id="adm-kpi-fines">$0.00</div>
+            <div class="metric-subtitle">Total assessed library penalties</div>
+          </div>
+          <div class="metric-card info-top" onclick="switchView('admin-members')">
+            <div class="metric-header"><span class="metric-title">Enrolled Patrons</span><span>🎓</span></div>
+            <div class="metric-value tabular-nums" id="adm-kpi-members">-</div>
+            <div class="metric-subtitle">Active library memberships</div>
+          </div>
+          <div class="metric-card" onclick="switchView('admin-policies')">
+            <div class="metric-header"><span class="metric-title">Loan Period</span><span>⏱️</span></div>
+            <div class="metric-value tabular-nums" id="adm-kpi-duration">14d</div>
+            <div class="metric-subtitle">Institutional checkout window</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN VIEW: POLICY CONFIGURATION -->
+      <section class="view-pane" id="view-admin-policies">
+        <div class="panel-card animate-fadeInUp">
+          <div class="panel-header">
+            <div>
+              <h3>⚙️ Institutional Policy Controls</h3>
+              <p>Set system-wide circulation rules, overdue fine amounts, and maximum hold reservation pickup windows</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadAdminPolicies()">↻ Reload Current Settings</button>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="adm-policy-name">Institution Name *</label>
+              <input type="text" id="adm-policy-name" value="Infinity Central Academic Library">
+            </div>
+            <div class="form-field">
+              <label for="adm-policy-duration">Default Loan Duration (Days) *</label>
+              <input type="number" id="adm-policy-duration" min="1" max="90" value="14">
+              <span class="form-hint">Standard checkout period before a book becomes overdue</span>
+            </div>
+            <div class="form-field">
+              <label for="adm-policy-quota">Max Loans Per Member *</label>
+              <input type="number" id="adm-policy-quota" min="1" max="25" value="5">
+              <span class="form-hint">Maximum concurrent volumes a patron may borrow</span>
+            </div>
+            <div class="form-field">
+              <label for="adm-policy-rate">Daily Overdue Fine Rate ($) *</label>
+              <input type="number" step="0.25" id="adm-policy-rate" value="5.00">
+              <span class="form-hint">Penalty assessed per day overdue</span>
+            </div>
+            <div class="form-field">
+              <label for="adm-policy-maxfine">Maximum Penalty Cap Per Loan ($) *</label>
+              <input type="number" step="1.00" id="adm-policy-maxfine" value="500.00">
+              <span class="form-hint">Maximum ceiling for overdue fees per book</span>
+            </div>
+            <div class="form-field">
+              <label for="adm-policy-hold">Reservation Pickup Window (Hours) *</label>
+              <input type="number" id="adm-policy-hold" value="48">
+              <span class="form-hint">Time reserved copy is held on shelf before next waitlist transition</span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" onclick="saveAdminPolicies()">💾 Save & Apply Institutional Policies</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN VIEW: MEMBER GOVERNANCE -->
+      <section class="view-pane" id="view-admin-members">
+        <div class="panel-card animate-fadeInUp">
+          <div class="panel-header">
+            <div>
+              <h3>👥 Patron Membership Directory & Governance</h3>
+              <p>Audit patron account status, view active loan counts, and enforce administrative suspensions</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadAdminMembers()">↻ Refresh Directory</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="friendly-table" id="admin-members-table">
+              <thead>
+                <tr>
+                  <th>Member ID</th>
+                  <th>Legal Name</th>
+                  <th>Email</th>
+                  <th>Membership Number</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-members-tbody">
+                <tr><td colspan="6" style="text-align:center; padding:2rem;">Loading members directory...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN VIEW: REPORTS & ANALYTICS -->
+      <section class="view-pane" id="view-admin-reports">
+        <div class="panel-card animate-fadeInUp">
+          <div class="panel-header">
+            <div>
+              <h3>📊 Executive Analytics & Operational Audit</h3>
+              <p>Real-time circulation volume, fine revenue, and shelf inventory distributions</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadAdminReports()">↻ Refresh Audits</button>
+          </div>
+
+          <!-- Report Cards Grid -->
+          <div class="metrics-row" style="margin-bottom: 2rem;">
+            <div class="metric-card success-top">
+              <div class="metric-header"><span class="metric-title">Total Shelf Holdings</span><span>📚</span></div>
+              <div class="metric-value tabular-nums" id="rpt-total-copies">-</div>
+              <div class="metric-subtitle" id="rpt-avail-sub">- Available Now</div>
+            </div>
+            <div class="metric-card alert-top">
+              <div class="metric-header"><span class="metric-title">Active Out on Loan</span><span>📤</span></div>
+              <div class="metric-value tabular-nums" id="rpt-active-loans">-</div>
+              <div class="metric-subtitle" id="rpt-overdue-sub">- Overdue Items</div>
+            </div>
+            <div class="metric-card info-top">
+              <div class="metric-header"><span class="metric-title">Fines Accrued</span><span>💳</span></div>
+              <div class="metric-value tabular-nums" id="rpt-fines-accrued">$0.00</div>
+              <div class="metric-subtitle" id="rpt-fines-collected">$0.00 Collected</div>
+            </div>
+            <div class="metric-card danger-top">
+              <div class="metric-header"><span class="metric-title">Queued Waitlists</span><span>🔖</span></div>
+              <div class="metric-value tabular-nums" id="rpt-reserved-copies">-</div>
+              <div class="metric-subtitle">Held for pickup window</div>
+            </div>
+          </div>
+
+          <!-- Itemized Overdue Report Section -->
+          <div>
+            <h4 style="font-size:1.1rem; font-weight:800; color:var(--deep-navy); margin-bottom:1rem;">Overdue Loan Audit Log</h4>
+            <div class="table-responsive">
+              <table class="friendly-table" id="admin-overdue-table">
+                <thead>
+                  <tr>
+                    <th>Loan ID</th>
+                    <th>Book Title</th>
+                    <th>Barcode</th>
+                    <th>Borrower Name</th>
+                    <th>Days Overdue</th>
+                    <th>Accrued Fine</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-overdue-tbody">
+                  <tr><td colspan="6" style="text-align:center; padding:2rem;">All checked-out books are currently on schedule. Zero overdue items!</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- SHARED VIEW: COMPLETE CATALOG                                      -->
+      <!-- ================================================================== -->
       <section class="view-pane" id="view-catalog">
-        <div class="panel-card">
+        <div class="panel-card animate-fadeInUp">
           <div class="panel-header">
             <div>
               <h3>📚 Complete Library Collection</h3>
@@ -1673,7 +2330,6 @@
             <button class="btn btn-secondary btn-sm" onclick="loadCatalogHoldings()">↻ Refresh Collection</button>
           </div>
 
-          <!-- Instant Search & Category Filter Toolbar -->
           <div class="filter-toolbar">
             <div class="search-box-wrap">
               <span class="search-box-icon">🔍</span>
@@ -1688,91 +2344,17 @@
           </div>
 
           <div class="books-grid" id="full-catalog-grid">
-            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div><div class="skeleton-line skeleton-text"></div></div>
-            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div><div class="skeleton-line skeleton-text"></div></div>
+            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div></div>
+            <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-subtitle"></div></div>
           </div>
         </div>
       </section>
 
-      <!-- VIEW 7: PATRON SELF-SERVICE PORTAL -->
-      <section class="view-pane" id="view-patron">
-        
-        <!-- Digital Library Card Widget -->
-        <div class="patron-card-widget">
-          <div class="patron-card-left">
-            <div class="patron-card-avatar">ER</div>
-            <div>
-              <div class="patron-card-name">Dr. Elena Rostova</div>
-              <div class="patron-card-sub">Member #1 &bull; Status: <strong style="color:var(--neon-lime);">Active Patron</strong> &bull; Central Academic Library</div>
-            </div>
-          </div>
-          <div class="patron-meter-wrap">
-            <div class="meter-label-row">
-              <span>Borrowing Quota</span>
-              <span id="patron-meter-text">0 / 5 Books Borrowed</span>
-            </div>
-            <div class="meter-track">
-              <div class="meter-fill" id="patron-meter-bar" style="width: 0%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="metrics-row">
-          <div class="metric-card">
-            <div class="metric-header"><span class="metric-title">Active Borrowed Books</span><span>📖</span></div>
-            <div class="metric-value tabular-nums" id="patron-loan-count">0</div>
-            <div class="metric-subtitle">Currently in your possession</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-header"><span class="metric-title">Queued Holds</span><span>🔖</span></div>
-            <div class="metric-value tabular-nums" id="patron-res-count">0</div>
-            <div class="metric-subtitle">Awaiting shelf return</div>
-          </div>
-          <div class="metric-card success-top">
-            <div class="metric-header"><span class="metric-title">Outstanding Fines</span><span>💳</span></div>
-            <div class="metric-value tabular-nums" id="patron-fine-amount">$0.00</div>
-            <div class="metric-subtitle">Clear standing balance</div>
-          </div>
-        </div>
-
-        <div class="panel-card">
-          <div class="panel-header">
-            <div>
-              <h3>📖 My Borrowed Books</h3>
-              <p>Books currently issued to your library account</p>
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="switchView('catalog')">+ Browse Catalog to Borrow</button>
-          </div>
-          <div class="books-grid" id="patron-loans-grid">
-            <div class="empty-state">
-              <div class="empty-icon">📖</div>
-              <h4>No Active Loans</h4>
-              <p>You have not checked out any books yet. Browse the catalog to borrow titles.</p>
-              <button class="btn btn-primary" onclick="switchView('catalog')">Browse Catalog</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel-card">
-          <div class="panel-header">
-            <div>
-              <h3>🔖 My Active Reservations</h3>
-              <p>Holds placed for books currently borrowed by other members</p>
-            </div>
-          </div>
-          <div class="books-grid" id="patron-res-grid">
-            <div class="empty-state">
-              <div class="empty-icon">🔖</div>
-              <h4>No Active Reservations</h4>
-              <p>You have no pending holds in the queue.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- VIEW 8: PATRON PRIVACY & DATA PROTECTION -->
+      <!-- ================================================================== -->
+      <!-- SHARED VIEW: PRIVACY GUARD DEMO                                    -->
+      <!-- ================================================================== -->
       <section class="view-pane" id="view-security">
-        <div class="privacy-card">
+        <div class="panel-card animate-fadeInUp">
           <div class="panel-header">
             <div>
               <h3>🛡️ Patron Privacy & Data Protection</h3>
@@ -1781,40 +2363,42 @@
             <span class="hero-tag highlight">Privacy Guard Active</span>
           </div>
 
-          <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.6; margin-bottom:1.5rem;">
+          <p style="font-size:0.98rem; color:var(--text-muted); line-height:1.6; margin-bottom:1.5rem;">
             In academic and public libraries, reader confidentiality is a fundamental ethical standard. A patron's borrowing history and overdue records may only be accessed by authorized library staff or the patron themselves.
           </p>
 
-          <div class="privacy-simulation-box">
-            <div class="sim-user">
-              <div class="sim-avatar" style="background:var(--primary-teal); color:var(--neon-lime);">ER</div>
-              <strong style="color:var(--deep-navy);">Dr. Elena Rostova</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Patron Account (Member #1)</div>
+          <div style="background:var(--off-white); border-radius:var(--radius-lg); padding:2rem; border:1px solid var(--border-color); margin-bottom:1.5rem;">
+            <div style="display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; gap:1.5rem;">
+              <div style="text-align:center;">
+                <div style="width:56px; height:56px; border-radius:50%; background:var(--primary-teal); color:var(--neon-lime); font-size:1.3rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem;">ER</div>
+                <strong style="color:var(--deep-navy);">Dr. Elena Rostova</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">Patron Account (Member #1)</div>
+              </div>
+              <div style="font-size:2rem; color:var(--danger); display:flex; flex-direction:column; align-items:center;">
+                <span style="font-size:0.8rem; font-weight:800; color:var(--danger); margin-bottom:0.25rem;">Unauthorized Query</span>
+                <span>&rarr; &rarr; &rarr;</span>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:56px; height:56px; border-radius:50%; background:var(--deep-navy); color:#FFFFFF; font-size:1.3rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem;">MV</div>
+                <strong style="color:var(--deep-navy);">Marcus Vance</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">Confidential Records (Member #2)</div>
+              </div>
             </div>
-            <div class="sim-arrow">
-              <span style="font-size:0.8rem; font-weight:700; color:var(--danger); margin-bottom:0.2rem;">Cross-Patron Query Attempt</span>
-              <span>&rarr; &rarr; &rarr;</span>
-            </div>
-            <div class="sim-user">
-              <div class="sim-avatar" style="background:var(--deep-navy); color:#FFFFFF;">MV</div>
-              <strong style="color:var(--deep-navy);">Marcus Vance</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Confidential Records (Member #2)</div>
-            </div>
-          </div>
 
-          <div style="text-align:center; margin: 1.5rem 0;">
-            <button class="btn btn-lime" onclick="executePrivilegeSimulation()">
-              ⚡ Test Privacy Protection (Simulate Unauthorized Query)
-            </button>
-          </div>
+            <div style="text-align:center; margin-top:2rem;">
+              <button class="btn btn-lime" onclick="executePrivilegeSimulation()">
+                ⚡ Test Privacy Protection (Simulate Unauthorized Query)
+              </button>
+            </div>
 
-          <div class="sim-outcome" id="privacy-outcome-box" style="display:none;">
-            <span style="font-size:1.8rem;" id="privacy-outcome-icon">🛡️</span>
-            <div>
-              <h4 id="privacy-outcome-title" style="font-size:1.05rem; font-weight:800; color:var(--deep-navy); margin-bottom:0.25rem;">Privacy Guard Blocked Cross-Patron Access (403 Forbidden)</h4>
-              <p id="privacy-outcome-desc" style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">
-                The server verified that Elena (Member #1) cannot view Marcus's (Member #2) private loan records. The request was rejected with zero confidential data exposed.
-              </p>
+            <div id="privacy-outcome-box" style="display:none; margin-top:1.5rem; background:#FFFFFF; border-radius:var(--radius-md); padding:1.25rem 1.5rem; border:1.5px solid var(--border-color); align-items:center; gap:1rem;">
+              <span style="font-size:2rem;" id="privacy-outcome-icon">🛡️</span>
+              <div>
+                <h4 id="privacy-outcome-title" style="font-size:1.05rem; font-weight:800; color:var(--deep-navy); margin-bottom:0.25rem;">Privacy Guard Blocked Cross-Patron Access (403 Forbidden)</h4>
+                <p id="privacy-outcome-desc" style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">
+                  The system verified that Elena (Member #1) cannot view Marcus Vance's private circulation records. Access was cleanly denied with zero confidential data exposed.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -1822,6 +2406,11 @@
 
     </div>
   </div>
+
+  <!-- Mobile Bottom Navigation Bar (Thumb Accessible) -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <!-- Populated dynamically based on role -->
+  </nav>
 
   <!-- Command Palette Modal -->
   <div class="cmd-modal-backdrop" id="cmd-modal" onclick="closeCommandModal(event)">
@@ -1832,14 +2421,7 @@
         <span class="kbd-shortcut">ESC</span>
       </div>
       <div class="cmd-list" id="cmd-list">
-        <div class="cmd-item" onclick="navigateFromCmd('dashboard')"><span>📊 Dashboard Overview</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('issue')"><span>📤 Issue Physical Copy</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('return')"><span>📥 Return Desk (1-Click Return)</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('catalog')"><span>📚 Browse Collection Catalog</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('add-book')"><span>📖 Register New Book Title</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('new-member')"><span>🎓 Register New Member</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('patron')"><span>👤 Patron Portal & Library Card</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('security')"><span>🛡️ Data Protection Verification</span><span class="kbd-shortcut">Jump</span></div>
+        <!-- Populated dynamically -->
       </div>
       <div class="cmd-footer">
         <span>Use arrow keys to navigate</span>
@@ -1848,19 +2430,106 @@
     </div>
   </div>
 
-  <!-- Floating Toast Alerts -->
+  <!-- Floating Toast Notifications -->
   <div class="toast-container" id="toast-container"></div>
 
   <script>
-    let activeRole = 'LIBRARIAN'; // 'LIBRARIAN' or 'MEMBER'
-    let staffToken = null;
+    // =========================================================================
+    // GLOBAL STATE & ROLE DEFINITIONS (The 3 Parts)
+    // =========================================================================
+    let activeRole = 'LIBRARIAN'; // 'MEMBER', 'LIBRARIAN', or 'ADMIN'
     let memberToken = null;
+    let staffToken = null;
+    let adminToken = null;
+
     let allBooks = [];
     let allMembers = [];
     let activeLoansList = [];
     let catalogFilter = 'ALL';
 
-    // Toast with Undo Capability
+    const ROLES = {
+      MEMBER: {
+        id: 'MEMBER',
+        name: 'Dr. Elena Rostova',
+        roleLabel: 'Normal User (Patron)',
+        avatar: 'ER',
+        defaultView: 'patron-home'
+      },
+      LIBRARIAN: {
+        id: 'LIBRARIAN',
+        name: 'Librarian Jane',
+        roleLabel: 'Librarian Staff',
+        avatar: 'LJ',
+        defaultView: 'librarian-dashboard'
+      },
+      ADMIN: {
+        id: 'ADMIN',
+        name: 'Director Sarah Sterling',
+        roleLabel: 'Executive Director',
+        avatar: 'SS',
+        defaultView: 'admin-dashboard'
+      }
+    };
+
+    // =========================================================================
+    // DELIGHT & ANIMATION HELPERS (Confetti & Particle FX)
+    // =========================================================================
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#B9F12F', '#2A5344', '#0B3048', '#FBBF24', '#38BDF8'];
+
+      for (let i = 0; i < 65; i++) {
+        particles.push({
+          x: window.innerWidth * (0.3 + Math.random() * 0.4),
+          y: window.innerHeight * 0.4,
+          r: Math.random() * 6 + 4,
+          dx: (Math.random() - 0.5) * 12,
+          dy: (Math.random() - 1) * 12 - 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          dRot: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let activeCount = 0;
+
+        for (const p of particles) {
+          p.x += p.dx;
+          p.y += p.dy;
+          p.dy += 0.35; // gravity
+          p.rotation += p.dRot;
+          p.opacity -= 0.015;
+
+          if (p.opacity > 0) {
+            activeCount++;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 1.6);
+            ctx.restore();
+          }
+        }
+
+        if (activeCount > 0) {
+          requestAnimationFrame(render);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      render();
+    }
+
+    // Interactive Toast with Undo Capability
     function showToast(msg, isError = false, undoCallback = null) {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -1884,9 +2553,12 @@
       container.appendChild(toast);
       setTimeout(() => {
         if (toast.parentElement) toast.remove();
-      }, 5000);
+      }, 5200);
     }
 
+    // =========================================================================
+    // AUTHENTICATION & API DISPATCHER
+    // =========================================================================
     async function login(username, password) {
       try {
         const res = await fetch('/api/v1/auth/login', {
@@ -1905,11 +2577,15 @@
     async function ensureTokens() {
       if (!staffToken) staffToken = await login('librarian', 'Password@123');
       if (!memberToken) memberToken = await login('member_elena', 'Password@123');
+      if (!adminToken) adminToken = await login('admin', 'Password@123');
     }
 
     async function authFetch(url, options = {}) {
       await ensureTokens();
-      const token = activeRole === 'LIBRARIAN' ? staffToken : memberToken;
+      let token = staffToken;
+      if (activeRole === 'MEMBER') token = memberToken;
+      if (activeRole === 'ADMIN') token = adminToken;
+
       const headers = options.headers || {};
       if (token) headers['Authorization'] = 'Bearer ' + token;
       headers['Accept'] = 'application/json';
@@ -1923,6 +2599,171 @@
       return fetch(url, { ...options, headers });
     }
 
+    // =========================================================================
+    // PERSONA & ROLE SWITCHING (Part 1, Part 2, Part 3)
+    // =========================================================================
+    function switchPersona(newRole) {
+      activeRole = newRole;
+      const roleDef = ROLES[newRole];
+
+      // Update avatar & labels in sidebar
+      document.getElementById('avatar-initials').innerText = roleDef.avatar;
+      document.getElementById('session-user-name').innerText = roleDef.name;
+      document.getElementById('session-user-role').innerText = roleDef.roleLabel;
+
+      // Update sidebar quick switch buttons
+      document.getElementById('btn-switch-patron').classList.toggle('active-persona', newRole === 'MEMBER');
+      document.getElementById('btn-switch-librarian').classList.toggle('active-persona', newRole === 'LIBRARIAN');
+      document.getElementById('btn-switch-admin').classList.toggle('active-persona', newRole === 'ADMIN');
+
+      // Update top segmented control
+      document.getElementById('tab-role-patron').classList.toggle('active', newRole === 'MEMBER');
+      document.getElementById('tab-role-librarian').classList.toggle('active', newRole === 'LIBRARIAN');
+      document.getElementById('tab-role-admin').classList.toggle('active', newRole === 'ADMIN');
+
+      // Re-render role-specific navigation menus
+      renderSidebarNav(newRole);
+      renderMobileBottomNav(newRole);
+
+      // Trigger celebration particle
+      triggerConfetti();
+      showToast('Switched to: ' + roleDef.name + ' (' + roleDef.roleLabel + ')');
+
+      // Switch to default view for role
+      switchView(roleDef.defaultView);
+    }
+
+    function renderSidebarNav(role) {
+      const container = document.getElementById('sidebar-nav-container');
+      if (role === 'MEMBER') {
+        container.innerHTML = `
+          <div class="nav-label">Patron Self-Service</div>
+          <div class="nav-item active" onclick="switchView('patron-home')">
+            <span class="nav-icon">🎓</span>
+            <span>Digital Pass & Home</span>
+          </div>
+          <div class="nav-item" onclick="switchView('catalog')">
+            <span class="nav-icon">📚</span>
+            <span>Browse Collection</span>
+            <span class="nav-badge" id="nav-badge-catalog">3</span>
+          </div>
+          <div class="nav-item" onclick="switchView('patron-loans')">
+            <span class="nav-icon">📖</span>
+            <span>My Borrowed Books</span>
+            <span class="nav-badge" id="nav-badge-loans">0</span>
+          </div>
+          <div class="nav-item" onclick="switchView('patron-reservations')">
+            <span class="nav-icon">🔖</span>
+            <span>My Reservations</span>
+          </div>
+          <div class="nav-item" onclick="switchView('patron-fines')">
+            <span class="nav-icon">💳</span>
+            <span>Fines & Balance</span>
+          </div>
+          <div class="nav-item" onclick="switchView('security')">
+            <span class="nav-icon">🛡️</span>
+            <span>Privacy Guard</span>
+            <span class="nav-badge active-alert">SEC</span>
+          </div>
+        `;
+      } else if (role === 'LIBRARIAN') {
+        container.innerHTML = `
+          <div class="nav-label">Circulation Desk</div>
+          <div class="nav-item active" onclick="switchView('librarian-dashboard')">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </div>
+          <div class="nav-item" onclick="switchView('issue')">
+            <span class="nav-icon">📤</span>
+            <span>Issue Book</span>
+          </div>
+          <div class="nav-item" onclick="switchView('return')">
+            <span class="nav-icon">📥</span>
+            <span>Return Desk</span>
+            <span class="nav-badge" id="nav-badge-returns">0</span>
+          </div>
+          <div class="nav-item" onclick="switchView('add-book')">
+            <span class="nav-icon">📖</span>
+            <span>Register Book</span>
+          </div>
+          <div class="nav-item" onclick="switchView('new-member')">
+            <span class="nav-icon">🎓</span>
+            <span>Register Member</span>
+          </div>
+          <div class="nav-label">Collection & Privacy</div>
+          <div class="nav-item" onclick="switchView('catalog')">
+            <span class="nav-icon">📚</span>
+            <span>Browse Catalog</span>
+            <span class="nav-badge" id="nav-badge-catalog">3</span>
+          </div>
+          <div class="nav-item" onclick="switchView('security')">
+            <span class="nav-icon">🛡️</span>
+            <span>Data Protection</span>
+            <span class="nav-badge active-alert">SEC</span>
+          </div>
+        `;
+      } else if (role === 'ADMIN') {
+        container.innerHTML = `
+          <div class="nav-label">Administrative Suite</div>
+          <div class="nav-item active" onclick="switchView('admin-dashboard')">
+            <span class="nav-icon">⚡</span>
+            <span>Executive Overview</span>
+          </div>
+          <div class="nav-item" onclick="switchView('admin-policies')">
+            <span class="nav-icon">⚙️</span>
+            <span>Policy Controls</span>
+          </div>
+          <div class="nav-item" onclick="switchView('admin-members')">
+            <span class="nav-icon">👥</span>
+            <span>Member Directory</span>
+          </div>
+          <div class="nav-item" onclick="switchView('admin-reports')">
+            <span class="nav-icon">📊</span>
+            <span>Audit & Analytics</span>
+          </div>
+          <div class="nav-label">Governance & Catalog</div>
+          <div class="nav-item" onclick="switchView('catalog')">
+            <span class="nav-icon">📚</span>
+            <span>Library Collection</span>
+          </div>
+          <div class="nav-item" onclick="switchView('security')">
+            <span class="nav-icon">🛡️</span>
+            <span>Privacy Guard</span>
+            <span class="nav-badge active-alert">SEC</span>
+          </div>
+        `;
+      }
+    }
+
+    function renderMobileBottomNav(role) {
+      const bNav = document.getElementById('mobile-bottom-nav');
+      if (role === 'MEMBER') {
+        bNav.innerHTML = `
+          <button class="bottom-nav-btn active" onclick="switchView('patron-home')"><span class="b-icon">🎓</span>Pass</button>
+          <button class="bottom-nav-btn" onclick="switchView('catalog')"><span class="b-icon">📚</span>Catalog</button>
+          <button class="bottom-nav-btn" onclick="switchView('patron-loans')"><span class="b-icon">📖</span>Loans</button>
+          <button class="bottom-nav-btn" onclick="switchView('patron-reservations')"><span class="b-icon">🔖</span>Holds</button>
+        `;
+      } else if (role === 'LIBRARIAN') {
+        bNav.innerHTML = `
+          <button class="bottom-nav-btn active" onclick="switchView('librarian-dashboard')"><span class="b-icon">📊</span>Desk</button>
+          <button class="bottom-nav-btn" onclick="switchView('issue')"><span class="b-icon">📤</span>Issue</button>
+          <button class="bottom-nav-btn" onclick="switchView('return')"><span class="b-icon">📥</span>Return</button>
+          <button class="bottom-nav-btn" onclick="switchView('catalog')"><span class="b-icon">📚</span>Catalog</button>
+        `;
+      } else {
+        bNav.innerHTML = `
+          <button class="bottom-nav-btn active" onclick="switchView('admin-dashboard')"><span class="b-icon">⚡</span>Overview</button>
+          <button class="bottom-nav-btn" onclick="switchView('admin-policies')"><span class="b-icon">⚙️</span>Policies</button>
+          <button class="bottom-nav-btn" onclick="switchView('admin-members')"><span class="b-icon">👥</span>Members</button>
+          <button class="bottom-nav-btn" onclick="switchView('admin-reports')"><span class="b-icon">📊</span>Audits</button>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // VIEW SWITCHER & ROUTING
+    // =========================================================================
     function switchView(viewName, updateHash = true) {
       document.querySelectorAll('.view-pane').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -1936,14 +2777,21 @@
 
       const breadcrumb = document.getElementById('breadcrumb-current');
       const titles = {
-        'dashboard': 'Dashboard',
+        'patron-home': 'Digital Pass & Home',
+        'patron-loans': 'My Borrowed Books',
+        'patron-reservations': 'My Reservations',
+        'patron-fines': 'Fines & Statement',
+        'librarian-dashboard': 'Circulation Workspace',
         'issue': 'Issue Book',
         'return': 'Return Desk',
         'add-book': 'Register Book',
         'new-member': 'Register Member',
         'catalog': 'Browse Collection',
-        'patron': 'Patron Portal',
-        'security': 'Data Protection'
+        'admin-dashboard': 'Executive Overview',
+        'admin-policies': 'Policy Controls',
+        'admin-members': 'Member Governance',
+        'admin-reports': 'Audit & Analytics',
+        'security': 'Privacy Protection'
       };
       breadcrumb.innerText = titles[viewName] || (viewName.charAt(0).toUpperCase() + viewName.slice(1));
 
@@ -1953,15 +2801,20 @@
 
       document.getElementById('app-sidebar').classList.remove('mobile-open');
 
-      if (viewName === 'dashboard') loadDashboardData();
+      // Dispatch appropriate data loading
+      if (viewName === 'patron-home' || viewName === 'patron-loans' || viewName === 'patron-reservations') loadPatronData();
+      if (viewName === 'librarian-dashboard') loadLibrarianDashboard();
       if (viewName === 'catalog') loadCatalogHoldings();
       if (viewName === 'return') loadReturnDeskLoans();
       if (viewName === 'issue') loadIssueSelectOptions();
-      if (viewName === 'patron') loadPatronData();
+      if (viewName === 'admin-dashboard') loadAdminDashboard();
+      if (viewName === 'admin-policies') loadAdminPolicies();
+      if (viewName === 'admin-members') loadAdminMembers();
+      if (viewName === 'admin-reports') loadAdminReports();
     }
 
     window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.replace('#', '') || 'dashboard';
+      const hash = window.location.hash.replace('#', '') || ROLES[activeRole].defaultView;
       switchView(hash, false);
     });
 
@@ -1969,201 +2822,145 @@
       document.getElementById('app-sidebar').classList.toggle('mobile-open');
     }
 
-    function toggleRole() {
-      if (activeRole === 'LIBRARIAN') {
-        activeRole = 'MEMBER';
-        document.getElementById('avatar-initials').innerText = 'ER';
-        document.getElementById('session-user-name').innerText = 'Dr. Elena Rostova';
-        document.getElementById('session-user-role').innerText = 'Patron Account';
-        document.getElementById('switch-role-label').innerText = 'Switch to Staff (Jane)';
-        document.getElementById('top-role-text').innerHTML = 'Viewing as: <strong>Dr. Elena Rostova (Patron)</strong>';
-        showToast('Switched to Patron Mode: Dr. Elena Rostova');
-        switchView('patron');
-      } else {
-        activeRole = 'LIBRARIAN';
-        document.getElementById('avatar-initials').innerText = 'LJ';
-        document.getElementById('session-user-name').innerText = 'Librarian Jane';
-        document.getElementById('session-user-role').innerText = 'Staff Account';
-        document.getElementById('switch-role-label').innerText = 'Switch to Patron (Elena)';
-        document.getElementById('top-role-text').innerHTML = 'Viewing as: <strong>Librarian Jane (Staff)</strong>';
-        showToast('Switched to Staff Mode: Librarian Jane');
-        switchView('dashboard');
+    // =========================================================================
+    // PART 1 (NORMAL USER) DATA LOADERS
+    // =========================================================================
+    async function loadPatronData() {
+      try {
+        const resLoans = await authFetch('/api/v1/members/1/loans');
+        const jsonLoans = await resLoans.json();
+        const allLoans = jsonLoans.data?.content || [];
+        const activeLoans = allLoans.filter(l => l.status === 'ACTIVE');
+
+        document.getElementById('patron-kpi-loans').innerText = activeLoans.length;
+        document.getElementById('patron-quota-text').innerText = activeLoans.length + ' / 5 Books Borrowed';
+        document.getElementById('patron-quota-bar').style.width = Math.min(100, (activeLoans.length / 5) * 100) + '%';
+
+        const loansBadge = document.getElementById('nav-badge-loans');
+        if (loansBadge) loansBadge.innerText = activeLoans.length;
+
+        const loansGrid = document.getElementById('patron-loans-grid');
+        if (loansGrid) {
+          if (activeLoans.length === 0) {
+            loansGrid.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">📖</div>
+                <h4>No Active Borrowed Books</h4>
+                <p>You have not borrowed any volumes yet. Browse the collection to find books.</p>
+                <button class="btn btn-primary" onclick="switchView('catalog')">Browse Catalog</button>
+              </div>
+            `;
+          } else {
+            loansGrid.innerHTML = activeLoans.map(l => `
+              <div class="book-card animate-fadeInUp">
+                <div>
+                  <div class="book-badge-row">
+                    <span class="genre-pill">On Loan</span>
+                    <span class="avail-badge in-stock">STATUS: ${l.status}</span>
+                  </div>
+                  <h4 class="book-title">${l.bookTitle}</h4>
+                  <div class="book-author">Accession Barcode: <code>${l.barcode || l.copyBarcode}</code></div>
+                </div>
+                <div class="book-meta-footer">
+                  <span>Due: <strong class="tabular-nums">${new Date(l.dueDate).toLocaleDateString()}</strong></span>
+                  <button class="btn btn-secondary btn-sm" onclick="executeReturnByLoanId(${l.id}, '${l.barcode || l.copyBarcode}', '${l.bookTitle.replace(/'/g, "\\'")}')">
+                    Return Early
+                  </button>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // Load reservations
+        const resRes = await authFetch('/api/v1/members/1/reservations');
+        const jsonRes = await resRes.json();
+        const reservations = Array.isArray(jsonRes.data) ? jsonRes.data : (jsonRes.data?.content || []);
+        document.getElementById('patron-kpi-holds').innerText = reservations.length;
+
+        const resGrid = document.getElementById('patron-res-grid');
+        if (resGrid) {
+          if (reservations.length === 0) {
+            resGrid.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">🔖</div>
+                <h4>No Active Reservations</h4>
+                <p>You have no holds waiting in the waitlist queue.</p>
+              </div>
+            `;
+          } else {
+            resGrid.innerHTML = reservations.map(r => `
+              <div class="book-card animate-fadeInUp">
+                <div class="book-badge-row">
+                  <span class="genre-pill">Hold Queue</span>
+                  <span class="avail-badge ${r.status === 'READY_FOR_PICKUP' ? 'in-stock' : 'out-of-stock'}">
+                    ${r.status}
+                  </span>
+                </div>
+                <h4 class="book-title">${r.bookTitle}</h4>
+                <div class="book-author">Queue Position: <strong class="tabular-nums">#${r.queuePosition}</strong></div>
+                <div class="book-meta-footer">
+                  <span>Status: <strong>${r.status}</strong></span>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // Load featured books on patron home
+        const resBooks = await fetch('/api/v1/books?page=0&size=3');
+        const jsonBooks = await resBooks.json();
+        const featured = jsonBooks.data?.content || [];
+        renderBookCards('patron-featured-books', featured);
+      } catch (err) {
+        console.error('Patron data error', err);
       }
     }
 
-    // Command Palette
-    function openCommandModal() {
-      const modal = document.getElementById('cmd-modal');
-      modal.classList.add('open');
-      const input = document.getElementById('cmd-input');
-      input.value = '';
-      input.focus();
-      filterCommandList('');
-    }
-
-    function closeCommandModal() {
-      document.getElementById('cmd-modal').classList.remove('open');
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        openCommandModal();
-      }
-      if (e.key === 'Escape') {
-        closeCommandModal();
-      }
-    });
-
-    function filterCommandList(query) {
-      const list = document.getElementById('cmd-list');
-      const items = list.getElementsByClassName('cmd-item');
-      const q = query.toLowerCase().trim();
-      Array.from(items).forEach(item => {
-        const text = item.innerText.toLowerCase();
-        item.style.display = text.includes(q) ? 'flex' : 'none';
-      });
-    }
-
-    function navigateFromCmd(viewName) {
-      closeCommandModal();
-      switchView(viewName);
-    }
-
-    // Load Dashboard
-    async function loadDashboardData() {
+    // =========================================================================
+    // PART 2 (LIBRARIAN) DATA LOADERS
+    // =========================================================================
+    async function loadLibrarianDashboard() {
       try {
         const resStats = await authFetch('/api/v1/reports/inventory');
         const jsonStats = await resStats.json();
         if (jsonStats.data) {
-          document.getElementById('kpi-available').innerText = jsonStats.data.availableCopies || '0';
-          document.getElementById('kpi-total').innerText = jsonStats.data.totalCopies || '0';
-          document.getElementById('kpi-loans').innerText = jsonStats.data.issuedCopies || '0';
-          document.getElementById('kpi-reserved').innerText = jsonStats.data.reservedCopies || '0';
-          document.getElementById('sidebar-loans-count').innerText = jsonStats.data.issuedCopies || '0';
+          document.getElementById('lib-kpi-available').innerText = jsonStats.data.availableCopies || '0';
+          document.getElementById('lib-kpi-total').innerText = jsonStats.data.totalCopies || '0';
+          document.getElementById('lib-kpi-loans').innerText = jsonStats.data.issuedCopies || '0';
+          document.getElementById('lib-kpi-reserved').innerText = jsonStats.data.reservedCopies || '0';
+          const retBadge = document.getElementById('nav-badge-returns');
+          if (retBadge) retBadge.innerText = jsonStats.data.issuedCopies || '0';
         }
 
         const resBooks = await fetch('/api/v1/books?page=0&size=4');
         const jsonBooks = await resBooks.json();
         const books = jsonBooks.data?.content || [];
-        renderBookCards('dashboard-recent-books', books);
-        document.getElementById('sidebar-catalog-count').innerText = jsonBooks.data?.totalElements || books.length;
+        renderBookCards('librarian-recent-books', books);
       } catch (err) {
-        console.error('Dashboard load error', err);
+        console.error('Librarian dashboard load error', err);
       }
     }
 
-    // Load Catalog Holdings
-    async function loadCatalogHoldings() {
-      try {
-        const res = await fetch('/api/v1/books?page=0&size=20');
-        const json = await res.json();
-        allBooks = json.data?.content || [];
-        filterAndRenderCatalog();
-        document.getElementById('sidebar-catalog-count').innerText = allBooks.length;
-      } catch (err) {
-        console.error('Catalog load error', err);
-      }
-    }
-
-    function handleCatalogSearch(query) {
-      filterAndRenderCatalog();
-    }
-
-    function setCatalogFilter(filter, btn) {
-      catalogFilter = filter;
-      document.querySelectorAll('.filter-chip').forEach(el => el.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      filterAndRenderCatalog();
-    }
-
-    function filterAndRenderCatalog() {
-      const q = (document.getElementById('catalog-search-input')?.value || '').toLowerCase().trim();
-      let filtered = allBooks.filter(b => {
-        const matchesQuery = !q ||
-          b.title.toLowerCase().includes(q) ||
-          b.author.toLowerCase().includes(q) ||
-          (b.genre && b.genre.toLowerCase().includes(q)) ||
-          (b.isbn && b.isbn.toLowerCase().includes(q));
-
-        if (!matchesQuery) return false;
-
-        if (catalogFilter === 'AVAILABLE') return b.availableCopies > 0;
-        if (catalogFilter !== 'ALL') return b.genre && b.genre.toLowerCase() === catalogFilter.toLowerCase();
-        return true;
-      });
-
-      renderBookCards('full-catalog-grid', filtered);
-    }
-
-    function renderBookCards(elementId, books) {
-      const container = document.getElementById(elementId);
-      if (!container) return;
-      if (books.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">🔍</div>
-            <h4>No Matching Books Found</h4>
-            <p>Try searching with another keyword or reset the category filters.</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = books.map(b => `
-        <div class="book-card">
-          <div>
-            <div class="book-badge-row">
-              <span class="genre-pill">${b.genre || 'General'}</span>
-              <span class="avail-badge ${b.availableCopies > 0 ? 'in-stock' : 'out-of-stock'} tabular-nums">
-                ● ${b.availableCopies} of ${b.totalCopies} Available
-              </span>
-            </div>
-            <h4 class="book-title">${b.title}</h4>
-            <div class="book-author">By ${b.author} &bull; ${b.publisher || 'Library Collection'} (${b.publicationYear || '2024'})</div>
-            <p class="book-desc">${b.description || 'Accessioned bibliographic title in the active catalog.'}</p>
-          </div>
-          <div>
-            <div class="book-meta-footer">
-              <span>ISBN: <code>${b.isbn}</code></span>
-              <div class="card-actions-row">
-                <button class="btn btn-secondary btn-sm" onclick="prepareIssueFromCatalog(${b.id}, '${b.title}')">
-                  📤 Issue
-                </button>
-                <button class="btn btn-primary btn-sm" onclick="handleReserveFromCatalog(${b.id}, '${b.title}')">
-                  ${b.availableCopies > 0 ? 'Reserve' : 'Queue Hold'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Populate Dropdowns in Issue Desk
     async function loadIssueSelectOptions() {
       try {
-        // Load Books
         const resBooks = await fetch('/api/v1/books?page=0&size=50');
         const jsonBooks = await resBooks.json();
-        const books = jsonBooks.data?.content || [];
-        allBooks = books;
+        allBooks = jsonBooks.data?.content || [];
 
         const bookSelect = document.getElementById('issue-book-select');
         bookSelect.innerHTML = '<option value="">-- Choose Available Book --</option>' +
-          books.map(b => `<option value="${b.id}">${b.title} (${b.availableCopies} available on shelf)</option>`).join('');
+          allBooks.map(b => `<option value="${b.id}">${b.title} (${b.availableCopies} available on shelf)</option>`).join('');
 
-        // Load Members
         const resMem = await authFetch('/api/v1/members?size=50');
         const jsonMem = await resMem.json();
-        const members = jsonMem.data?.content || [];
-        allMembers = members;
+        allMembers = jsonMem.data?.content || [];
 
         const memSelect = document.getElementById('issue-member-select');
         memSelect.innerHTML = '<option value="">-- Choose Registered Patron --</option>' +
-          members.map(m => `<option value="${m.id}">${m.name} (Member #${m.id} - ${m.membershipNumber})</option>`).join('');
+          allMembers.map(m => `<option value="${m.id}">${m.name} (Member #${m.id} - ${m.membershipNumber})</option>`).join('');
       } catch (e) {
-        console.error('Error loading issue select options', e);
+        console.error('Error loading issue options', e);
       }
     }
 
@@ -2194,18 +2991,6 @@
       showToast('Selected: ' + title + ' (' + barcode + ') for Member #' + memberId);
     }
 
-    function prepareIssueFromCatalog(bookId, title) {
-      switchView('issue');
-      setTimeout(() => {
-        const bookSelect = document.getElementById('issue-book-select');
-        if (bookSelect) {
-          bookSelect.value = bookId;
-          onIssueBookSelected(bookId);
-        }
-        showToast('Ready to issue "' + title + '". Select patron to confirm.');
-      }, 150);
-    }
-
     function resetIssueForm() {
       document.getElementById('issue-barcode').value = '';
       document.getElementById('issue-member-id').value = '1';
@@ -2227,9 +3012,10 @@
         });
         const json = await res.json();
         if (res.ok) {
+          triggerConfetti();
           const dueStr = json.data?.dueDate ? new Date(json.data.dueDate).toLocaleDateString() : '14 days';
           showToast('✓ Successfully Issued: "' + (json.data?.bookTitle || barcode) + '" to ' + (json.data?.memberName || 'Member #' + memberId) + ' (Due: ' + dueStr + ')');
-          loadDashboardData();
+          loadLibrarianDashboard();
           loadReturnDeskLoans();
           switchView('return');
         } else {
@@ -2240,23 +3026,23 @@
       }
     }
 
-    // Friendly Return Desk
     async function loadReturnDeskLoans() {
       try {
         const res = await authFetch('/api/v1/loans?status=ACTIVE&size=50');
         const json = await res.json();
         activeLoansList = json.data?.content || [];
-        
-        document.getElementById('sidebar-loans-count').innerText = activeLoansList.length;
+
+        const retBadge = document.getElementById('nav-badge-returns');
+        if (retBadge) retBadge.innerText = activeLoansList.length;
 
         const tbody = document.getElementById('return-loans-tbody');
         if (activeLoansList.length === 0) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="6" style="text-align: center; padding: 2.5rem;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🟢</div>
-                <strong>All cataloged books are currently on the shelves!</strong>
-                <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">No books are currently checked out. Issue a book to see it listed here.</p>
+              <td colspan="6" style="text-align: center; padding: 2.8rem;">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🟢</div>
+                <strong style="color:var(--deep-navy);">All cataloged books are currently on the shelves!</strong>
+                <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">Zero active checkouts. Issue a book above to view it in the return table.</p>
               </td>
             </tr>
           `;
@@ -2271,9 +3057,7 @@
 
           return `
             <tr>
-              <td>
-                <strong style="color:var(--deep-navy);">${l.bookTitle}</strong>
-              </td>
+              <td><strong style="color:var(--deep-navy);">${l.bookTitle}</strong></td>
               <td><code>${l.barcode}</code></td>
               <td>${l.memberName} (ID: ${l.memberId})</td>
               <td class="tabular-nums">
@@ -2281,9 +3065,7 @@
                   ${dueFormatted} ${isOverdue ? '(Overdue)' : ''}
                 </span>
               </td>
-              <td>
-                <span class="avail-badge in-stock">Active Loan</span>
-              </td>
+              <td><span class="avail-badge in-stock">Active Loan</span></td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="executeReturnByLoanId(${l.id}, '${l.barcode}', '${l.bookTitle.replace(/'/g, "\\'")}')">
                   📥 Return This Book
@@ -2306,10 +3088,12 @@
         });
         const json = await res.json();
         if (res.ok) {
+          triggerConfetti();
           const fineMsg = json.data?.overdueFineCalculated > 0 ? ' (Fine assessed: $' + json.data.overdueFineCalculated + ')' : '';
-          showToast('✓ Returned: "' + title + '" (' + barcode + ')' + fineMsg);
+          showToast('✓ Successfully Returned: "' + title + '" (' + barcode + ')' + fineMsg);
           loadReturnDeskLoans();
-          loadDashboardData();
+          loadLibrarianDashboard();
+          if (activeRole === 'MEMBER') loadPatronData();
         } else {
           showToast('Return failed: ' + (json.detail || json.message), true);
         }
@@ -2332,10 +3116,11 @@
         });
         const json = await res.json();
         if (res.ok) {
+          triggerConfetti();
           showToast('✓ Book copy ' + barcode + ' returned successfully!');
           document.getElementById('return-barcode').value = '';
           loadReturnDeskLoans();
-          loadDashboardData();
+          loadLibrarianDashboard();
         } else {
           showToast('Return Rejected: ' + (json.detail || json.message), true);
         }
@@ -2344,7 +3129,6 @@
       }
     }
 
-    // Add Book Form Helpers
     function quickFillNewBook(title, author, publisher, year, genre, copies) {
       document.getElementById('new-book-title').value = title;
       document.getElementById('new-book-author').value = author;
@@ -2380,8 +3164,9 @@
         });
         const json = await res.json();
         if (res.ok) {
+          triggerConfetti();
           showToast('✓ Registered New Title: "' + title + '" with ' + copies + ' shelf copies!');
-          loadDashboardData();
+          loadLibrarianDashboard();
           switchView('catalog');
         } else {
           showToast('Failed to register book: ' + (json.detail || json.message), true);
@@ -2391,7 +3176,6 @@
       }
     }
 
-    // Add Member Form Helpers
     function quickFillNewMember(name, email, phone) {
       document.getElementById('new-mem-name').value = name;
       document.getElementById('new-mem-email').value = email;
@@ -2415,6 +3199,7 @@
         });
         const json = await res.json();
         if (res.ok) {
+          triggerConfetti();
           showToast('✓ Member Registered! ID: ' + json.data.id + ' (' + json.data.membershipNumber + ')');
           document.getElementById('new-mem-name').value = '';
           document.getElementById('new-mem-email').value = '';
@@ -2427,7 +3212,281 @@
       }
     }
 
-    // Reserve Book
+    // =========================================================================
+    // PART 3 (ADMIN / DIRECTOR) DATA LOADERS & ACTIONS
+    // =========================================================================
+    async function loadAdminDashboard() {
+      try {
+        const resCirc = await authFetch('/api/v1/reports/circulation');
+        const jsonCirc = await resCirc.json();
+        if (jsonCirc.data) {
+          document.getElementById('adm-kpi-circ').innerText = jsonCirc.data.totalLoansIssued || '0';
+        }
+
+        const resFines = await authFetch('/api/v1/reports/fines');
+        const jsonFines = await resFines.json();
+        if (jsonFines.data) {
+          document.getElementById('adm-kpi-fines').innerText = '$' + (jsonFines.data.totalAccruedAmount || '0.00');
+        }
+
+        const resMem = await authFetch('/api/v1/members?size=1');
+        const jsonMem = await resMem.json();
+        if (jsonMem.data) {
+          document.getElementById('adm-kpi-members').innerText = jsonMem.data.totalElements || '3';
+        }
+      } catch (e) {
+        console.error('Admin dashboard error', e);
+      }
+    }
+
+    async function loadAdminPolicies() {
+      try {
+        const res = await authFetch('/api/v1/libraries/1');
+        const json = await res.json();
+        if (json.data) {
+          document.getElementById('adm-policy-name').value = json.data.name || 'Infinity Central Academic Library';
+          document.getElementById('adm-policy-duration').value = json.data.loanDurationDays || 14;
+          document.getElementById('adm-policy-quota').value = json.data.maxLoansPerMember || 5;
+          document.getElementById('adm-policy-rate').value = json.data.dailyFineRate || 5.00;
+          document.getElementById('adm-policy-maxfine').value = json.data.maxFinePerLoan || 500.00;
+          document.getElementById('adm-policy-hold').value = json.data.reservationHoldHours || 48;
+          document.getElementById('adm-kpi-duration').innerText = (json.data.loanDurationDays || 14) + 'd';
+        }
+      } catch (e) {
+        console.error('Error loading policies', e);
+      }
+    }
+
+    async function saveAdminPolicies() {
+      const name = document.getElementById('adm-policy-name').value.trim();
+      const loanDurationDays = parseInt(document.getElementById('adm-policy-duration').value);
+      const maxLoansPerMember = parseInt(document.getElementById('adm-policy-quota').value);
+      const dailyFineRate = parseFloat(document.getElementById('adm-policy-rate').value);
+      const maxFinePerLoan = parseFloat(document.getElementById('adm-policy-maxfine').value);
+      const reservationHoldHours = parseInt(document.getElementById('adm-policy-hold').value);
+
+      try {
+        const res = await authFetch('/api/v1/libraries/1', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name, loanDurationDays, maxLoansPerMember, dailyFineRate, maxFinePerLoan, reservationHoldHours
+          })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          triggerConfetti();
+          showToast('✓ Institutional Policies Updated & Enforced Successfully!');
+          loadAdminPolicies();
+        } else {
+          showToast('Policy update failed: ' + (json.detail || json.message), true);
+        }
+      } catch (e) {
+        showToast('Network error saving policies', true);
+      }
+    }
+
+    async function loadAdminMembers() {
+      try {
+        const res = await authFetch('/api/v1/members?size=50');
+        const json = await res.json();
+        const members = json.data?.content || [];
+        const tbody = document.getElementById('admin-members-tbody');
+        
+        if (members.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem;">No registered members found.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = members.map(m => `
+          <tr>
+            <td class="tabular-nums">#${m.id}</td>
+            <td><strong>${m.name}</strong></td>
+            <td>${m.email}</td>
+            <td><code>${m.membershipNumber}</code></td>
+            <td>
+              <span class="status-pill ${m.status === 'ACTIVE' ? 'status-active' : 'status-suspended'}">
+                ● ${m.status}
+              </span>
+            </td>
+            <td>
+              ${m.status === 'ACTIVE'
+                ? `<button class="btn btn-danger btn-sm" onclick="setMemberStatus(${m.id}, 'suspend', '${m.name.replace(/'/g, "\\'")}')">Suspend</button>`
+                : `<button class="btn btn-primary btn-sm" onclick="setMemberStatus(${m.id}, 'reactivate', '${m.name.replace(/'/g, "\\'")}')">Reactivate</button>`
+              }
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error('Error loading admin members', e);
+      }
+    }
+
+    async function setMemberStatus(id, action, name) {
+      try {
+        const res = await authFetch('/api/v1/members/' + id + '/' + action, {
+          method: 'POST'
+        });
+        const json = await res.json();
+        if (res.ok) {
+          triggerConfetti();
+          showToast('✓ Patron ' + name + ' ' + (action === 'suspend' ? 'suspended' : 'reactivated') + ' successfully.');
+          loadAdminMembers();
+        } else {
+          showToast('Action failed: ' + (json.detail || json.message), true);
+        }
+      } catch (e) {
+        showToast('Network error modifying member status', true);
+      }
+    }
+
+    async function loadAdminReports() {
+      try {
+        const resInv = await authFetch('/api/v1/reports/inventory');
+        const jsonInv = await resInv.json();
+        if (jsonInv.data) {
+          document.getElementById('rpt-total-copies').innerText = jsonInv.data.totalCopies || '0';
+          document.getElementById('rpt-avail-sub').innerText = (jsonInv.data.availableCopies || '0') + ' Available Now';
+          document.getElementById('rpt-active-loans').innerText = jsonInv.data.issuedCopies || '0';
+          document.getElementById('rpt-reserved-copies').innerText = jsonInv.data.reservedCopies || '0';
+        }
+
+        const resFines = await authFetch('/api/v1/reports/fines');
+        const jsonFines = await resFines.json();
+        if (jsonFines.data) {
+          document.getElementById('rpt-fines-accrued').innerText = '$' + (jsonFines.data.totalAccruedAmount || '0.00');
+          document.getElementById('rpt-fines-collected').innerText = '$' + (jsonFines.data.totalCollectedAmount || '0.00') + ' Collected';
+        }
+
+        const resOverdue = await authFetch('/api/v1/reports/overdue');
+        const jsonOverdue = await resOverdue.json();
+        const overdueList = jsonOverdue.data?.overdueLoans || [];
+        document.getElementById('rpt-overdue-sub').innerText = overdueList.length + ' Overdue Items';
+
+        const tbody = document.getElementById('admin-overdue-tbody');
+        if (overdueList.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-muted);">🟢 All checked-out books are currently on schedule. Zero overdue items!</td></tr>';
+        } else {
+          tbody.innerHTML = overdueList.map(o => `
+            <tr>
+              <td>#${o.loanId}</td>
+              <td><strong>${o.bookTitle}</strong></td>
+              <td><code>${o.barcode}</code></td>
+              <td>${o.borrowerName}</td>
+              <td class="tabular-nums" style="color:var(--danger); font-weight:800;">${o.daysOverdue} days</td>
+              <td class="tabular-nums" style="color:var(--danger); font-weight:800;">$${o.accruedFine}</td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {
+        console.error('Error loading reports', e);
+      }
+    }
+
+    // =========================================================================
+    // CATALOG HOLDINGS & RESERVATIONS
+    // =========================================================================
+    async function loadCatalogHoldings() {
+      try {
+        const res = await fetch('/api/v1/books?page=0&size=30');
+        const json = await res.json();
+        allBooks = json.data?.content || [];
+        filterAndRenderCatalog();
+        
+        const catBadge = document.getElementById('nav-badge-catalog');
+        if (catBadge) catBadge.innerText = allBooks.length;
+      } catch (err) {
+        console.error('Catalog load error', err);
+      }
+    }
+
+    function handleCatalogSearch() {
+      filterAndRenderCatalog();
+    }
+
+    function setCatalogFilter(filter, btn) {
+      catalogFilter = filter;
+      document.querySelectorAll('.filter-chip').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      filterAndRenderCatalog();
+    }
+
+    function filterAndRenderCatalog() {
+      const q = (document.getElementById('catalog-search-input')?.value || '').toLowerCase().trim();
+      let filtered = allBooks.filter(b => {
+        const matchesQuery = !q ||
+          b.title.toLowerCase().includes(q) ||
+          b.author.toLowerCase().includes(q) ||
+          (b.genre && b.genre.toLowerCase().includes(q)) ||
+          (b.isbn && b.isbn.toLowerCase().includes(q));
+
+        if (!matchesQuery) return false;
+        if (catalogFilter === 'AVAILABLE') return b.availableCopies > 0;
+        if (catalogFilter !== 'ALL') return b.genre && b.genre.toLowerCase() === catalogFilter.toLowerCase();
+        return true;
+      });
+
+      renderBookCards('full-catalog-grid', filtered);
+    }
+
+    function renderBookCards(elementId, books) {
+      const container = document.getElementById(elementId);
+      if (!container) return;
+      if (books.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h4>No Matching Books Found</h4>
+            <p>Try searching with another keyword or reset the category filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = books.map((b, idx) => `
+        <div class="book-card animate-fadeInUp" style="animation-delay: ${idx * 0.04}s;">
+          <div>
+            <div class="book-badge-row">
+              <span class="genre-pill">${b.genre || 'General'}</span>
+              <span class="avail-badge ${b.availableCopies > 0 ? 'in-stock' : 'out-of-stock'} tabular-nums">
+                ● ${b.availableCopies} of ${b.totalCopies} Available
+              </span>
+            </div>
+            <h4 class="book-title">${b.title}</h4>
+            <div class="book-author">By ${b.author} &bull; ${b.publisher || 'Library Collection'} (${b.publicationYear || '2024'})</div>
+            <p class="book-desc">${b.description || 'Accessioned bibliographic title in the active collection.'}</p>
+          </div>
+          <div>
+            <div class="book-meta-footer">
+              <span>ISBN: <code>${b.isbn}</code></span>
+              <div class="card-actions-row">
+                ${activeRole !== 'MEMBER' ? `
+                  <button class="btn btn-secondary btn-sm" onclick="prepareIssueFromCatalog(${b.id}, '${b.title.replace(/'/g, "\\'")}')">
+                    📤 Issue
+                  </button>
+                ` : ''}
+                <button class="btn btn-primary btn-sm" onclick="handleReserveFromCatalog(${b.id}, '${b.title.replace(/'/g, "\\'")}')">
+                  ${b.availableCopies > 0 ? 'Reserve' : 'Queue Hold'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function prepareIssueFromCatalog(bookId, title) {
+      switchView('issue');
+      setTimeout(() => {
+        const bookSelect = document.getElementById('issue-book-select');
+        if (bookSelect) {
+          bookSelect.value = bookId;
+          onIssueBookSelected(bookId);
+        }
+        showToast('Ready to issue "' + title + '". Select patron to confirm.');
+      }, 150);
+    }
+
     async function handleReserveFromCatalog(bookId, title) {
       showToast('Placing hold for "' + title + '"...', false, () => {
         showToast('Hold request cancelled.');
@@ -2441,8 +3500,10 @@
         });
         const json = await res.json();
         if (res.ok) {
+          triggerConfetti();
           showToast('✓ Hold Confirmed for "' + title + '" (Queue Position: #' + (json.data?.queuePosition || 1) + ')');
-          loadDashboardData();
+          loadCatalogHoldings();
+          if (activeRole === 'MEMBER') loadPatronData();
         } else {
           showToast('Hold Notice: ' + (json.detail || json.message), true);
         }
@@ -2451,91 +3512,13 @@
       }
     }
 
-    // Patron Portal
-    async function loadPatronData() {
-      try {
-        const resLoans = await authFetch('/api/v1/members/1/loans');
-        const jsonLoans = await resLoans.json();
-        const allLoans = jsonLoans.data?.content || [];
-        const activeLoans = allLoans.filter(l => l.status === 'ACTIVE');
-        
-        document.getElementById('patron-loan-count').innerText = activeLoans.length;
-        document.getElementById('patron-meter-text').innerText = activeLoans.length + ' / 5 Books Borrowed';
-        document.getElementById('patron-meter-bar').style.width = Math.min(100, (activeLoans.length / 5) * 100) + '%';
-
-        const loansContainer = document.getElementById('patron-loans-grid');
-        if (activeLoans.length === 0) {
-          loansContainer.innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">📖</div>
-              <h4>No Active Loans</h4>
-              <p>You have not borrowed any books yet. Explore the catalog to borrow titles.</p>
-              <button class="btn btn-primary" onclick="switchView('catalog')">Browse Catalog</button>
-            </div>
-          `;
-        } else {
-          loansContainer.innerHTML = activeLoans.map(l => `
-            <div class="book-card">
-              <div>
-                <div class="book-badge-row">
-                  <span class="genre-pill">On Loan</span>
-                  <span class="avail-badge in-stock">STATUS: ${l.status}</span>
-                </div>
-                <h4 class="book-title">${l.bookTitle}</h4>
-                <div class="book-author">Barcode: <code>${l.barcode || l.copyBarcode}</code></div>
-              </div>
-              <div class="book-meta-footer">
-                <span>Due: <strong class="tabular-nums">${new Date(l.dueDate).toLocaleDateString()}</strong></span>
-                <button class="btn btn-secondary btn-sm" onclick="executeReturnByLoanId(${l.id}, '${l.barcode || l.copyBarcode}', '${l.bookTitle.replace(/'/g, "\\'")}')">
-                  Return Early
-                </button>
-              </div>
-            </div>
-          `).join('');
-        }
-
-        const resRes = await authFetch('/api/v1/members/1/reservations');
-        const jsonRes = await resRes.json();
-        const reservations = Array.isArray(jsonRes.data) ? jsonRes.data : (jsonRes.data?.content || []);
-        document.getElementById('patron-res-count').innerText = reservations.length;
-        
-        const resContainer = document.getElementById('patron-res-grid');
-        if (reservations.length === 0) {
-          resContainer.innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">🔖</div>
-              <h4>No Active Reservations</h4>
-              <p>You have no holds waiting in the queue.</p>
-            </div>
-          `;
-        } else {
-          resContainer.innerHTML = reservations.map(r => `
-            <div class="book-card">
-              <div class="book-badge-row">
-                <span class="genre-pill">Hold Queue</span>
-                <span class="avail-badge ${r.status === 'READY_FOR_PICKUP' ? 'in-stock' : 'out-of-stock'}">
-                  ${r.status}
-                </span>
-              </div>
-              <h4 class="book-title">${r.bookTitle}</h4>
-              <div class="book-author">Queue Position: <strong class="tabular-nums">#${r.queuePosition}</strong></div>
-              <div class="book-meta-footer">
-                <span>Status: <strong>${r.status}</strong></span>
-              </div>
-            </div>
-          `).join('');
-        }
-      } catch (err) {
-        console.error('Patron data load error', err);
-      }
-    }
-
-    // Friendly Privacy Test
+    // =========================================================================
+    // PRIVACY TEST SIMULATOR
+    // =========================================================================
     async function executePrivilegeSimulation() {
       const outcomeBox = document.getElementById('privacy-outcome-box');
       try {
         const res = await authFetch('/api/v1/members/2/loans');
-        const json = await res.json();
         outcomeBox.style.display = 'flex';
         if (res.status === 403) {
           document.getElementById('privacy-outcome-icon').innerText = '🛡️';
@@ -2544,17 +3527,78 @@
             'The access control layer verified that Elena (Member #1) cannot view Marcus Vance\'s (Member #2) private circulation records. Confidentiality protected!';
           showToast('🛡️ Privacy Alert: Cross-patron query safely blocked (403 Forbidden)');
         } else {
-          document.getElementById('privacy-outcome-title').innerText = 'Unexpected Response: ' + res.status;
+          document.getElementById('privacy-outcome-title').innerText = 'Status: ' + res.status;
         }
       } catch (err) {
         outcomeBox.style.display = 'flex';
-        document.getElementById('privacy-outcome-desc').innerText = 'Error executing simulation: ' + err;
+        document.getElementById('privacy-outcome-desc').innerText = 'Error: ' + err;
       }
     }
 
+    // =========================================================================
+    // COMMAND PALETTE
+    // =========================================================================
+    function openCommandModal() {
+      const modal = document.getElementById('cmd-modal');
+      modal.classList.add('open');
+      const input = document.getElementById('cmd-input');
+      input.value = '';
+      input.focus();
+      populateCommandList();
+      filterCommandList('');
+    }
+
+    function closeCommandModal() {
+      document.getElementById('cmd-modal').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        openCommandModal();
+      }
+      if (e.key === 'Escape') closeCommandModal();
+    });
+
+    function populateCommandList() {
+      const list = document.getElementById('cmd-list');
+      list.innerHTML = `
+        <div class="cmd-item" onclick="switchPersona('MEMBER')"><span>🎓 Switch Role: Normal User (Patron)</span><span class="kbd-shortcut">Role</span></div>
+        <div class="cmd-item" onclick="switchPersona('LIBRARIAN')"><span>📚 Switch Role: Librarian Staff</span><span class="kbd-shortcut">Role</span></div>
+        <div class="cmd-item" onclick="switchPersona('ADMIN')"><span>⚡ Switch Role: Administrator</span><span class="kbd-shortcut">Role</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('catalog')"><span>📚 Browse Collection Catalog</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('issue')"><span>📤 Issue Book Copy</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('return')"><span>📥 Return Desk</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('admin-policies')"><span>⚙️ Institutional Policies</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('admin-members')"><span>👥 Member Governance</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('admin-reports')"><span>📊 Audits & Reports</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('security')"><span>🛡️ Privacy Protection</span><span class="kbd-shortcut">Jump</span></div>
+      `;
+    }
+
+    function filterCommandList(query) {
+      const list = document.getElementById('cmd-list');
+      const items = list.getElementsByClassName('cmd-item');
+      const q = query.toLowerCase().trim();
+      Array.from(items).forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function navigateFromCmd(viewName) {
+      closeCommandModal();
+      switchView(viewName);
+    }
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
       ensureTokens().then(() => {
-        const initialView = window.location.hash.replace('#', '') || 'dashboard';
+        renderSidebarNav(activeRole);
+        renderMobileBottomNav(activeRole);
+        const initialView = window.location.hash.replace('#', '') || ROLES[activeRole].defaultView;
         switchView(initialView, false);
       });
     });
