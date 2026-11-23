@@ -14,8 +14,14 @@ public class CirculationDTOs {
 
             Long bookCopyId,
 
-            Long bookId
-    ) {}
+            Long bookId,
+
+            String barcode
+    ) {
+        public IssueBookRequest(Long memberId, Long bookCopyId, Long bookId) {
+            this(memberId, bookCopyId, bookId, null);
+        }
+    }
 
     public record ReturnBookRequest(
             Long loanId,

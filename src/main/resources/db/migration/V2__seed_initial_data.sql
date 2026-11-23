@@ -58,19 +58,19 @@ INSERT INTO user_accounts (
     username, password_hash, role, member_id, active
 ) VALUES (
     'admin',
-    '$argon2id$v=19$m=65536,t=3,p=1$0uMhQ6gT8Xl9eQvB9R7tYw$l2u3F+4H8Y9Wk0J1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y',
+    '$argon2id$v=19$m=65536,t=3,p=1$VXIEabDxq95seA8/jznGhQ$wQtrcosRh34t4vyvpzNfz1F18wfQiYD5kVRb9ddPpEk',
     'ADMIN',
     NULL,
     TRUE
 ), (
     'librarian',
-    '$argon2id$v=19$m=65536,t=3,p=1$0uMhQ6gT8Xl9eQvB9R7tYw$l2u3F+4H8Y9Wk0J1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y',
+    '$argon2id$v=19$m=65536,t=3,p=1$VXIEabDxq95seA8/jznGhQ$wQtrcosRh34t4vyvpzNfz1F18wfQiYD5kVRb9ddPpEk',
     'LIBRARIAN',
     NULL,
     TRUE
 ), (
     'member_elena',
-    '$argon2id$v=19$m=65536,t=3,p=1$0uMhQ6gT8Xl9eQvB9R7tYw$l2u3F+4H8Y9Wk0J1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y',
+    '$argon2id$v=19$m=65536,t=3,p=1$VXIEabDxq95seA8/jznGhQ$wQtrcosRh34t4vyvpzNfz1F18wfQiYD5kVRb9ddPpEk',
     'MEMBER',
     1,
     TRUE

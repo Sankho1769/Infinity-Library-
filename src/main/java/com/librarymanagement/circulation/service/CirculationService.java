@@ -151,12 +151,28 @@ public class CirculationService {
                 throw new ConflictException(ErrorCode.BOOK_NOT_AVAILABLE,
                         "Book copy is not available for issue. Current status: " + copy.getStatus());
             }
+        } else if (request.barcode() != null && !request.barcode().isBlank()) {
+            BookCopy found = bookCopyRepository.findByBarcode(request.barcode().trim())
+                    .orElseThrow(() -> new ResourceNotFoundException("Book copy with barcode", request.barcode()));
+            copy = bookCopyRepository.findByIdForUpdate(found.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("BookCopy", found.getId()));
+
+            if (copy.getStatus() == BookCopyStatus.RESERVED) {
+                Optional<Reservation> reservationOpt = reservationRepository.findFirstByBookIdAndMemberIdAndStatusIn(
+                        copy.getBook().getId(), member.getId(), List.of(ReservationStatus.READY_FOR_PICKUP));
+                if (reservationOpt.isEmpty()) {
+                    throw new ConflictException(ErrorCode.BOOK_NOT_AVAILABLE, "This copy is reserved for another member.");
+                }
+            } else if (copy.getStatus() != BookCopyStatus.AVAILABLE) {
+                throw new ConflictException(ErrorCode.BOOK_NOT_AVAILABLE,
+                        "Book copy is not available for issue. Current status: " + copy.getStatus());
+            }
         } else if (request.bookId() != null) {
             copy = bookCopyRepository.findFirstByBookIdAndStatusOrderByIdAsc(request.bookId(), BookCopyStatus.AVAILABLE)
                     .orElseThrow(() -> new ConflictException(ErrorCode.BOOK_NOT_AVAILABLE,
                             "No available copies found for book ID: " + request.bookId()));
         } else {
-            throw new BusinessException(ErrorCode.VALIDATION_FAILED, "Either bookCopyId or bookId must be provided");
+            throw new BusinessException(ErrorCode.VALIDATION_FAILED, "Either bookCopyId, barcode, or bookId must be provided");
         }
 
         // 7. Verify copy is not already on active loan
