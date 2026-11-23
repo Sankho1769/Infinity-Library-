@@ -1584,6 +1584,448 @@
       .pass-name { font-size: 1.25rem; }
       .pass-quota-box { min-width: 100%; }
     }
+  
+    /* ==========================================================================
+       AUTHENTICATION PORTAL & USER SESSION STYLING
+       ========================================================================== */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 34, 51, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .auth-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 24px 64px rgba(7, 34, 51, 0.35), 0 0 40px var(--lime-glow);
+      border: 1.5px solid var(--border-color);
+      max-width: 560px;
+      width: 100%;
+      overflow: hidden;
+      transform: scale(0.92) translateY(20px);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .auth-overlay.open .auth-card {
+      transform: scale(1) translateY(0);
+    }
+    .auth-card.shake-error {
+      animation: shakeError 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    @keyframes shakeError {
+      10%, 90% { transform: translate3d(-3px, 0, 0); }
+      20%, 80% { transform: translate3d(5px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+      40%, 60% { transform: translate3d(6px, 0, 0); }
+    }
+    .auth-header {
+      background: linear-gradient(135deg, var(--deep-navy) 0%, var(--primary-teal) 100%);
+      color: #FFFFFF;
+      padding: 2rem 2rem 1.6rem;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+    .auth-header::after {
+      content: '∞';
+      position: absolute;
+      right: -20px;
+      bottom: -40px;
+      font-size: 10rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.04);
+      pointer-events: none;
+    }
+    .auth-brand-symbol {
+      width: 52px;
+      height: 52px;
+      background: var(--neon-lime);
+      color: var(--deep-navy);
+      font-size: 2rem;
+      font-weight: 800;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.85rem;
+      box-shadow: 0 0 24px var(--lime-glow);
+      animation: symbolPulse 3.5s ease-in-out infinite;
+    }
+    .auth-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+    .auth-subtitle {
+      font-size: 0.88rem;
+      color: #CAD5CF;
+      line-height: 1.4;
+    }
+    .auth-close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-full);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+    .auth-close-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.08);
+    }
+    .auth-nav-tabs {
+      display: flex;
+      background: var(--surface-muted);
+      padding: 6px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .auth-nav-tab {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: var(--transition-smooth);
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .auth-nav-tab:hover {
+      color: var(--deep-navy);
+    }
+    .auth-nav-tab.active {
+      background: #FFFFFF;
+      color: var(--deep-navy);
+      box-shadow: 0 2px 8px rgba(11, 48, 72, 0.1);
+    }
+    .auth-body {
+      padding: 1.8rem 2rem 2rem;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .auth-alert {
+      display: none;
+      padding: 0.85rem 1.1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      align-items: center;
+      gap: 0.65rem;
+      border: 1px solid transparent;
+    }
+    .auth-alert.error {
+      display: flex;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-color: rgba(217, 56, 58, 0.25);
+    }
+    .auth-alert.success {
+      display: flex;
+      background: var(--success-bg);
+      color: var(--success);
+      border-color: rgba(30, 135, 75, 0.25);
+    }
+    .input-with-action {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-toggle-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+    .password-toggle-btn:hover {
+      color: var(--deep-navy);
+    }
+    .auth-remember-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1.15rem 0 1.45rem;
+      font-size: 0.85rem;
+    }
+    .auth-remember-row label {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .auth-remember-row a {
+      color: var(--teal-light);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .auth-remember-row a:hover {
+      text-decoration: underline;
+    }
+    .auth-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--deep-navy) 0%, var(--primary-teal) 100%);
+      color: var(--neon-lime);
+      border: 1.5px solid rgba(185, 241, 47, 0.35);
+      padding: 0.95rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      box-shadow: 0 4px 16px rgba(11, 48, 72, 0.2);
+      transition: var(--transition-bounce);
+      min-height: 48px;
+    }
+    .auth-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(11, 48, 72, 0.3), 0 0 20px var(--lime-glow);
+    }
+    .auth-submit-btn:active {
+      transform: scale(0.97);
+    }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 1.75rem 0 1.25rem;
+      color: var(--text-subtle);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+    .auth-divider span {
+      padding: 0 1rem;
+    }
+    .demo-accounts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    @media (max-width: 600px) {
+      .demo-accounts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .demo-account-card {
+      background: var(--surface-muted);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 0.65rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .demo-account-card:hover {
+      background: #FFFFFF;
+      border-color: var(--neon-lime);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(11, 48, 72, 0.1), 0 0 14px var(--lime-glow);
+    }
+    .demo-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      margin-bottom: 2px;
+    }
+    .demo-role-name {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--deep-navy);
+      line-height: 1.2;
+    }
+    .demo-user-tag {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .demo-badge-pill {
+      font-size: 0.64rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-full);
+      margin-top: 2px;
+    }
+    .pill-member { background: #E0F2FE; color: #0369A1; }
+    .pill-librarian { background: #E3F7EB; color: #15803D; }
+    .pill-admin { background: #FEF3C7; color: #B45309; }
+
+    /* Top Header User Badge & Logout Button */
+    .header-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: var(--surface-white);
+      border: 1.5px solid var(--border-color);
+      padding: 0.35rem 0.75rem 0.35rem 0.45rem;
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-xs);
+      transition: var(--transition-fast);
+    }
+    .header-user-badge:hover {
+      border-color: var(--primary-teal);
+    }
+    .header-user-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--deep-navy);
+      color: var(--neon-lime);
+      font-size: 0.82rem;
+      font-weight: 800;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px var(--lime-glow);
+    }
+    .header-user-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+    .header-user-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--deep-navy);
+      white-space: nowrap;
+    }
+    .header-user-role-label {
+      font-size: 0.66rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .header-auth-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-left: 0.35rem;
+      border-left: 1px solid var(--border-color);
+      padding-left: 0.5rem;
+    }
+    .btn-auth-action {
+      background: var(--surface-muted);
+      border: 1px solid var(--border-color);
+      color: var(--deep-navy);
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: var(--transition-fast);
+    }
+    .btn-auth-action:hover {
+      background: var(--primary-teal);
+      color: #FFFFFF;
+      border-color: var(--primary-teal);
+    }
+    .btn-auth-logout {
+      background: var(--danger-bg);
+      border-color: rgba(217, 56, 58, 0.2);
+      color: var(--danger);
+    }
+    .btn-auth-logout:hover {
+      background: var(--danger);
+      color: #FFFFFF;
+      border-color: var(--danger);
+    }
+
+    /* Role Barrier Modal */
+    .role-barrier-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 34, 51, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .role-barrier-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .barrier-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 2.2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      border: 1.5px solid var(--border-color);
+      transform: scale(0.95);
+      transition: var(--transition-bounce);
+    }
+    .role-barrier-modal.open .barrier-card {
+      transform: scale(1);
+    }
+    
   </style>
 </head>
 <body>
@@ -1663,6 +2105,23 @@
           <span>🔍 Quick Search...</span>
           <span class="kbd-shortcut">Ctrl K</span>
         </button>
+
+        <!-- Current User Session Badge with Switch & Sign Out -->
+        <div class="header-user-badge" id="header-user-badge">
+          <div class="header-user-avatar" id="header-avatar-initials">LJ</div>
+          <div class="header-user-text">
+            <div class="header-user-name" id="header-user-name">Librarian Jane</div>
+            <div class="header-user-role-label" id="header-user-role">Librarian Staff</div>
+          </div>
+          <div class="header-auth-actions">
+            <button class="btn-auth-action" onclick="openAuthModal()" title="Switch Account">
+              <span>🔄 Switch</span>
+            </button>
+            <button class="btn-auth-action btn-auth-logout" onclick="handleLogout()" title="Sign Out of Session">
+              <span>🚪 Sign Out</span>
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -2437,7 +2896,18 @@
     // =========================================================================
     // GLOBAL STATE & ROLE DEFINITIONS (The 3 Parts)
     // =========================================================================
-    let activeRole = 'LIBRARIAN'; // 'MEMBER', 'LIBRARIAN', or 'ADMIN'
+    // Active session & role definition
+    let activeRole = 'MEMBER'; // default to normal user
+    let currentSession = {
+      token: null,
+      refreshToken: null,
+      username: 'member_elena',
+      role: 'MEMBER',
+      memberId: 1,
+      displayName: 'Dr. Elena Rostova',
+      avatar: 'ER'
+    };
+
     let memberToken = null;
     let staffToken = null;
     let adminToken = null;
@@ -2472,10 +2942,56 @@
     };
 
     // =========================================================================
+    // AUTHENTICATION MODAL & DIALOG CONTROLS
+    // =========================================================================
+    function openAuthModal() {
+      const modal = document.getElementById('auth-overlay');
+      const alertBox = document.getElementById('auth-alert-box');
+      alertBox.style.display = 'none';
+      modal.classList.add('open');
+      setTimeout(() => {
+        const uInput = document.getElementById('login-username');
+        if (uInput) uInput.focus();
+      }, 100);
+    }
+
+    function closeAuthModal() {
+      // If user is completely unauthenticated and has no token, give friendly feedback
+      if (!currentSession.token && !memberToken) {
+        showToast('Exploring as Guest with public catalog access.');
+      }
+      document.getElementById('auth-overlay').classList.remove('open');
+    }
+
+    function switchAuthTab(tab) {
+      document.getElementById('tab-auth-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-auth-register').classList.toggle('active', tab === 'register');
+      document.getElementById('auth-panel-login').style.display = (tab === 'login') ? 'block' : 'none';
+      document.getElementById('auth-panel-register').style.display = (tab === 'register') ? 'block' : 'none';
+      document.getElementById('auth-alert-box').style.display = 'none';
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const el = document.getElementById(inputId);
+      if (el) {
+        el.type = (el.type === 'password') ? 'text' : 'password';
+      }
+    }
+
+    function closeRoleBarrier() {
+      document.getElementById('role-barrier-modal').classList.remove('open');
+    }
+
+    function showRoleBarrier() {
+      document.getElementById('role-barrier-modal').classList.add('open');
+    }
+
+    // =========================================================================
     // DELIGHT & ANIMATION HELPERS (Confetti & Particle FX)
     // =========================================================================
     function triggerConfetti() {
       const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -2483,7 +2999,7 @@
       const particles = [];
       const colors = ['#B9F12F', '#2A5344', '#0B3048', '#FBBF24', '#38BDF8'];
 
-      for (let i = 0; i < 65; i++) {
+      for (let i = 0; i < 70; i++) {
         particles.push({
           x: window.innerWidth * (0.3 + Math.random() * 0.4),
           y: window.innerHeight * 0.4,
@@ -2557,7 +3073,7 @@
     }
 
     // =========================================================================
-    // AUTHENTICATION & API DISPATCHER
+    // CORE AUTHENTICATION API & SESSION PERSISTENCE
     // =========================================================================
     async function login(username, password) {
       try {
@@ -2567,24 +3083,252 @@
           body: JSON.stringify({ username, password })
         });
         const json = await res.json();
-        return json.data?.accessToken;
+        if (json.success && json.data) {
+          return json.data;
+        }
+        return null;
       } catch (e) {
         console.error('Login error', e);
         return null;
       }
     }
 
+    async function handleLoginSubmit(event) {
+      event.preventDefault();
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value;
+      const remember = document.getElementById('login-remember').checked;
+      const btnText = document.getElementById('login-btn-text');
+      const spinner = document.getElementById('login-spinner');
+      const alertBox = document.getElementById('auth-alert-box');
+      const alertText = document.getElementById('auth-alert-text');
+      const card = document.getElementById('auth-card');
+
+      btnText.innerText = 'Verifying credentials...';
+      spinner.style.display = 'inline-block';
+      alertBox.style.display = 'none';
+
+      try {
+        const data = await login(u, p);
+        if (data && data.accessToken) {
+          // Set session
+          currentSession.token = data.accessToken;
+          currentSession.refreshToken = data.refreshToken;
+          currentSession.username = data.username;
+          currentSession.role = data.role;
+          currentSession.memberId = data.memberId || (data.role === 'MEMBER' ? 1 : null);
+
+          if (u === 'member_elena') {
+            currentSession.displayName = 'Dr. Elena Rostova';
+            currentSession.avatar = 'ER';
+          } else if (u === 'librarian') {
+            currentSession.displayName = 'Librarian Jane';
+            currentSession.avatar = 'LJ';
+          } else if (u === 'admin') {
+            currentSession.displayName = 'Director Sarah Sterling';
+            currentSession.avatar = 'SS';
+          } else {
+            currentSession.displayName = u;
+            currentSession.avatar = u.substring(0, 2).toUpperCase();
+          }
+
+          if (data.role === 'MEMBER') memberToken = data.accessToken;
+          if (data.role === 'LIBRARIAN') staffToken = data.accessToken;
+          if (data.role === 'ADMIN') adminToken = data.accessToken;
+
+          if (remember) {
+            localStorage.setItem('infinity_auth_session', JSON.stringify(currentSession));
+          }
+
+          updateUserDisplay();
+          triggerConfetti();
+          showToast('Welcome back, ' + currentSession.displayName + '!');
+          closeAuthModal();
+
+          // Switch persona and load view
+          switchPersona(currentSession.role, false);
+        } else {
+          // Show error alert with shake
+          alertBox.className = 'auth-alert error';
+          alertText.innerText = 'Invalid credentials. Please verify your username and password.';
+          alertBox.style.display = 'flex';
+          card.classList.add('shake-error');
+          setTimeout(() => card.classList.remove('shake-error'), 500);
+        }
+      } catch (err) {
+        alertBox.className = 'auth-alert error';
+        alertText.innerText = 'Network error or service unavailable. Please retry.';
+        alertBox.style.display = 'flex';
+      } finally {
+        btnText.innerText = 'Authenticate & Sign In';
+        spinner.style.display = 'none';
+      }
+    }
+
+    async function quickLogin(username, password) {
+      switchAuthTab('login');
+      document.getElementById('login-username').value = username;
+      document.getElementById('login-password').value = password;
+      const formEvent = { preventDefault: () => {} };
+      await handleLoginSubmit(formEvent);
+    }
+
+    async function handleLogout() {
+      if (currentSession.refreshToken) {
+        try {
+          await fetch('/api/v1/auth/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + currentSession.token
+            },
+            body: JSON.stringify({ refreshToken: currentSession.refreshToken })
+          });
+        } catch (e) {
+          console.warn('Logout revocation error', e);
+        }
+      }
+
+      currentSession = {
+        token: null,
+        refreshToken: null,
+        username: null,
+        role: null,
+        memberId: null,
+        displayName: 'Guest / Signed Out',
+        avatar: '?'
+      };
+      localStorage.removeItem('infinity_auth_session');
+      updateUserDisplay();
+      showToast('You have been logged out.');
+      openAuthModal();
+    }
+
+    async function handleRegisterSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const duration = parseInt(document.getElementById('reg-duration').value, 10);
+      const btnText = document.getElementById('reg-btn-text');
+      const spinner = document.getElementById('reg-spinner');
+
+      btnText.innerText = 'Creating account...';
+      spinner.style.display = 'inline-block';
+
+      try {
+        await ensureTokens();
+        const res = await authFetch('/api/v1/members', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            membershipDurationMonths: duration
+          })
+        });
+
+        const json = await res.json();
+        if (json.success && json.data) {
+          const newMember = json.data;
+          window.latestRegisteredMember = newMember;
+          triggerConfetti();
+
+          // Show success container
+          document.getElementById('reg-result-card-num').innerText = newMember.membershipNumber || 'MEM-2026-NEW';
+          document.getElementById('reg-result-name').innerText = newMember.name;
+          document.querySelector('#auth-panel-register form').style.display = 'none';
+          document.getElementById('reg-success-container').style.display = 'block';
+
+          showToast('Patron registered successfully: ' + newMember.name);
+        } else {
+          showToast(json.detail || 'Failed to complete registration.', true);
+        }
+      } catch (err) {
+        showToast('Registration service encountered an error.', true);
+      } finally {
+        btnText.innerText = 'Register & Generate Membership Pass';
+        spinner.style.display = 'none';
+      }
+    }
+
+    function continueAsRegisteredMember() {
+      // Sign in as the member session
+      if (window.latestRegisteredMember) {
+        const m = window.latestRegisteredMember;
+        currentSession.displayName = m.name;
+        currentSession.memberId = m.id;
+        currentSession.role = 'MEMBER';
+        currentSession.avatar = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        
+        // Update patron pass card values in UI
+        const nameEl = document.querySelector('.pass-name');
+        if (nameEl) nameEl.innerText = m.name;
+        const idEl = document.querySelector('.pass-id');
+        if (idEl) idEl.innerText = 'CARD ID: ' + m.membershipNumber + ' • Active Patron';
+        const avatarEl = document.querySelector('.pass-avatar');
+        if (avatarEl) avatarEl.innerText = currentSession.avatar;
+
+        updateUserDisplay();
+        closeAuthModal();
+        switchPersona('MEMBER', false);
+        showToast('Welcome to Infinity Central, ' + m.name + '!');
+      } else {
+        quickLogin('member_elena', 'Password@123');
+      }
+    }
+
+    function updateUserDisplay() {
+      const name = currentSession.displayName || 'Guest User';
+      const roleDef = ROLES[activeRole] || ROLES.MEMBER;
+      const avatar = currentSession.avatar || '??';
+
+      // Sidebar Profile
+      const sideAvatar = document.getElementById('avatar-initials');
+      if (sideAvatar) sideAvatar.innerText = avatar;
+      const sideName = document.getElementById('session-user-name');
+      if (sideName) sideName.innerText = name;
+      const sideRole = document.getElementById('session-user-role');
+      if (sideRole) sideRole.innerText = roleDef.roleLabel;
+
+      // Top Header User Badge
+      const headAvatar = document.getElementById('header-avatar-initials');
+      if (headAvatar) headAvatar.innerText = avatar;
+      const headName = document.getElementById('header-user-name');
+      if (headName) headName.innerText = name;
+      const headRole = document.getElementById('header-user-role');
+      if (headRole) headRole.innerText = roleDef.roleLabel;
+    }
+
     async function ensureTokens() {
-      if (!staffToken) staffToken = await login('librarian', 'Password@123');
-      if (!memberToken) memberToken = await login('member_elena', 'Password@123');
-      if (!adminToken) adminToken = await login('admin', 'Password@123');
+      if (!staffToken) {
+        const d = await login('librarian', 'Password@123');
+        if (d) staffToken = d.accessToken;
+      }
+      if (!memberToken) {
+        const d = await login('member_elena', 'Password@123');
+        if (d) memberToken = d.accessToken;
+      }
+      if (!adminToken) {
+        const d = await login('admin', 'Password@123');
+        if (d) adminToken = d.accessToken;
+      }
+      if (!currentSession.token) {
+        if (activeRole === 'MEMBER' && memberToken) currentSession.token = memberToken;
+        else if (activeRole === 'LIBRARIAN' && staffToken) currentSession.token = staffToken;
+        else if (activeRole === 'ADMIN' && adminToken) currentSession.token = adminToken;
+      }
     }
 
     async function authFetch(url, options = {}) {
       await ensureTokens();
-      let token = staffToken;
-      if (activeRole === 'MEMBER') token = memberToken;
-      if (activeRole === 'ADMIN') token = adminToken;
+      let token = currentSession.token;
+      if (!token) {
+        if (activeRole === 'MEMBER') token = memberToken;
+        else if (activeRole === 'ADMIN') token = adminToken;
+        else token = staffToken;
+      }
 
       const headers = options.headers || {};
       if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -2596,15 +3340,61 @@
         }
       }
 
-      return fetch(url, { ...options, headers });
+      let res = await fetch(url, { ...options, headers });
+      if (res.status === 401 && currentSession.refreshToken) {
+        // Attempt token rotation
+        const refreshed = await attemptTokenRefresh();
+        if (refreshed) {
+          headers['Authorization'] = 'Bearer ' + currentSession.token;
+          return fetch(url, { ...options, headers });
+        }
+      }
+      return res;
     }
 
+    async function attemptTokenRefresh() {
+      try {
+        const res = await fetch('/api/v1/auth/refresh', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken: currentSession.refreshToken })
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && json.data.accessToken) {
+            currentSession.token = json.data.accessToken;
+            currentSession.refreshToken = json.data.refreshToken;
+            if (localStorage.getItem('infinity_auth_session')) {
+              localStorage.setItem('infinity_auth_session', JSON.stringify(currentSession));
+            }
+            return true;
+          }
+        }
+      } catch (e) {
+        console.warn('Token rotation error', e);
+      }
+      return false;
+    }
+    
     // =========================================================================
     // PERSONA & ROLE SWITCHING (Part 1, Part 2, Part 3)
     // =========================================================================
-    function switchPersona(newRole) {
+    function switchPersona(newRole, checkPermissions = true) {
+      // Role-based security barrier: if signed in as normal member and trying to access staff/admin tools
+      if (checkPermissions && currentSession.role === 'MEMBER' && (newRole === 'LIBRARIAN' || newRole === 'ADMIN')) {
+        showRoleBarrier();
+        return;
+      }
+
       activeRole = newRole;
       const roleDef = ROLES[newRole];
+
+      // Update tokens
+      if (newRole === 'MEMBER' && memberToken) currentSession.token = memberToken;
+      if (newRole === 'LIBRARIAN' && staffToken) currentSession.token = staffToken;
+      if (newRole === 'ADMIN' && adminToken) currentSession.token = adminToken;
+
+      updateUserDisplay();
 
       // Update avatar & labels in sidebar
       document.getElementById('avatar-initials').innerText = roleDef.avatar;
@@ -3595,7 +4385,22 @@
     // INITIALIZATION
     // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
+      // Check saved session in localStorage
+      const saved = localStorage.getItem('infinity_auth_session');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.token && parsed.role) {
+            currentSession = parsed;
+            activeRole = parsed.role;
+          }
+        } catch (e) {
+          console.warn('Failed to parse saved session', e);
+        }
+      }
+
       ensureTokens().then(() => {
+        updateUserDisplay();
         renderSidebarNav(activeRole);
         renderMobileBottomNav(activeRole);
         const initialView = window.location.hash.replace('#', '') || ROLES[activeRole].defaultView;
@@ -3603,5 +4408,173 @@
       });
     });
   </script>
+
+  <!-- =========================================================================
+       AUTHENTICATION PORTAL MODAL (LOGIN & REGISTRATION)
+       ========================================================================= -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-card" id="auth-card" onclick="event.stopPropagation()">
+      <div class="auth-header">
+        <button class="auth-close-btn" onclick="closeAuthModal()" id="btn-close-auth-modal" title="Close dialog">✕</button>
+        <div class="auth-brand-symbol">∞</div>
+        <h2 class="auth-title">Infinity Central Library</h2>
+        <p class="auth-subtitle">Access your account, browse the collection, and manage institutional resources.</p>
+      </div>
+
+      <!-- Segmented Navigation: Sign In vs New Patron Registration -->
+      <div class="auth-nav-tabs">
+        <button class="auth-nav-tab active" id="tab-auth-login" onclick="switchAuthTab('login')">
+          <span>🔐 Member & Staff Sign In</span>
+        </button>
+        <button class="auth-nav-tab" id="tab-auth-register" onclick="switchAuthTab('register')">
+          <span>📝 New Patron Self-Registration</span>
+        </button>
+      </div>
+
+      <div class="auth-body">
+        <!-- Error / Success Alert Container -->
+        <div class="auth-alert" id="auth-alert-box">
+          <span id="auth-alert-icon">⚠️</span>
+          <span id="auth-alert-text">Error message</span>
+        </div>
+
+        <!-- 1. SIGN IN TAB CONTENT -->
+        <div id="auth-panel-login">
+          <form onsubmit="handleLoginSubmit(event)">
+            <div class="form-group" style="margin-bottom: 1.15rem;">
+              <label class="form-label" for="login-username">Username or ID</label>
+              <input type="text" id="login-username" class="form-input" placeholder="e.g. member_elena, librarian, admin" required autocomplete="username">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.5rem;">
+              <label class="form-label" for="login-password">Password</label>
+              <div class="input-with-action">
+                <input type="password" id="login-password" class="form-input" placeholder="••••••••••••" required autocomplete="current-password">
+                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password')" title="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <div class="auth-remember-row">
+              <label>
+                <input type="checkbox" id="login-remember" checked>
+                <span>Remember session on this device</span>
+              </label>
+              <a href="javascript:void(0)" onclick="showToast('For password recovery, please contact Central Circulation.')">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="auth-submit-btn" id="btn-login-submit">
+              <span id="login-spinner" style="display:none;">⏳</span>
+              <span id="login-btn-text">Authenticate & Sign In</span>
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- 1-Click Quick Demo Credentials -->
+          <div class="auth-divider">
+            <span>Or Sign In with 1-Click Demo Accounts</span>
+          </div>
+
+          <div class="demo-accounts-grid">
+            <!-- Normal User Card -->
+            <div class="demo-account-card" onclick="quickLogin('member_elena', 'Password@123')">
+              <div class="demo-avatar" style="background:#E0F2FE;">🎓</div>
+              <div class="demo-role-name">Dr. Elena</div>
+              <div class="demo-user-tag">member_elena</div>
+              <span class="demo-badge-pill pill-member">Patron</span>
+            </div>
+
+            <!-- Librarian Card -->
+            <div class="demo-account-card" onclick="quickLogin('librarian', 'Password@123')">
+              <div class="demo-avatar" style="background:#E3F7EB;">📚</div>
+              <div class="demo-role-name">Staff Jane</div>
+              <div class="demo-user-tag">librarian</div>
+              <span class="demo-badge-pill pill-librarian">Librarian</span>
+            </div>
+
+            <!-- Admin Card -->
+            <div class="demo-account-card" onclick="quickLogin('admin', 'Password@123')">
+              <div class="demo-avatar" style="background:#FEF3C7;">⚡</div>
+              <div class="demo-role-name">Dir. Sterling</div>
+              <div class="demo-user-tag">admin</div>
+              <span class="demo-badge-pill pill-admin">Director</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. NEW PATRON SELF-REGISTRATION TAB CONTENT -->
+        <div id="auth-panel-register" style="display: none;">
+          <form onsubmit="handleRegisterSubmit(event)">
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.25rem;">
+              Enroll as a new patron to obtain your Digital Library Pass and immediately begin reserving books from the collection.
+            </p>
+
+            <div class="form-group" style="margin-bottom: 1.15rem;">
+              <label class="form-label" for="reg-name">Full Legal Name</label>
+              <input type="text" id="reg-name" class="form-input" placeholder="e.g. Sophia Chen" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.15rem;">
+              <label class="form-label" for="reg-email">Institutional Email Address</label>
+              <input type="email" id="reg-email" class="form-input" placeholder="sophia.chen@university.edu" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.15rem;">
+              <label class="form-label" for="reg-phone">Contact Phone</label>
+              <input type="tel" id="reg-phone" class="form-input" placeholder="+1-555-0189" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.35rem;">
+              <label class="form-label" for="reg-duration">Membership Plan</label>
+              <select id="reg-duration" class="form-input">
+                <option value="12">Standard Annual Pass (12 Months - Full Borrowing Rights)</option>
+                <option value="6">Semester Research Pass (6 Months)</option>
+                <option value="24">Two-Year Extended Fellowship (24 Months)</option>
+              </select>
+            </div>
+
+            <button type="submit" class="auth-submit-btn" id="btn-reg-submit" style="background:linear-gradient(135deg, var(--teal-light) 0%, var(--primary-teal) 100%);">
+              <span id="reg-spinner" style="display:none;">⏳</span>
+              <span id="reg-btn-text">Register & Generate Membership Pass</span>
+              <span>✓</span>
+            </button>
+          </form>
+
+          <!-- Success Registration State Container (Hidden by default) -->
+          <div id="reg-success-container" style="display:none; text-align:center; padding:1rem 0;">
+            <div style="font-size:3rem; margin-bottom:0.5rem;">🎉</div>
+            <h3 style="color:var(--deep-navy); font-size:1.3rem; margin-bottom:0.5rem;">Registration Complete!</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.25rem;">
+              Your official digital library pass has been issued and linked to your university profile.
+            </p>
+            <div style="background:var(--surface-muted); border:1.5px dashed var(--primary-teal); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem;">
+              <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Membership Number</div>
+              <div style="font-size:1.4rem; font-weight:800; color:var(--deep-navy); letter-spacing:0.05em;" id="reg-result-card-num">MEM-2026-0004</div>
+              <div style="font-size:0.85rem; color:var(--primary-teal); font-weight:600; margin-top:0.25rem;" id="reg-result-name">Sophia Chen</div>
+            </div>
+            <button class="auth-submit-btn" onclick="continueAsRegisteredMember()">
+              <span>Access Patron Portal Now</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role Barrier Modal (Restricted Access Alert) -->
+  <div class="role-barrier-modal" id="role-barrier-modal" onclick="closeRoleBarrier()">
+    <div class="barrier-card" onclick="event.stopPropagation()">
+      <div style="font-size:3rem; margin-bottom:0.75rem;">🛡️</div>
+      <h3 style="font-size:1.35rem; color:var(--deep-navy); margin-bottom:0.6rem;">Staff Privileges Required</h3>
+      <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.5; margin-bottom:1.5rem;">
+        You are currently signed in with a <strong style="color:var(--primary-teal);">Normal User (Patron)</strong> account. The requested workspace requires Circulation Staff or Administrator authorization.
+      </p>
+      <div style="display:flex; gap:0.75rem; justify-content:center;">
+        <button class="btn-outline" onclick="closeRoleBarrier()" style="min-height:44px; padding:0 1.25rem;">Stay on Patron Portal</button>
+        <button class="btn-primary" onclick="closeRoleBarrier(); openAuthModal();" style="min-height:44px; padding:0 1.25rem;">Switch / Sign In as Staff</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
