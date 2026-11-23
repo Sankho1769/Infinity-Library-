@@ -35,8 +35,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public OpenAPI & Documentation Endpoints
+                        // Public OpenAPI, Portal & Documentation Endpoints
                         .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/static/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/custom.css",

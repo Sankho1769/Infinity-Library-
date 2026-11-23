@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinity Library — Unified Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal-primary: #2A5344;
+      --teal-dark: #1E3D31;
+      --navy-deep: #0B3048;
+      --lime-neon: #B9F12F;
+      --off-white: #F2F0E9;
+      --surface-card: #FFFFFF;
+      --text-muted: #5A6D65;
+      --border-subtle: #E2DFD2;
+      --danger: #D9383A;
+      --success: #2A8C55;
+      --warning: #D97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--off-white);
+      color: var(--navy-deep);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--navy-deep);
+      color: var(--off-white);
+      padding: 0.9rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(11, 48, 72, 0.15);
+      border-bottom: 3px solid var(--lime-neon);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--lime-neon);
+      color: var(--navy-deep);
+      font-weight: 800;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--lime-neon);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .header-center {
+      display: flex;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(185, 241, 47, 0.25);
+      border-radius: 999px;
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+    .mode-switch-btn {
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--off-white);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .mode-switch-btn.active {
+      background: var(--lime-neon);
+      color: var(--navy-deep);
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .user-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(185, 241, 47, 0.3);
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .user-pill .badge {
+      background: var(--lime-neon);
+      color: var(--navy-deep);
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+    }
+
+    .quick-role-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--off-white);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-role-btn:hover {
+      border-color: var(--lime-neon);
+      color: var(--lime-neon);
+    }
+
+    .swagger-btn {
+      background: transparent;
+      border: 1px solid var(--lime-neon);
+      color: var(--lime-neon);
+      text-decoration: none;
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .swagger-btn:hover {
+      background: var(--lime-neon);
+      color: var(--navy-deep);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .banner {
+      background: var(--teal-primary);
+      color: var(--off-white);
+      padding: 1.25rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 6px solid var(--lime-neon);
+      box-shadow: 0 4px 15px rgba(42, 83, 68, 0.15);
+    }
+    .banner h2 { font-size: 1.2rem; margin-bottom: 0.25rem; }
+    .banner p { font-size: 0.85rem; opacity: 0.9; }
+
+    /* Legacy Action Tiles (Modernized Home Grid) */
+    .action-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .action-tile {
+      background: var(--surface-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(11, 48, 72, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .action-tile:hover {
+      border-color: var(--teal-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(42, 83, 68, 0.12);
+    }
+    .action-tile.active-tile {
+      border-color: var(--teal-primary);
+      background: #F0F6F3;
+    }
+    .tile-icon {
+      font-size: 2rem;
+      width: 54px;
+      height: 54px;
+      background: var(--off-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.25rem;
+    }
+    .tile-title {
+      font-weight: 700;
+      color: var(--navy-deep);
+      font-size: 1rem;
+    }
+    .tile-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Forms & Workspaces */
+    .workspace-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 3px 12px rgba(11, 48, 72, 0.05);
+      margin-bottom: 2rem;
+    }
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .workspace-header h3 { font-size: 1.25rem; color: var(--navy-deep); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: #FAFAFA;
+      transition: border 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--teal-primary);
+      background: #fff;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: flex-end;
+    }
+
+    .action-btn {
+      background: var(--teal-primary);
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .action-btn:hover { background: var(--teal-dark); }
+    .action-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--navy-deep);
+    }
+    .action-btn.secondary:hover { background: var(--off-white); }
+    .action-btn.danger { background: var(--danger); }
+
+    /* Results / Status Boxes */
+    .status-msg {
+      margin-top: 1rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      display: none;
+    }
+    .status-msg.success { background: #E6F4EA; color: var(--success); border: 1px solid #A8DAB5; }
+    .status-msg.error { background: #FDE8E8; color: var(--danger); border: 1px solid #F8B4B4; }
+
+    /* Catalog & Lists Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(11, 48, 72, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card h4 { font-size: 1.1rem; color: var(--navy-deep); margin-bottom: 0.25rem; }
+    .card .author { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .card .meta {
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border-subtle);
+    }
+    .stock-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+    }
+    .stock-available { background: #E6F4EA; color: var(--success); }
+    .stock-empty { background: #FDE8E8; color: var(--danger); }
+
+    .code-snippet {
+      background: var(--navy-deep);
+      color: var(--lime-neon);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.85rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      background: #EDEAE1;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">∞</div>
+      <div>
+        <div class="brand-title">Infinity Library</div>
+        <div class="brand-subtitle">Production Management & Circulation System</div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <button class="mode-switch-btn active" id="btn-mode-staff" onclick="setMode('staff')">🏢 Staff Circulation Desk</button>
+      <button class="mode-switch-btn" id="btn-mode-member" onclick="setMode('member')">👤 Member & Patron Portal</button>
+    </div>
+
+    <div class="header-actions">
+      <div class="user-pill">
+        <span id="current-user-display">Logged in: <strong>Librarian Jane</strong></span>
+        <span class="badge" id="current-user-role">ROLE_LIBRARIAN</span>
+      </div>
+      <button class="quick-role-btn" title="Switch account" onclick="toggleUserRole()">⇄ Switch User</button>
+      <a href="/swagger-ui.html" target="_blank" class="swagger-btn">Open Swagger API Docs ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- STAFF MODE CONTAINER -->
+    <div id="staff-mode-container">
+      <div class="banner">
+        <div>
+          <h2>🏢 Librarian Circulation & Catalog Operations Desk</h2>
+          <p>Modernized counterpart to the legacy Swing desktop system. Perform concurrency-locked checkouts, barcode returns, student registrations, and bibliographic title additions.</p>
+        </div>
+        <button class="action-btn secondary" style="color:#fff; border-color:var(--lime-neon);" onclick="loadStaffStats()">↻ Refresh Dashboard</button>
+      </div>
+
+      <!-- Action Tiles corresponding to legacy Home.java -->
+      <div class="action-tiles-grid">
+        <div class="action-tile active-tile" onclick="openStaffTab('issue')">
+          <div class="tile-icon">📤</div>
+          <div class="tile-title">Issue Book</div>
+          <div class="tile-desc">Pessimistic lock checkout</div>
+        </div>
+        <div class="action-tile" onclick="openStaffTab('return')">
+          <div class="tile-icon">📥</div>
+          <div class="tile-title">Return Book</div>
+          <div class="tile-desc">Return & fine accrual</div>
+        </div>
+        <div class="action-tile" onclick="openStaffTab('add-book')">
+          <div class="tile-icon">📖</div>
+          <div class="tile-title">New Book</div>
+          <div class="tile-desc">Register title & physical copies</div>
+        </div>
+        <div class="action-tile" onclick="openStaffTab('new-student')">
+          <div class="tile-icon">🎓</div>
+          <div class="tile-title">New Student</div>
+          <div class="tile-desc">Member registration</div>
+        </div>
+        <div class="action-tile" onclick="openStaffTab('reports')">
+          <div class="tile-icon">📊</div>
+          <div class="tile-title">Live Reports</div>
+          <div class="tile-desc">Derived inventory metrics</div>
+        </div>
+      </div>
+
+      <!-- Form 1: Issue Book (Legacy IssueBook.java) -->
+      <div class="workspace-card staff-panel" id="panel-issue">
+        <div class="workspace-header">
+          <h3>📤 Issue Physical Book Copy</h3>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Protected by <code>SELECT ... FOR UPDATE</code> Row-Level Write Lock</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Physical Copy Barcode *</label>
+            <input type="text" id="issue-barcode" placeholder="e.g. CPY-1-A1B2C3D4 or select below" value="CPY-101">
+          </div>
+          <div class="form-group">
+            <label>Student / Member ID *</label>
+            <input type="number" id="issue-member-id" placeholder="e.g. 1 (Elena Rostova)" value="1">
+          </div>
+        </div>
+        <div style="margin-top:1rem; font-size:0.85rem; color:var(--text-muted);">
+          * System will acquire an exclusive pessimistic row lock on the physical copy, check borrowing quota (&le; 5), verify member status (<code>ACTIVE</code>), and snapshot the loan policy (14 days default).
+        </div>
+        <div class="status-msg" id="issue-msg"></div>
+        <div class="btn-row">
+          <button class="action-btn" onclick="executeIssueBook()">Confirm & Issue Book</button>
+        </div>
+      </div>
+
+      <!-- Form 2: Return Book (Legacy ReturnBook.java) -->
+      <div class="workspace-card staff-panel" id="panel-return" style="display:none;">
+        <div class="workspace-header">
+          <h3>📥 Return Physical Book Copy</h3>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Deterministic fine calculation & FIFO hold reallocation</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Physical Copy Barcode *</label>
+            <input type="text" id="return-barcode" placeholder="e.g. CPY-101">
+          </div>
+        </div>
+        <div style="margin-top:1rem; font-size:0.85rem; color:var(--text-muted);">
+          * Overdue duration is computed using the library's official Clock. If overdue, a fine record is accrued ($0.50/day). If pending reservations exist, the copy is automatically allocated to the next member in line.
+        </div>
+        <div class="status-msg" id="return-msg"></div>
+        <div class="btn-row">
+          <button class="action-btn" onclick="executeReturnBook()">Process Return</button>
+        </div>
+      </div>
+
+      <!-- Form 3: Add Book (Legacy AddBook.java) -->
+      <div class="workspace-card staff-panel" id="panel-add-book" style="display:none;">
+        <div class="workspace-header">
+          <h3>📖 Register Bibliographic Title & Inventory Copies</h3>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Separates bibliographic title from physical copies</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Book Title *</label>
+            <input type="text" id="add-title" placeholder="e.g. Clean Code" value="Clean Code: A Handbook of Agile Software Craftsmanship">
+          </div>
+          <div class="form-group">
+            <label>ISBN-10 / ISBN-13 *</label>
+            <input type="text" id="add-isbn" placeholder="e.g. 978-0132350884">
+          </div>
+          <div class="form-group">
+            <label>Author *</label>
+            <input type="text" id="add-author" placeholder="e.g. Robert C. Martin" value="Robert C. Martin">
+          </div>
+          <div class="form-group">
+            <label>Publisher</label>
+            <input type="text" id="add-publisher" placeholder="e.g. Prentice Hall" value="Prentice Hall">
+          </div>
+          <div class="form-group">
+            <label>Publication Year</label>
+            <input type="number" id="add-year" placeholder="e.g. 2008" value="2008">
+          </div>
+          <div class="form-group">
+            <label>Genre / Category *</label>
+            <input type="text" id="add-genre" placeholder="e.g. Software Engineering" value="Software Engineering">
+          </div>
+          <div class="form-group">
+            <label>Initial Physical Copies to Serialise *</label>
+            <input type="number" id="add-copies" min="1" max="50" value="3">
+          </div>
+        </div>
+        <div class="status-msg" id="add-book-msg"></div>
+        <div class="btn-row">
+          <button class="action-btn" onclick="executeAddBook()">Register Title & Generate Barcodes</button>
+        </div>
+      </div>
+
+      <!-- Form 4: New Student Registration (Legacy StudentRegistration.java) -->
+      <div class="workspace-card staff-panel" id="panel-new-student" style="display:none;">
+        <div class="workspace-header">
+          <h3>🎓 New Student / Member Registration</h3>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Generates unique membership number and audit trail</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="stu-name" placeholder="e.g. Alan Turing">
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="stu-email" placeholder="e.g. alan.turing@university.edu">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="stu-phone" placeholder="e.g. +1-555-0199">
+          </div>
+          <div class="form-group">
+            <label>Course / Program</label>
+            <input type="text" id="stu-course" placeholder="e.g. Computer Science & Engineering">
+          </div>
+        </div>
+        <div class="status-msg" id="stu-msg"></div>
+        <div class="btn-row">
+          <button class="action-btn" onclick="executeRegisterStudent()">Register Member</button>
+        </div>
+      </div>
+
+      <!-- Panel 5: Reports -->
+      <div class="workspace-card staff-panel" id="panel-reports" style="display:none;">
+        <div class="workspace-header">
+          <h3>📊 Real-Time Derived Inventory & Circulation Intelligence</h3>
+          <button class="action-btn secondary" onclick="loadStaffStats()">Refresh Metrics</button>
+        </div>
+        <div class="form-grid" id="staff-stats-grid">
+          <div class="card">
+            <h4>📦 Total Physical Inventory</h4>
+            <div style="font-size:2rem; font-weight:800; color:var(--teal-primary);" id="stat-total-copies">-</div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Derived dynamically from active <code>book_copies</code> records</p>
+          </div>
+          <div class="card">
+            <h4>🟢 Available on Shelves</h4>
+            <div style="font-size:2rem; font-weight:800; color:var(--success);" id="stat-available-copies">-</div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Ready for immediate checkout</p>
+          </div>
+          <div class="card">
+            <h4>📤 Currently On Loan</h4>
+            <div style="font-size:2rem; font-weight:800; color:var(--navy-deep);" id="stat-loan-copies">-</div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Tracked in active loan contracts</p>
+          </div>
+          <div class="card">
+            <h4>🔖 Reserved Holds</h4>
+            <div style="font-size:2rem; font-weight:800; color:var(--warning);" id="stat-reserved-copies">-</div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Allocated to FIFO pickup queue</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMBER MODE CONTAINER -->
+    <div id="member-mode-container" style="display:none;">
+      <div class="banner">
+        <div>
+          <h2>👤 Patron & Member Self-Service Portal</h2>
+          <p>Logged in as <strong>Elena Rostova</strong>. Search bibliographic titles, inspect copy availability, place reservation holds, and view your personal loan and fine status.</p>
+        </div>
+        <button class="action-btn secondary" style="color:#fff; border-color:var(--lime-neon);" onclick="loadMemberData()">↻ Refresh My Data</button>
+      </div>
+
+      <div class="action-tiles-grid">
+        <div class="action-tile active-tile" onclick="openMemberTab('catalog')">
+          <div class="tile-icon">📚</div>
+          <div class="tile-title">Browse Catalog</div>
+          <div class="tile-desc">Search titles & availability</div>
+        </div>
+        <div class="action-tile" onclick="openMemberTab('loans')">
+          <div class="tile-icon">📖</div>
+          <div class="tile-title">My Loans</div>
+          <div class="tile-desc"><span id="mem-loan-badge">0</span> active loans</div>
+        </div>
+        <div class="action-tile" onclick="openMemberTab('reservations')">
+          <div class="tile-icon">🔖</div>
+          <div class="tile-title">My Holds</div>
+          <div class="tile-desc"><span id="mem-res-badge">0</span> active holds</div>
+        </div>
+        <div class="action-tile" onclick="openMemberTab('fines')">
+          <div class="tile-icon">💳</div>
+          <div class="tile-title">My Fines</div>
+          <div class="tile-desc"><span id="mem-fine-badge">0</span> penalties</div>
+        </div>
+        <div class="action-tile" onclick="openMemberTab('security')">
+          <div class="tile-icon">🛡️</div>
+          <div class="tile-title">BOLA Security Test</div>
+          <div class="tile-desc">IDOR defense verification</div>
+        </div>
+      </div>
+
+      <!-- Member Tab 1: Catalog -->
+      <div class="workspace-card member-panel" id="mpanel-catalog">
+        <div class="workspace-header">
+          <h3>📚 Bibliographic Catalog & Live Copy Inventory</h3>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Availability calculated on-the-fly</span>
+        </div>
+        <div class="cards-grid" id="member-catalog-grid">
+          <div>Loading catalog...</div>
+        </div>
+      </div>
+
+      <!-- Member Tab 2: My Loans -->
+      <div class="workspace-card member-panel" id="mpanel-loans" style="display:none;">
+        <div class="workspace-header">
+          <h3>📖 My Borrowed Books & Due Dates</h3>
+        </div>
+        <div class="cards-grid" id="member-loans-grid">
+          <div>Loading loans...</div>
+        </div>
+      </div>
+
+      <!-- Member Tab 3: My Reservations -->
+      <div class="workspace-card member-panel" id="mpanel-reservations" style="display:none;">
+        <div class="workspace-header">
+          <h3>🔖 My Active Reservations & Queue Positions</h3>
+        </div>
+        <div class="cards-grid" id="member-reservations-grid">
+          <div>Loading reservations...</div>
+        </div>
+      </div>
+
+      <!-- Member Tab 4: My Fines -->
+      <div class="workspace-card member-panel" id="mpanel-fines" style="display:none;">
+        <div class="workspace-header">
+          <h3>💳 Outstanding Fine Ledger</h3>
+        </div>
+        <div class="cards-grid" id="member-fines-grid">
+          <div>Loading fines...</div>
+        </div>
+      </div>
+
+      <!-- Member Tab 5: BOLA Defense Demo -->
+      <div class="workspace-card member-panel" id="mpanel-security" style="display:none;">
+        <div class="workspace-header">
+          <h3>🛡️ Broken Object-Level Authorization (BOLA/IDOR) Defense</h3>
+        </div>
+        <p style="margin-bottom:1rem; font-size:0.9rem; color:var(--text-muted);">
+          In unhardened systems, a member can manipulate URL query parameters (e.g. <code>/api/v1/members/2/loans</code>) to peek into another patron's private loans and fines.
+          In Infinity Library, Spring Security method-level authorization inspects <code>authentication.principal.memberId</code>.
+        </p>
+        <button class="action-btn" onclick="testBOLA()">⚡ Simulate BOLA Attack: Request Member #2 Data</button>
+        <div id="bola-result-box" style="margin-top:1.5rem; display:none;">
+          <strong>Security Response:</strong>
+          <div class="code-snippet" id="bola-code-output"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Infinity Library Management System &bull; Java 25 LTS &bull; Spring Boot 4.2.0 &bull; PostgreSQL 19/18 &bull; Argon2id Cryptography &bull; Flyway Migrations
+  </footer>
+
+  <script>
+    let activeRole = 'LIBRARIAN'; // 'LIBRARIAN' or 'MEMBER'
+    let staffToken = null;
+    let memberToken = null;
+
+    async function ensureAuth() {
+      if (activeRole === 'LIBRARIAN' && !staffToken) {
+        const res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'librarian', password: 'Librarian@123456' })
+        });
+        const json = await res.json();
+        staffToken = json.data?.accessToken;
+      } else if (activeRole === 'MEMBER' && !memberToken) {
+        const res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'member_elena', password: 'Member@123456' })
+        });
+        const json = await res.json();
+        memberToken = json.data?.accessToken;
+      }
+    }
+
+    async function apiCall(url, options = {}) {
+      await ensureAuth();
+      const token = activeRole === 'LIBRARIAN' ? staffToken : memberToken;
+      const headers = options.headers || {};
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+      headers['Accept'] = 'application/json';
+      return fetch(url, { ...options, headers });
+    }
+
+    function setMode(mode) {
+      if (mode === 'staff') {
+        activeRole = 'LIBRARIAN';
+        document.getElementById('staff-mode-container').style.display = 'block';
+        document.getElementById('member-mode-container').style.display = 'none';
+        document.getElementById('btn-mode-staff').classList.add('active');
+        document.getElementById('btn-mode-member').classList.remove('active');
+        document.getElementById('current-user-display').innerHTML = 'Logged in: <strong>Librarian Jane</strong>';
+        document.getElementById('current-user-role').innerText = 'ROLE_LIBRARIAN';
+        loadStaffStats();
+      } else {
+        activeRole = 'MEMBER';
+        document.getElementById('staff-mode-container').style.display = 'none';
+        document.getElementById('member-mode-container').style.display = 'block';
+        document.getElementById('btn-mode-staff').classList.remove('active');
+        document.getElementById('btn-mode-member').classList.add('active');
+        document.getElementById('current-user-display').innerHTML = 'Logged in: <strong>Elena Rostova</strong>';
+        document.getElementById('current-user-role').innerText = 'ROLE_MEMBER';
+        loadMemberData();
+      }
+    }
+
+    function toggleUserRole() {
+      setMode(activeRole === 'LIBRARIAN' ? 'member' : 'staff');
+    }
+
+    function openStaffTab(panelName) {
+      document.querySelectorAll('.staff-panel').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('#staff-mode-container .action-tile').forEach(t => t.classList.remove('active-tile'));
+      document.getElementById('panel-' + panelName).style.display = 'block';
+      event?.currentTarget?.classList.add('active-tile');
+      if (panelName === 'reports') loadStaffStats();
+    }
+
+    function openMemberTab(panelName) {
+      document.querySelectorAll('.member-panel').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('#member-mode-container .action-tile').forEach(t => t.classList.remove('active-tile'));
+      document.getElementById('mpanel-' + panelName).style.display = 'block';
+      event?.currentTarget?.classList.add('active-tile');
+    }
+
+    // Staff Actions
+    async function executeIssueBook() {
+      const barcode = document.getElementById('issue-barcode').value.trim();
+      const memberId = document.getElementById('issue-member-id').value.trim();
+      const msgBox = document.getElementById('issue-msg');
+      msgBox.style.display = 'none';
+
+      if (!barcode || !memberId) {
+        alert('Please specify both barcode and member ID');
+        return;
+      }
+
+      try {
+        const res = await apiCall('/api/v1/loans/issue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ copyBarcode: barcode, memberId: parseInt(memberId) })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          msgBox.className = 'status-msg success';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✓ <strong>Book Issued Successfully!</strong> Loan ID: ' + json.data.id + '<br>Due Date: ' + new Date(json.data.dueDate).toLocaleDateString() + ' (Pessimistic lock released)';
+        } else {
+          msgBox.className = 'status-msg error';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✗ <strong>Checkout Blocked:</strong> ' + (json.detail || json.message || 'Operation failed');
+        }
+      } catch (err) {
+        alert('Error communicating with circulation service.');
+      }
+    }
+
+    async function executeReturnBook() {
+      const barcode = document.getElementById('return-barcode').value.trim();
+      const msgBox = document.getElementById('return-msg');
+      msgBox.style.display = 'none';
+
+      if (!barcode) {
+        alert('Please enter a copy barcode');
+        return;
+      }
+
+      try {
+        const res = await apiCall('/api/v1/loans/return', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ copyBarcode: barcode })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          msgBox.className = 'status-msg success';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✓ <strong>Return Processed!</strong> Book copy <code>' + barcode + '</code> marked returned.<br>' +
+            (json.data.overdueFineCalculated > 0 ? '⚠️ Overdue fine assessed: $' + json.data.overdueFineCalculated : 'No overdue fines accrued.') +
+            (json.data.reservationAllocated ? '<br>🔖 Copy automatically reserved for next patron in line!' : '');
+        } else {
+          msgBox.className = 'status-msg error';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✗ <strong>Return Rejected:</strong> ' + (json.detail || json.message);
+        }
+      } catch (err) {
+        alert('Return error');
+      }
+    }
+
+    async function executeAddBook() {
+      const title = document.getElementById('add-title').value.trim();
+      const isbn = document.getElementById('add-isbn').value.trim() || ('978-' + Math.floor(1000000000 + Math.random() * 9000000000));
+      const author = document.getElementById('add-author').value.trim();
+      const publisher = document.getElementById('add-publisher').value.trim();
+      const year = parseInt(document.getElementById('add-year').value) || 2024;
+      const genre = document.getElementById('add-genre').value.trim();
+      const copies = parseInt(document.getElementById('add-copies').value) || 2;
+      const msgBox = document.getElementById('add-book-msg');
+
+      try {
+        const res = await apiCall('/api/v1/books', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: title,
+            isbn: isbn,
+            author: author,
+            publisher: publisher,
+            publicationYear: year,
+            genre: genre,
+            language: 'English',
+            initialCopies: copies
+          })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          msgBox.className = 'status-msg success';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✓ <strong>Book Added!</strong> Created title: "<em>' + json.data.title + '</em>" with ' + copies + ' physical barcode copies.<br>ISBN: ' + isbn;
+          document.getElementById('add-isbn').value = '';
+        } else {
+          msgBox.className = 'status-msg error';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✗ <strong>Creation Failed:</strong> ' + (json.detail || json.message);
+        }
+      } catch (err) {
+        alert('Add book error');
+      }
+    }
+
+    async function executeRegisterStudent() {
+      const name = document.getElementById('stu-name').value.trim();
+      const email = document.getElementById('stu-email').value.trim();
+      const phone = document.getElementById('stu-phone').value.trim();
+      const msgBox = document.getElementById('stu-msg');
+
+      if (!name || !email) {
+        alert('Name and Email are mandatory');
+        return;
+      }
+
+      try {
+        const res = await apiCall('/api/v1/members', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, email: email, phone: phone })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          msgBox.className = 'status-msg success';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✓ <strong>Student Registered!</strong> Assigned Member ID: ' + json.data.id + ' &bull; Membership Number: <code>' + json.data.membershipNumber + '</code>';
+          document.getElementById('stu-name').value = '';
+          document.getElementById('stu-email').value = '';
+        } else {
+          msgBox.className = 'status-msg error';
+          msgBox.style.display = 'block';
+          msgBox.innerHTML = '✗ <strong>Registration Error:</strong> ' + (json.detail || json.message);
+        }
+      } catch (err) {
+        alert('Register member error');
+      }
+    }
+
+    async function loadStaffStats() {
+      try {
+        const res = await apiCall('/api/v1/reports/inventory');
+        const json = await res.json();
+        if (json.data) {
+          document.getElementById('stat-total-copies').innerText = json.data.totalCopies || '0';
+          document.getElementById('stat-available-copies').innerText = json.data.availableCopies || '0';
+          document.getElementById('stat-loan-copies').innerText = json.data.issuedCopies || '0';
+          document.getElementById('stat-reserved-copies').innerText = json.data.reservedCopies || '0';
+        }
+      } catch (e) {
+        console.error('Stats error', e);
+      }
+    }
+
+    // Member Data Loaders
+    async function loadMemberData() {
+      try {
+        // Load Catalog
+        const resCat = await fetch('/api/v1/books?page=0&size=10');
+        const jsonCat = await resCat.json();
+        const books = jsonCat.data?.content || [];
+        document.getElementById('member-catalog-grid').innerHTML = books.map(b => `
+          <div class="card">
+            <div>
+              <h4>${b.title}</h4>
+              <div class="author">By ${b.author} &bull; ${b.genre}</div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">${b.description || 'Bibliographic record.'}</p>
+            </div>
+            <div>
+              <div class="meta">
+                <span>ISBN: ${b.isbn}</span>
+                <span class="stock-badge ${b.availableCopies > 0 ? 'stock-available' : 'stock-empty'}">
+                  ● ${b.availableCopies} of ${b.totalCopies} Available
+                </span>
+              </div>
+              <button class="action-btn" style="width:100%;" onclick="placeHold(${b.id}, '${b.title}')">
+                ${b.availableCopies > 0 ? 'In Stock (Visit Desk)' : 'Place Hold / Reserve'}
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        // Load Elena's Loans
+        const resLoans = await apiCall('/api/v1/members/1/loans');
+        const jsonLoans = await resLoans.json();
+        const loans = jsonLoans.data?.content || [];
+        document.getElementById('mem-loan-badge').innerText = loans.length;
+        document.getElementById('member-loans-grid').innerHTML = loans.length === 0 
+          ? '<div style="grid-column: 1/-1; padding:1.5rem; text-align:center;">No active or past loans.</div>'
+          : loans.map(l => `
+            <div class="card">
+              <h4>${l.bookTitle}</h4>
+              <div class="author">Barcode: <code>${l.copyBarcode}</code></div>
+              <div class="meta">
+                <span>Borrowed: ${new Date(l.issueDate).toLocaleDateString()}</span>
+                <span>Due: <strong>${new Date(l.dueDate).toLocaleDateString()}</strong></span>
+              </div>
+              <span class="stock-badge ${l.status === 'ACTIVE' ? 'stock-available' : 'stock-empty'}">Status: ${l.status}</span>
+            </div>
+          `).join('');
+
+        // Load Elena's Reservations
+        const resRes = await apiCall('/api/v1/members/1/reservations');
+        const jsonRes = await resRes.json();
+        const reservations = jsonRes.data || [];
+        document.getElementById('mem-res-badge').innerText = reservations.length;
+        document.getElementById('member-reservations-grid').innerHTML = reservations.length === 0
+          ? '<div style="grid-column: 1/-1; padding:1.5rem; text-align:center;">No active reservations.</div>'
+          : reservations.map(r => `
+            <div class="card">
+              <h4>${r.bookTitle}</h4>
+              <div class="author">Queue Position: #${r.queuePosition}</div>
+              <div class="meta">
+                <span>Status: <strong>${r.status}</strong></span>
+              </div>
+            </div>
+          `).join('');
+
+        // Load Elena's Fines
+        const resFines = await apiCall('/api/v1/members/1/fines');
+        const jsonFines = await resFines.json();
+        const fines = jsonFines.data || [];
+        document.getElementById('mem-fine-badge').innerText = fines.length;
+        document.getElementById('member-fines-grid').innerHTML = fines.length === 0
+          ? '<div style="grid-column: 1/-1; padding:1.5rem; text-align:center; color:var(--success); font-weight:600;">✓ Good standing: Zero outstanding fines!</div>'
+          : fines.map(f => `
+            <div class="card">
+              <h4>Fine ID #${f.id}</h4>
+              <div class="meta">
+                <span>Amount: $${f.amount}</span>
+                <span>Paid: $${f.paidAmount}</span>
+              </div>
+              <span class="stock-badge ${f.status === 'PAID' ? 'stock-available' : 'stock-empty'}">Status: ${f.status}</span>
+            </div>
+          `).join('');
+      } catch (err) {
+        console.error('Member load error', err);
+      }
+    }
+
+    async function placeHold(bookId, title) {
+      try {
+        const res = await apiCall('/api/v1/reservations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bookId: bookId, memberId: 1 })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          alert('✓ Hold placed for "' + title + '" (Queue Position: #' + (json.data?.queuePosition || 1) + ')');
+          loadMemberData();
+        } else {
+          alert('Notice: ' + (json.detail || json.message));
+        }
+      } catch (e) {
+        alert('Hold error');
+      }
+    }
+
+    async function testBOLA() {
+      const box = document.getElementById('bola-result-box');
+      const out = document.getElementById('bola-code-output');
+      box.style.display = 'block';
+      out.innerText = 'Elena (Member #1) attempting to fetch Member #2 private loans via GET /api/v1/members/2/loans...';
+      try {
+        const res = await apiCall('/api/v1/members/2/loans');
+        const json = await res.json();
+        out.innerText = 'HTTP Status: ' + res.status + ' ' + res.statusText + '\n\n' + JSON.stringify(json, null, 2);
+      } catch (err) {
+        out.innerText = 'Error: ' + err;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      ensureAuth();
+      loadStaffStats();
+    });
+  </script>
+</body>
+</html>

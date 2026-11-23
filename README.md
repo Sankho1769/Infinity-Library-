@@ -95,9 +95,9 @@ Launch PostgreSQL and the containerized Spring Boot backend in one command:
 docker-compose up --build
 ```
 Once initialized:
-- **API Base URL:** `http://localhost:8080/api/v1`
-- **Branded Swagger UI:** `http://localhost:8080/swagger-ui.html`
-- **OpenAPI 3.0 Spec:** `http://localhost:8080/api/docs`
+- **Unified Web Application (Staff Desk & Patron Portal):** `http://localhost:8080/`
+- **Branded Swagger UI API Console:** `http://localhost:8080/swagger-ui.html`
+- **OpenAPI 3.1 Spec (JSON):** `http://localhost:8080/api/docs`
 - **Actuator Health:** `http://localhost:8080/actuator/health`
 
 ### 3. Running Locally with Maven
