@@ -8,6 +8,11 @@
 
 ---
 
+> **Related Engineering Documents:**  
+> [Root README](README.md) &bull; [SRS Specification](SRS.md) &bull; [Product Requirements (PRD)](PRD.md) &bull; [Project Report](PROJECT_REPORT.md) &bull; [Security Review](SECURITY_REVIEW.md) &bull; [QA Report](QA_REPORT.md) &bull; [Website UX Audit](WEBSITE_AUDIT_REPORT.md) &bull; [Documentation Index](docs/README.md)
+
+---
+
 ## 1. Threat Modeling & Authentication Architecture
 
 ### 1.1 Password Cryptography: Argon2id

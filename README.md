@@ -7,7 +7,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-19%20%2F%2018-0B3048?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Security](https://img.shields.io/badge/Security-Argon2id%20%2B%20JWT-B9F12F?style=for-the-badge&logo=springsecurity&logoColor=black)
 ![Architecture](https://img.shields.io/badge/Architecture-Modular%20Monolith-2A5344?style=for-the-badge)
-![Tests](https://img.shields.io/badge/Tests-47%20Passed%20(100%25)-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-47%20Passed%20%28100%25%29-brightgreen?style=for-the-badge)
 ![UI / UX](https://img.shields.io/badge/UX-3--Part%20Persona%20Suite-0B3048?style=for-the-badge)
 
 ---
@@ -110,12 +110,15 @@ Designed to replace legacy library management architectures prone to race condit
 ---
 
 ## 📚 Official Documentation Suite
-In accordance with project governance, the root directory hosts comprehensive engineering documents:
-1. [**SRS.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/SRS.md) — IEEE 830 / ISO/IEC/IEEE 29148 Software Requirements Specification.
-2. [**PRD.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/PRD.md) — Product Requirements Document (Personas, user journeys, KPIs).
-3. [**PROJECT_REPORT.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/PROJECT_REPORT.md) — Engineering Technical Report (Concurrency proofs, database normalization, threat model, test suite breakdown).
-4. [**SECURITY_REVIEW.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/SECURITY_REVIEW.md) — Application Security & Threat Audit Report.
-5. [**QA_REPORT.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/QA_REPORT.md) — Quality Assurance & Test Verification Report.
+In accordance with project governance, the repository hosts comprehensive engineering documents:
+1. [**`SRS.md`**](SRS.md) — IEEE 830 / ISO/IEC/IEEE 29148 Software Requirements Specification.
+2. [**`PRD.md`**](PRD.md) — Product Requirements Document (Personas, user journeys, KPIs).
+3. [**`PROJECT_REPORT.md`**](PROJECT_REPORT.md) — Engineering Technical Report (Concurrency proofs, database normalization, threat model, test suite breakdown).
+4. [**`SECURITY_REVIEW.md`**](SECURITY_REVIEW.md) — Application Security & Threat Audit Report.
+5. [**`QA_REPORT.md`**](QA_REPORT.md) — Quality Assurance & Test Verification Report.
+6. [**`WEBSITE_AUDIT_REPORT.md`**](WEBSITE_AUDIT_REPORT.md) — Full UX/UI & Responsive Audit Report.
+7. [**`docs/DOCUMENTATION_CHECKLIST.md`**](docs/DOCUMENTATION_CHECKLIST.md) — Documentation Verification Matrix.
+8. [**`docs/README.md`**](docs/README.md) — Documentation Index & Feature Package Directory.
 
 ---
 

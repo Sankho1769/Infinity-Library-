@@ -2035,7 +2035,7 @@
 
   <!-- LEFT NAVIGATION SIDEBAR -->
   <aside class="app-sidebar" id="app-sidebar">
-    <div class="sidebar-brand">
+    <div class="sidebar-brand" style="cursor: pointer;" onclick="switchView(ROLES[activeRole].defaultView)" title="Infinity Central Home">
       <div class="brand-symbol">∞</div>
       <div class="brand-meta">
         <h1>Infinity</h1>
@@ -2083,7 +2083,7 @@
       <div class="header-left">
         <button class="mobile-menu-toggle" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu">☰</button>
         <div class="header-breadcrumb">
-          <span>Infinity Central</span> / <strong id="breadcrumb-current">Dashboard</strong>
+          <span style="cursor: pointer;" onclick="switchView(ROLES[activeRole].defaultView)" title="Return to Dashboard">Infinity Central</span> / <strong id="breadcrumb-current">Dashboard</strong>
         </div>
       </div>
 
@@ -4356,13 +4356,21 @@
         <div class="cmd-item" onclick="switchPersona('MEMBER')"><span>🎓 Switch Role: Normal User (Patron)</span><span class="kbd-shortcut">Role</span></div>
         <div class="cmd-item" onclick="switchPersona('LIBRARIAN')"><span>📚 Switch Role: Librarian Staff</span><span class="kbd-shortcut">Role</span></div>
         <div class="cmd-item" onclick="switchPersona('ADMIN')"><span>⚡ Switch Role: Administrator</span><span class="kbd-shortcut">Role</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('patron-home')"><span>🎓 Patron Digital Pass & Home</span><span class="kbd-shortcut">Jump</span></div>
         <div class="cmd-item" onclick="navigateFromCmd('catalog')"><span>📚 Browse Collection Catalog</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('patron-loans')"><span>📖 Patron Active Loans</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('patron-reservations')"><span>⏳ Patron Holds Queue</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('patron-fines')"><span>💳 Patron Financial Statements</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('librarian-dashboard')"><span>📋 Staff Circulation Workspace</span><span class="kbd-shortcut">Jump</span></div>
         <div class="cmd-item" onclick="navigateFromCmd('issue')"><span>📤 Issue Book Copy</span><span class="kbd-shortcut">Jump</span></div>
         <div class="cmd-item" onclick="navigateFromCmd('return')"><span>📥 Return Desk</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('add-book')"><span>➕ Register Bibliographic Title</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('new-member')"><span>👥 Enroll Patron Member</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('admin-dashboard')"><span>⚡ Executive Leadership Suite</span><span class="kbd-shortcut">Jump</span></div>
         <div class="cmd-item" onclick="navigateFromCmd('admin-policies')"><span>⚙️ Institutional Policies</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('admin-members')"><span>👥 Member Governance</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('admin-reports')"><span>📊 Audits & Reports</span><span class="kbd-shortcut">Jump</span></div>
-        <div class="cmd-item" onclick="navigateFromCmd('security')"><span>🛡️ Privacy Protection</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('admin-members')"><span>👥 Member Governance Directory</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('admin-reports')"><span>📊 Audits & Analytics</span><span class="kbd-shortcut">Jump</span></div>
+        <div class="cmd-item" onclick="navigateFromCmd('security')"><span>🛡️ Privacy Protection Suite</span><span class="kbd-shortcut">Jump</span></div>
       `;
     }
 

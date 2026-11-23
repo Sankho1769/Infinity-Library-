@@ -9,6 +9,11 @@
 
 ---
 
+> **Related Engineering Documents:**  
+> [Root README](README.md) &bull; [SRS Specification](SRS.md) &bull; [Product Requirements (PRD)](PRD.md) &bull; [Project Report](PROJECT_REPORT.md) &bull; [Security Review](SECURITY_REVIEW.md) &bull; [QA Report](QA_REPORT.md) &bull; [Website UX Audit](WEBSITE_AUDIT_REPORT.md) &bull; [Documentation Index](docs/README.md)
+
+---
+
 ## Abstract
 The Infinity Library Management System (ILMS) is a high-reliability, concurrency-safe modular monolith engineered to solve the systemic operational challenges of contemporary library systems. Traditional library software frequently encounters concurrency anomalies, inventory drift, and financial accounting discrepancies due to optimistic checking and manual counter columns. 
 
