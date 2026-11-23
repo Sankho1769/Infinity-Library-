@@ -1,5 +1,5 @@
 # Infinity Library Management System (ILMS)
-### Senior Backend Engineering Modular Monolith | Java 25 LTS & Spring Boot 4.2.x
+### Enterprise Modular Monolith | Java 25 LTS & Spring Boot 4.2.x | 3-Part Persona Architecture
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge&logo=github-actions)
 ![Java](https://img.shields.io/badge/Java-25%20LTS-0B3048?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -8,15 +8,90 @@
 ![Security](https://img.shields.io/badge/Security-Argon2id%20%2B%20JWT-B9F12F?style=for-the-badge&logo=springsecurity&logoColor=black)
 ![Architecture](https://img.shields.io/badge/Architecture-Modular%20Monolith-2A5344?style=for-the-badge)
 ![Tests](https://img.shields.io/badge/Tests-47%20Passed%20(100%25)-brightgreen?style=for-the-badge)
+![UI / UX](https://img.shields.io/badge/UX-3--Part%20Persona%20Suite-0B3048?style=for-the-badge)
 
 ---
 
 ## 🎨 Design Identity & Palette
-The system adheres strictly to the official design palette across its OpenAPI/Swagger UI interface, diagrams, and documentation:
-- **Primary Teal:** `#2A5344` (Core domain logic, primary actions, navigation headers)
-- **Deep Navy:** `#0B3048` (Security filters, database transactions, structural framing)
-- **Neon Lime:** `#B9F12F` (Badges, active states, key metric highlights, interactive accents)
-- **Warm Off White:** `#F2F0E9` (Backgrounds, clean read surfaces, API card fills)
+The system strictly adheres to an executive design palette across documentation, API consoles, and its responsive web interfaces:
+- **Primary Teal (`#2A5344`):** Core domain logic, primary actions, and patron branding.
+- **Deep Navy (`#0B3048`):** Security filters, database transactions, and structural framing.
+- **Neon Lime (`#B9F12F`):** Badges, active states, key metric highlights, and particle accents.
+- **Warm Off-White (`#F4F2EC`):** Backgrounds, clean reading surfaces, and cards.
+
+---
+
+## 📸 System Showcase & Visual Tour
+
+### 1. Unified Authentication Portal & 1-Click Demo Access
+*A glassmorphic authentication gateway providing credential sign-in, show/hide password toggle, and instant 1-click preset logins for evaluators.*
+
+![Authentication Portal](docs/screenshots/01-auth-portal-login.png)
+
+---
+
+### 2. Part 1: Normal User (Patron Experience)
+*Featuring a **Holographic Digital Library Pass** with dynamic CSS shimmer gradient (`@keyframes holoShimmer`), animated avatar monogram, real-time borrowing quota meter (`0 / 5 Books Borrowed`), active loans tracking, and personal hold status.*
+
+![Patron Digital Pass & Dashboard](docs/screenshots/02-patron-digital-pass.png)
+
+---
+
+### 3. Real-Time Catalog Reservation with Confetti FX
+*Patrons can browse the catalog and place title reservations when copies are checked out. Real-time hold placements trigger a 2D physics Canvas particle confetti burst and update waitlist priority instantly.*
+
+![Catalog Reservation & Confetti Burst](docs/screenshots/03-catalog-reserve-confetti.png)
+
+---
+
+### 4. Role-Based Access Control & Security Barrier
+*Patrons attempting to navigate to staff circulation or executive governance tools are intercepted with a security barrier dialog and guided to sign in with authorized credentials.*
+
+![Role Access Barrier](docs/screenshots/04-role-access-barrier.png)
+
+---
+
+### 5. Part 2: Librarian (Circulation & Staff Desk)
+*Circulation desk with rapid 1-click checkout presets, live copy & patron dropdowns, and an active loans table with 1-click returns and automated fine assessments.*
+
+![Librarian Circulation Desk](docs/screenshots/05-librarian-circulation-desk.png)
+
+---
+
+### 6. Part 3: Administrator (Executive Leadership Suite)
+*Executive dashboard aggregating real-time institutional KPIs: physical inventory counts, active circulation, overdue alerts, and financial fine balances.*
+
+![Admin Executive Dashboard](docs/screenshots/06-admin-executive-dashboard.png)
+
+---
+
+### 7. Dynamic Institutional Policy Configuration
+*Live policy management interacting directly with `PUT /api/v1/libraries/1`. Administrators can configure standard loan periods, maximum borrower quotas, daily overdue penalty rates, and hold windows with immediate system-wide enforcement.*
+
+![Admin Policy Controls](docs/screenshots/07-admin-policy-controls.png)
+
+---
+
+### 8. Member Directory & Account Governance
+*Complete member roster with instant account governance controls (`POST /api/v1/members/{id}/suspend` and `reactivate`) to manage borrowing privileges in real time.*
+
+![Member Governance](docs/screenshots/08-admin-member-governance.png)
+
+---
+
+### 9. Self-Service Patron Onboarding & Pass Issuance
+*Prospective patrons can register online, automatically minting an institutional membership pass (e.g. `MEM-2026-DB92B5`) with immediate digital borrowing rights.*
+
+![Patron Self-Registration](docs/screenshots/09-patron-self-registration.png)
+
+---
+
+### 10. Responsive Mobile Viewports (320px – 768px)
+*Optimized for all screen sizes with an off-canvas drawer navigation menu and a thumb-accessible sticky bottom navigation bar.*
+
+| Off-Canvas Drawer Navigation | Clean Mobile Dashboard with Bottom Nav |
+| :---: | :---: |
+| ![Mobile Drawer](docs/screenshots/10-mobile-responsive-drawer.png) | ![Mobile Bottom Nav](docs/screenshots/11-mobile-dashboard-bottom-nav.png) |
 
 ---
 
@@ -30,15 +105,17 @@ Designed to replace legacy library management architectures prone to race condit
 - **Audited Financial Accounting:** Deterministic fine accrual with immutable transaction logs for payments and administrative waivers.
 - **Modern Security Architecture:** Argon2id password hashing, short-lived JWT access tokens, and refresh token rotation with automated token family reuse revocation.
 - **RFC 9457 Problem Details:** Unified, standardized error representations across all endpoints.
+- **Three Persona Architecture:** Tailored interfaces for Normal Users (Patrons), Circulation Librarians, and Executive Administrators with zero framework jargon in the UI.
 
 ---
 
 ## 📚 Official Documentation Suite
-In accordance with project governance, the root directory hosts exactly four comprehensive engineering documents:
-1. [**SRS.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/SRS.md) — IEEE 830 / ISO/IEC/IEEE 29148 Software Requirements Specification (Functional requirements, business rules matrix, traceability matrix).
-2. [**PRD.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/PRD.md) — Product Requirements Document (Personas, user journeys, MVP scope vs. roadmap, KPIs).
-3. [**PROJECT_REPORT.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/PROJECT_REPORT.md) — Comprehensive Engineering Technical Report (Deep-dive into concurrency proofs, database normalization, threat model, test suite breakdown).
-4. [**README.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/README.md) — Developer quickstart, architecture guide, API catalog, and operational documentation.
+In accordance with project governance, the root directory hosts comprehensive engineering documents:
+1. [**SRS.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/SRS.md) — IEEE 830 / ISO/IEC/IEEE 29148 Software Requirements Specification.
+2. [**PRD.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/PRD.md) — Product Requirements Document (Personas, user journeys, KPIs).
+3. [**PROJECT_REPORT.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/PROJECT_REPORT.md) — Engineering Technical Report (Concurrency proofs, database normalization, threat model, test suite breakdown).
+4. [**SECURITY_REVIEW.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/SECURITY_REVIEW.md) — Application Security & Threat Audit Report.
+5. [**QA_REPORT.md**](file:///c:/Users/hp/Desktop/Infinity-Library-/QA_REPORT.md) — Quality Assurance & Test Verification Report.
 
 ---
 
@@ -48,23 +125,23 @@ ILMS is organized as a **Modular Monolith** using **package-by-feature** encapsu
 
 ```mermaid
 flowchart TD
-    subgraph Clients["Clients & Gateways (#F2F0E9 Off White)"]
-        UI["Swagger UI / Web Client"]
-        Desk["Staff Circulation Desk"]
+    subgraph Clients["Clients & Gateways (#F4F2EC Warm Off-White)"]
+        UI["Unified Web Application (Patron / Librarian / Admin)"]
+        Swagger["OpenAPI 3.1 Swagger UI Console"]
     end
 
     subgraph Security["Spring Security & Auth (#0B3048 Deep Navy)"]
-        JWT["JwtAuthenticationFilter"]
-        Argon["Argon2id Password Encoder"]
-        RBAC["Method Security (@PreAuthorize)"]
+        JWT["JwtAuthenticationFilter (Bearer Token Validator)"]
+        Argon["Argon2id Password Encoder (m=65536, t=3, p=1)"]
+        RBAC["Method Security (@PreAuthorize / HasRole)"]
     end
 
     subgraph CoreModules["Domain Feature Modules (#2A5344 Teal)"]
         CAT["Catalog Module (Book, BookCopy)"]
         CIR["Circulation Module (Loan, Pessimistic Lock)"]
-        RES["Reservation Module (FIFO Queue)"]
+        RES["Reservation Module (FIFO Queue, Hold Expiration)"]
         FIN["Fines Module (Deterministic Accrual, Transactions)"]
-        MEM["Members Module (Governance, Quotas)"]
+        MEM["Members Module (Governance, Quotas, Passes)"]
         REP["Reports Module (Dynamic Aggregates)"]
     end
 
@@ -72,7 +149,7 @@ flowchart TD
         PG1[("Physical Copies & Books")]
         PG2[("Active Loans (Partial Unique Indexes)")]
         PG3[("FIFO Reservations")]
-        PG4[("Audit Ledger & Idempotency")]
+        PG4[("Audit Ledger & Idempotency Keys")]
     end
 
     Clients --> Security
@@ -95,13 +172,13 @@ Launch PostgreSQL and the containerized Spring Boot backend in one command:
 docker-compose up --build
 ```
 Once initialized:
-- **Unified Web Application (Staff Desk & Patron Portal):** `http://localhost:8080/`
+- **Unified Web Application (All 3 Personas):** `http://localhost:8080/`
 - **Branded Swagger UI API Console:** `http://localhost:8080/swagger-ui.html`
 - **OpenAPI 3.1 Spec (JSON):** `http://localhost:8080/api/docs`
 - **Actuator Health:** `http://localhost:8080/actuator/health`
 
 ### 3. Running Locally with Maven
-To run using an embedded H2 test database (configured in PostgreSQL compatibility mode):
+To run using an embedded H2 database (in PostgreSQL compatibility mode):
 ```bash
 # Unix / macOS
 ./mvnw spring-boot:run
@@ -120,6 +197,20 @@ export DB_USERNAME=postgres
 export DB_PASSWORD=your_password
 .\mvnw.cmd spring-boot:run
 ```
+
+---
+
+## 🔐 Pre-Seeded Default Accounts
+
+The database migration (`V2__seed_initial_data.sql`) seeds default users with verified Argon2id-hashed credentials:
+
+| Username | Password | Role | Persona & Capabilities |
+| :--- | :--- | :--- | :--- |
+| `member_elena` | `Password@123` | `MEMBER` | **Dr. Elena Rostova** — Digital pass, active loans, catalog holds |
+| `librarian` | `Password@123` | `LIBRARIAN` | **Librarian Jane** — Circulation desk, checkouts, returns, catalog registration |
+| `admin` | `Password@123` | `ADMIN` | **Director Sarah Sterling** — Institutional policies, member governance, audits |
+
+*All three accounts can be signed into manually or tested instantly via 1-click demo buttons on the login portal.*
 
 ---
 
@@ -149,18 +240,6 @@ The project includes 47 tests across Unit, Service, Concurrency, Security, and A
 
 ---
 
-## 🔐 Pre-Seeded Default Accounts
-
-The Flyway migration (`V2__seed_initial_data.sql`) seeds default users with Argon2id-hashed credentials:
-
-| Username | Password | Role | Description |
-| :--- | :--- | :--- | :--- |
-| `admin` | `Admin@123456` | `ROLE_ADMIN` | Full administrative, audit, and policy configuration access |
-| `librarian` | `Librarian@123456` | `ROLE_LIBRARIAN` | Cataloging, checkout/return circulation, fine collection/waivers |
-| `member_elena` | `Member@123456` | `ROLE_MEMBER` | Standard patron accessing catalog, personal loans, and reservations |
-
----
-
 ## 📡 REST API Reference
 
 All endpoints are versioned under `/api/v1` and produce/consume `application/json`.
@@ -171,6 +250,8 @@ All endpoints are versioned under `/api/v1` and produce/consume `application/jso
 | `POST` | `/api/v1/auth/login` | Public | Authenticate with username/password; returns JWT + Refresh Token |
 | `POST` | `/api/v1/auth/refresh` | Public | Rotate refresh token and obtain new short-lived access token |
 | `POST` | `/api/v1/auth/logout` | Authenticated | Revoke refresh token and invalidate active session |
+| `GET`  | `/api/v1/auth/me` | Authenticated | Retrieve profile and assigned roles of authenticated user |
+| `POST` | `/api/v1/auth/users` | `ADMIN` | Provision a new system user account |
 
 ### 2. Catalog & Books (`/api/v1/books`)
 | Method | Endpoint | Role | Description |
@@ -202,16 +283,23 @@ All endpoints are versioned under `/api/v1` and produce/consume `application/jso
 | `POST` | `/api/v1/fines/{id}/waive` | `LIBRARIAN`, `ADMIN` | Waive fine with mandatory audit justification reason |
 | `GET` | `/api/v1/fines/member/{memberId}` | `MEMBER` (Self), Staff | Retrieve member's outstanding fine ledger |
 
-### 6. Members (`/api/v1/members`)
+### 6. Members & Governance (`/api/v1/members`)
 | Method | Endpoint | Role | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/members` | `LIBRARIAN`, `ADMIN` | Register new library member |
+| `POST` | `/api/v1/members` | Public / Staff | Register new library member / patron |
 | `GET` | `/api/v1/members/{id}/loans` | `MEMBER` (Self), Staff | Get member active and past loans (BOLA protected) |
 | `GET` | `/api/v1/members/{id}/fines` | `MEMBER` (Self), Staff | Get member fines (BOLA protected) |
 | `GET` | `/api/v1/members/{id}/reservations`| `MEMBER` (Self), Staff | Get member reservations (BOLA protected) |
-| `PATCH`| `/api/v1/members/{id}/status` | `ADMIN` | Update member status (`ACTIVE`, `SUSPENDED`, etc.) |
+| `POST`| `/api/v1/members/{id}/suspend` | `ADMIN` | Suspend borrowing privileges for a member |
+| `POST`| `/api/v1/members/{id}/reactivate` | `ADMIN` | Reactivate member borrowing privileges |
 
-### 7. Executive Reports (`/api/v1/reports`)
+### 7. Institutional Policies & Settings (`/api/v1/libraries`)
+| Method | Endpoint | Role | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/libraries/{id}` | Public | Retrieve library institutional policies and settings |
+| `PUT` | `/api/v1/libraries/{id}` | `ADMIN` | Update loan durations, max quotas, daily fine rates, and hold windows |
+
+### 8. Executive Reports (`/api/v1/reports`)
 | Method | Endpoint | Role | Description |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/v1/reports/inventory` | `LIBRARIAN`, `ADMIN` | Database-derived inventory counts (total, available, on loan) |
@@ -226,7 +314,7 @@ All endpoints are versioned under `/api/v1` and produce/consume `application/jso
 ```bash
 curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"librarian", "password":"Librarian@123456"}'
+  -d '{"username":"librarian", "password":"Password@123"}'
 ```
 *Response:*
 ```json
@@ -235,11 +323,12 @@ curl -X POST http://localhost:8080/api/v1/auth/login \
   "message": "Authentication successful",
   "data": {
     "accessToken": "eyJhbGciOiJIUzI1NiIsIn...",
-    "refreshToken": "e7b0a708-62d6-444f-8cf7-...",
+    "refreshToken": "UOF1zC4z3glaBaG-AbGiJ7uM0RU82WbIOAbsIcTfz2M",
     "tokenType": "Bearer",
-    "expiresInMs": 900000,
+    "expiresIn": 604800,
     "username": "librarian",
-    "role": "ROLE_LIBRARIAN"
+    "role": "LIBRARIAN",
+    "memberId": null
   }
 }
 ```
@@ -249,10 +338,10 @@ curl -X POST http://localhost:8080/api/v1/auth/login \
 curl -X POST http://localhost:8080/api/v1/loans/issue \
   -H "Authorization: Bearer <ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 11111111-2222-3333-4444-555555555555" \
+  -H "Idempotency-Key: idem-checkout-001" \
   -d '{
     "memberId": 1,
-    "copyBarcode": "CPY-101"
+    "barcode": "CPY-9781449373320-001"
   }'
 ```
 
@@ -262,17 +351,22 @@ curl -X POST http://localhost:8080/api/v1/loans/return \
   -H "Authorization: Bearer <ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
-    "copyBarcode": "CPY-101"
+    "barcode": "CPY-9781449373320-001"
   }'
 ```
 
-### 4. Waive an Overdue Fine (Requires Justification)
+### 4. Update Institutional Policies (Admin Only)
 ```bash
-curl -X POST http://localhost:8080/api/v1/fines/1/waive \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+curl -X PUT http://localhost:8080/api/v1/libraries/1 \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
-    "justificationReason": "Hospitalization documented by medical certificate per Library Policy Section 4.2"
+    "name": "Infinity Central Academic Library",
+    "loanDurationDays": 21,
+    "maxLoansPerMember": 5,
+    "dailyFineRate": 5.00,
+    "maxFinePerLoan": 500.00,
+    "reservationHoldHours": 48
   }'
 ```
 
@@ -288,7 +382,7 @@ curl -X POST http://localhost:8080/api/v1/fines/1/waive \
 | `DB_NAME` | Database schema name | `infinity_library` | `infinity_library` |
 | `DB_USERNAME` | Database username | `library_admin` | Dedicated non-root user |
 | `DB_PASSWORD` | Database password | `library_secure_password` | High-entropy vault secret |
-| `JWT_SECRET` | 256-bit signing key | Default hardcoded secret | Min 32 chars random secret |
+| `JWT_SECRET` | 256-bit signing key | Default secret | Min 32 chars random secret |
 | `JWT_EXPIRATION_MS` | Access token lifespan | `900000` (15 min) | `900000` |
 | `JWT_REFRESH_EXPIRATION_MS` | Refresh token lifespan | `604800000` (7 days) | `604800000` |
 | `SERVER_PORT` | HTTP server listening port | `8080` | `8080` |
