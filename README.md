@@ -23,70 +23,84 @@ The system strictly adheres to an executive design palette across documentation,
 
 ## 📸 System Showcase & Visual Tour
 
-### 1. Unified Authentication Portal & 1-Click Demo Access
+### 1. Dedicated Full-Page Login Gateway
+*A real-life institutional library gateway featuring live operational hours, system online indicators, campus announcements, and Library Card ID or Username authentication.*
+
+![Dedicated Full-Page Login Gateway](docs/screenshots/00-login-gateway-fullpage.png)
+
+---
+
+### 2. Animated Identity Verification & Role-Based Redirection
+*Upon authenticating, the system verifies credentials and routes the session via an animated interstitial screen directly to the user's role-tailored portal (Patron, Librarian, or Admin).*
+
+![Role-Based Redirection Interstitial](docs/screenshots/01b-redirection-interstitial.png)
+
+---
+
+### 3. Unified Authentication Modal & 1-Click Demo Profiles
 *A glassmorphic authentication gateway providing credential sign-in, show/hide password toggle, and instant 1-click preset logins for evaluators.*
 
 ![Authentication Portal](docs/screenshots/01-auth-portal-login.png)
 
 ---
 
-### 2. Part 1: Normal User (Patron Experience)
+### 4. Part 1: Normal User (Patron Experience)
 *Featuring a **Holographic Digital Library Pass** with dynamic CSS shimmer gradient (`@keyframes holoShimmer`), animated avatar monogram, real-time borrowing quota meter (`0 / 5 Books Borrowed`), active loans tracking, and personal hold status.*
 
 ![Patron Digital Pass & Dashboard](docs/screenshots/02-patron-digital-pass.png)
 
 ---
 
-### 3. Real-Time Catalog Reservation with Confetti FX
+### 5. Real-Time Catalog Reservation with Confetti FX
 *Patrons can browse the catalog and place title reservations when copies are checked out. Real-time hold placements trigger a 2D physics Canvas particle confetti burst and update waitlist priority instantly.*
 
 ![Catalog Reservation & Confetti Burst](docs/screenshots/03-catalog-reserve-confetti.png)
 
 ---
 
-### 4. Role-Based Access Control & Security Barrier
+### 6. Role-Based Access Control & Security Barrier
 *Patrons attempting to navigate to staff circulation or executive governance tools are intercepted with a security barrier dialog and guided to sign in with authorized credentials.*
 
 ![Role Access Barrier](docs/screenshots/04-role-access-barrier.png)
 
 ---
 
-### 5. Part 2: Librarian (Circulation & Staff Desk)
+### 7. Part 2: Librarian (Circulation & Staff Desk)
 *Circulation desk with rapid 1-click checkout presets, live copy & patron dropdowns, and an active loans table with 1-click returns and automated fine assessments.*
 
 ![Librarian Circulation Desk](docs/screenshots/05-librarian-circulation-desk.png)
 
 ---
 
-### 6. Part 3: Administrator (Executive Leadership Suite)
+### 8. Part 3: Administrator (Executive Leadership Suite)
 *Executive dashboard aggregating real-time institutional KPIs: physical inventory counts, active circulation, overdue alerts, and financial fine balances.*
 
 ![Admin Executive Dashboard](docs/screenshots/06-admin-executive-dashboard.png)
 
 ---
 
-### 7. Dynamic Institutional Policy Configuration
+### 9. Dynamic Institutional Policy Configuration
 *Live policy management interacting directly with `PUT /api/v1/libraries/1`. Administrators can configure standard loan periods, maximum borrower quotas, daily overdue penalty rates, and hold windows with immediate system-wide enforcement.*
 
 ![Admin Policy Controls](docs/screenshots/07-admin-policy-controls.png)
 
 ---
 
-### 8. Member Directory & Account Governance
+### 10. Member Directory & Account Governance
 *Complete member roster with instant account governance controls (`POST /api/v1/members/{id}/suspend` and `reactivate`) to manage borrowing privileges in real time.*
 
 ![Member Governance](docs/screenshots/08-admin-member-governance.png)
 
 ---
 
-### 9. Self-Service Patron Onboarding & Pass Issuance
+### 11. Self-Service Patron Onboarding & Pass Issuance
 *Prospective patrons can register online, automatically minting an institutional membership pass (e.g. `MEM-2026-DB92B5`) with immediate digital borrowing rights.*
 
 ![Patron Self-Registration](docs/screenshots/09-patron-self-registration.png)
 
 ---
 
-### 10. Responsive Mobile Viewports (320px – 768px)
+### 12. Responsive Mobile Viewports (320px – 768px)
 *Optimized for all screen sizes with an off-canvas drawer navigation menu and a thumb-accessible sticky bottom navigation bar.*
 
 | Off-Canvas Drawer Navigation | Clean Mobile Dashboard with Bottom Nav |

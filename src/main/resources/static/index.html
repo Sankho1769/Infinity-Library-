@@ -2026,9 +2026,383 @@
       transform: scale(1);
     }
     
+  
+    /* ==========================================================================
+       DEDICATED FULL-PAGE REAL-LIFE LOGIN GATEWAY & REDIRECTION SCREEN
+       ========================================================================== */
+    .fullpage-login-portal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: var(--off-white);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      opacity: 1;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s ease;
+    }
+    .fullpage-login-portal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98);
+      display: none;
+    }
+
+    /* Top Gateway Status & Announcement Bar */
+    .gateway-top-bar {
+      background: var(--deep-navy);
+      color: #CAD5CF;
+      padding: 0.55rem 2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .gateway-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--neon-lime);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .status-dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-lime);
+      box-shadow: 0 0 10px var(--lime-glow);
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+    .gateway-notice-strip {
+      background: var(--surface-muted);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.45rem 2rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    /* Login Gateway Main Canvas */
+    .gateway-canvas {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      position: relative;
+    }
+    .gateway-canvas::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      right: 15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(185, 241, 47, 0.09) 0%, rgba(42, 83, 68, 0.05) 50%, transparent 70%);
+      pointer-events: none;
+      animation: ambientFloat 18s ease-in-out infinite alternate;
+    }
+
+    /* Gateway Login Card */
+    .gateway-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 24px 64px rgba(7, 34, 51, 0.15), 0 0 32px var(--lime-glow);
+      max-width: 580px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gateway-card.shake-error {
+      animation: shakeError 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    /* Redirection Interstitial Screen */
+    .redirect-interstitial {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      background: rgba(7, 34, 51, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .redirect-interstitial.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .redirect-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.45), 0 0 40px var(--lime-glow);
+      border: 1.5px solid var(--border-color);
+      transform: scale(0.95);
+      transition: var(--transition-bounce);
+    }
+    .redirect-interstitial.active .redirect-card {
+      transform: scale(1);
+    }
+    .redirect-avatar-ring {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--deep-navy);
+      color: var(--neon-lime);
+      font-size: 1.8rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 28px var(--lime-glow);
+      animation: symbolPulse 2s ease-in-out infinite;
+    }
+    .redirect-progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-muted);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin: 1.5rem 0 0.85rem;
+      position: relative;
+    }
+    .redirect-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary-teal), var(--neon-lime));
+      border-radius: var(--radius-full);
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .redirect-destination-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--teal-subtle);
+      color: var(--primary-teal);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      margin-top: 0.5rem;
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- =========================================================================
+       REAL-LIFE DEDICATED FULL-PAGE LOGIN GATEWAY
+       ========================================================================= -->
+  <div class="fullpage-login-portal hidden" id="fullpage-login">
+    <!-- Institutional Top Service Bar -->
+    <div class="gateway-top-bar">
+      <div class="gateway-status-pill">
+        <span class="status-dot-pulse"></span>
+        <span>Central Digital Library Gateway &bull; Live System Online</span>
+      </div>
+      <div>
+        <span>🕒 Operating Hours: Monday – Sunday 08:00 – 22:00 &bull; 24/7 Digital Catalog</span>
+      </div>
+    </div>
+
+    <!-- Campus / Community Announcement Strip -->
+    <div class="gateway-notice-strip">
+      <span style="font-size:1.1rem;">📢</span>
+      <span><strong>Campus Notice:</strong> Standard borrowing loan periods automatically set to 21 days. Self-service hold reservation lockers ready in East Wing.</span>
+    </div>
+
+    <!-- Main Gateway Authentication Canvas -->
+    <div class="gateway-canvas">
+      <div class="gateway-card" id="gateway-login-card">
+        <div class="auth-header">
+          <div class="auth-brand-symbol">∞</div>
+          <h2 class="auth-title">Infinity Central Library</h2>
+          <p class="auth-subtitle">Unified Access Gateway &bull; Sign in with your Library Card ID or Staff Credentials</p>
+        </div>
+
+        <!-- Navigation Tabs: Sign In vs Patron Self-Registration -->
+        <div class="auth-nav-tabs">
+          <button class="auth-nav-tab active" id="tab-gw-login" onclick="switchGatewayTab('login')">
+            <span>🔐 Member & Staff Sign In</span>
+          </button>
+          <button class="auth-nav-tab" id="tab-gw-register" onclick="switchGatewayTab('register')">
+            <span>📝 New Patron Self-Registration</span>
+          </button>
+        </div>
+
+        <div class="auth-body">
+          <!-- Live Alert Feedback Box -->
+          <div class="auth-alert" id="gw-alert-box">
+            <span id="gw-alert-icon">⚠️</span>
+            <span id="gw-alert-text">Error message</span>
+          </div>
+
+          <!-- 1. SIGN IN FORM -->
+          <div id="gw-panel-login">
+            <form onsubmit="handleGatewayLoginSubmit(event)">
+              <div class="form-group" style="margin-bottom: 1.15rem;">
+                <label class="form-label" for="gw-login-id">Library Card ID or Username</label>
+                <input type="text" id="gw-login-id" class="form-input" placeholder="e.g. MEM-2026-0001, member_elena, librarian, admin" required autocomplete="username">
+                <span style="font-size:0.75rem; color:var(--text-subtle); margin-top:4px; display:block;">Enter your official Member ID (e.g. MEM-2026-0001) or staff username</span>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.5rem;">
+                <label class="form-label" for="gw-login-pass">Password</label>
+                <div class="input-with-action">
+                  <input type="password" id="gw-login-pass" class="form-input" placeholder="••••••••••••" required autocomplete="current-password">
+                  <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('gw-login-pass')" title="Toggle password visibility">👁️</button>
+                </div>
+              </div>
+
+              <div class="auth-remember-row">
+                <label>
+                  <input type="checkbox" id="gw-remember" checked>
+                  <span>Keep me signed in on this device</span>
+                </label>
+                <a href="javascript:void(0)" onclick="showToast('For password recovery, please visit the Central Circulation Desk.')">Need Help?</a>
+              </div>
+
+              <button type="submit" class="auth-submit-btn" id="btn-gw-submit">
+                <span id="gw-spinner" style="display:none;">⏳</span>
+                <span id="gw-btn-text">Sign In & Access Portal</span>
+                <span>→</span>
+              </button>
+            </form>
+
+            <!-- 1-Click Fast-Access Profiles (Instant Testing & Evaluation) -->
+            <div class="auth-divider">
+              <span>Or Sign In with 1-Click Demo Profiles</span>
+            </div>
+
+            <div class="demo-accounts-grid">
+              <!-- Patron Card -->
+              <div class="demo-account-card" onclick="quickGatewayLogin('member_elena', 'Password@123')">
+                <div class="demo-avatar" style="background:#E0F2FE;">🎓</div>
+                <div class="demo-role-name">Dr. Elena</div>
+                <div class="demo-user-tag">Card: MEM-2026-0001</div>
+                <span class="demo-badge-pill pill-member">Patron Portal →</span>
+              </div>
+
+              <!-- Librarian Card -->
+              <div class="demo-account-card" onclick="quickGatewayLogin('librarian', 'Password@123')">
+                <div class="demo-avatar" style="background:#E3F7EB;">📚</div>
+                <div class="demo-role-name">Staff Jane</div>
+                <div class="demo-user-tag">Staff: librarian</div>
+                <span class="demo-badge-pill pill-librarian">Circulation Desk →</span>
+              </div>
+
+              <!-- Admin Card -->
+              <div class="demo-account-card" onclick="quickGatewayLogin('admin', 'Password@123')">
+                <div class="demo-avatar" style="background:#FEF3C7;">⚡</div>
+                <div class="demo-role-name">Dir. Sterling</div>
+                <div class="demo-user-tag">Executive: admin</div>
+                <span class="demo-badge-pill pill-admin">Admin Suite →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. NEW PATRON REGISTRATION -->
+          <div id="gw-panel-register" style="display:none;">
+            <form onsubmit="handleGatewayRegisterSubmit(event)">
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.25rem;">
+                Enroll as a new patron to obtain your Digital Library Pass and immediately begin reserving books from the collection.
+              </p>
+
+              <div class="form-group" style="margin-bottom: 1.15rem;">
+                <label class="form-label" for="gw-reg-name">Full Legal Name</label>
+                <input type="text" id="gw-reg-name" class="form-input" placeholder="e.g. Sophia Chen" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1.15rem;">
+                <label class="form-label" for="gw-reg-email">Institutional Email Address</label>
+                <input type="email" id="gw-reg-email" class="form-input" placeholder="sophia.chen@university.edu" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1.15rem;">
+                <label class="form-label" for="gw-reg-phone">Contact Phone</label>
+                <input type="tel" id="gw-reg-phone" class="form-input" placeholder="+1-555-0189" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1.35rem;">
+                <label class="form-label" for="gw-reg-duration">Membership Plan</label>
+                <select id="gw-reg-duration" class="form-input">
+                  <option value="12">Standard Annual Pass (12 Months - Full Borrowing Rights)</option>
+                  <option value="6">Semester Research Pass (6 Months)</option>
+                  <option value="24">Two-Year Extended Fellowship (24 Months)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="auth-submit-btn" id="btn-gw-reg-submit" style="background:linear-gradient(135deg, var(--teal-light) 0%, var(--primary-teal) 100%);">
+                <span id="gw-reg-spinner" style="display:none;">⏳</span>
+                <span id="gw-reg-btn-text">Register & Generate Membership Pass</span>
+                <span>✓</span>
+              </button>
+            </form>
+
+            <div id="gw-reg-success-container" style="display:none; text-align:center; padding:1rem 0;">
+              <div style="font-size:3rem; margin-bottom:0.5rem;">🎉</div>
+              <h3 style="color:var(--deep-navy); font-size:1.3rem; margin-bottom:0.5rem;">Registration Complete!</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.25rem;">
+                Your official digital library pass has been issued and linked to your university profile.
+              </p>
+              <div style="background:var(--surface-muted); border:1.5px dashed var(--primary-teal); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem;">
+                <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Membership Number</div>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--deep-navy); letter-spacing:0.05em;" id="gw-reg-result-card-num">MEM-2026-0004</div>
+                <div style="font-size:0.85rem; color:var(--primary-teal); font-weight:600; margin-top:0.25rem;" id="gw-reg-result-name">Sophia Chen</div>
+              </div>
+              <button class="auth-submit-btn" onclick="continueAsRegisteredGatewayMember()">
+                <span>Access Patron Portal Now</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animated Real-Life Redirection Interstitial Screen -->
+  <div class="redirect-interstitial" id="redirect-screen">
+    <div class="redirect-card">
+      <div class="redirect-avatar-ring" id="redirect-avatar">ER</div>
+      <h2 style="font-size:1.5rem; color:var(--deep-navy); margin-bottom:0.35rem;" id="redirect-welcome-title">Welcome Back!</h2>
+      <p style="font-size:0.9rem; color:var(--text-muted);" id="redirect-role-badge">Verifying security credentials...</p>
+
+      <div class="redirect-progress-track">
+        <div class="redirect-progress-bar" id="redirect-bar"></div>
+      </div>
+
+      <div class="redirect-destination-pill" id="redirect-destination">
+        <span>🔄 Routing to your authorized portal...</span>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Confetti Canvas Layer -->
   <canvas id="confetti-canvas"></canvas>
@@ -2944,6 +3318,229 @@
     // =========================================================================
     // AUTHENTICATION MODAL & DIALOG CONTROLS
     // =========================================================================
+    function resolveUsername(input) {
+      if (!input) return '';
+      const clean = input.trim();
+      const cardMapping = {
+        'MEM-2026-0001': 'member_elena',
+        'MEM-2026-0002': 'member_elena',
+        'MEM-2026-0003': 'member_elena'
+      };
+      if (cardMapping[clean.toUpperCase()]) {
+        return cardMapping[clean.toUpperCase()];
+      }
+      return clean;
+    }
+
+    function showFullpageLogin() {
+      const el = document.getElementById('fullpage-login');
+      if (el) el.classList.remove('hidden');
+      const card = document.getElementById('gateway-login-card');
+      if (card) card.classList.remove('shake-error');
+      const alertBox = document.getElementById('gw-alert-box');
+      if (alertBox) alertBox.style.display = 'none';
+      window.location.hash = 'login';
+    }
+
+    function hideFullpageLogin() {
+      const el = document.getElementById('fullpage-login');
+      if (el) el.classList.add('hidden');
+    }
+
+    function switchGatewayTab(tab) {
+      document.getElementById('tab-gw-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-gw-register').classList.toggle('active', tab === 'register');
+      document.getElementById('gw-panel-login').style.display = (tab === 'login') ? 'block' : 'none';
+      document.getElementById('gw-panel-register').style.display = (tab === 'register') ? 'block' : 'none';
+      document.getElementById('gw-alert-box').style.display = 'none';
+    }
+
+    async function executeRedirection(displayName, role, targetView, avatar) {
+      const screen = document.getElementById('redirect-screen');
+      const title = document.getElementById('redirect-welcome-title');
+      const roleBadge = document.getElementById('redirect-role-badge');
+      const avatarEl = document.getElementById('redirect-avatar');
+      const bar = document.getElementById('redirect-bar');
+      const destPill = document.getElementById('redirect-destination');
+
+      const portalNames = {
+        'MEMBER': '🎓 Patron Self-Service Portal (#patron-home)',
+        'LIBRARIAN': '📚 Staff Circulation Workspace (#librarian-dashboard)',
+        'ADMIN': '⚡ Executive Leadership Suite (#admin-dashboard)'
+      };
+
+      title.innerText = 'Welcome, ' + displayName + '!';
+      roleBadge.innerText = 'Identity Verified • Authorized Role: ' + (ROLES[role]?.roleLabel || role);
+      avatarEl.innerText = avatar;
+      destPill.innerHTML = '<span>🔄 Routing to ' + (portalNames[role] || 'Dashboard') + '...</span>';
+      
+      // Show redirection interstitial
+      screen.classList.add('active');
+      bar.style.width = '0%';
+
+      // Animate progress bar over 600ms
+      setTimeout(() => {
+        bar.style.width = '100%';
+      }, 50);
+
+      await new Promise(r => setTimeout(r, 650));
+
+      screen.classList.remove('active');
+      hideFullpageLogin();
+
+      // Switch persona and load designated view
+      switchPersona(role, false);
+      switchView(targetView);
+      triggerConfetti();
+      showToast('✓ Redirected successfully to ' + (ROLES[role]?.roleLabel || 'your portal') + '!');
+    }
+
+    async function handleGatewayLoginSubmit(event) {
+      event.preventDefault();
+      const rawId = document.getElementById('gw-login-id').value.trim();
+      const password = document.getElementById('gw-login-pass').value;
+      const remember = document.getElementById('gw-remember').checked;
+      const btnText = document.getElementById('gw-btn-text');
+      const spinner = document.getElementById('gw-spinner');
+      const alertBox = document.getElementById('gw-alert-box');
+      const alertText = document.getElementById('gw-alert-text');
+      const card = document.getElementById('gateway-login-card');
+
+      btnText.innerText = 'Authenticating...';
+      spinner.style.display = 'inline-block';
+      alertBox.style.display = 'none';
+
+      const username = resolveUsername(rawId);
+
+      try {
+        const data = await login(username, password);
+        if (data && data.accessToken) {
+          currentSession.token = data.accessToken;
+          currentSession.refreshToken = data.refreshToken;
+          currentSession.username = data.username;
+          currentSession.role = data.role;
+          currentSession.memberId = data.memberId || (data.role === 'MEMBER' ? 1 : null);
+
+          if (username === 'member_elena') {
+            currentSession.displayName = 'Dr. Elena Rostova';
+            currentSession.avatar = 'ER';
+          } else if (username === 'librarian') {
+            currentSession.displayName = 'Librarian Jane';
+            currentSession.avatar = 'LJ';
+          } else if (username === 'admin') {
+            currentSession.displayName = 'Director Sarah Sterling';
+            currentSession.avatar = 'SS';
+          } else {
+            currentSession.displayName = username;
+            currentSession.avatar = username.substring(0, 2).toUpperCase();
+          }
+
+          if (data.role === 'MEMBER') memberToken = data.accessToken;
+          if (data.role === 'LIBRARIAN') staffToken = data.accessToken;
+          if (data.role === 'ADMIN') adminToken = data.accessToken;
+
+          if (remember) {
+            localStorage.setItem('infinity_auth_session', JSON.stringify(currentSession));
+          }
+
+          const targetView = ROLES[data.role]?.defaultView || 'patron-home';
+
+          // Execute realistic animated redirection based on ID / Pass!
+          await executeRedirection(currentSession.displayName, data.role, targetView, currentSession.avatar);
+        } else {
+          alertBox.className = 'auth-alert error';
+          alertText.innerText = 'Invalid credentials. Please verify your Library Card ID or username and password.';
+          alertBox.style.display = 'flex';
+          card.classList.add('shake-error');
+          setTimeout(() => card.classList.remove('shake-error'), 500);
+        }
+      } catch (err) {
+        alertBox.className = 'auth-alert error';
+        alertText.innerText = 'Authentication service unavailable. Please retry.';
+        alertBox.style.display = 'flex';
+      } finally {
+        btnText.innerText = 'Sign In & Access Portal';
+        spinner.style.display = 'none';
+      }
+    }
+
+    async function quickGatewayLogin(id, pass) {
+      switchGatewayTab('login');
+      document.getElementById('gw-login-id').value = id;
+      document.getElementById('gw-login-pass').value = pass;
+      const formEvent = { preventDefault: () => {} };
+      await handleGatewayLoginSubmit(formEvent);
+    }
+
+    async function handleGatewayRegisterSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('gw-reg-name').value.trim();
+      const email = document.getElementById('gw-reg-email').value.trim();
+      const phone = document.getElementById('gw-reg-phone').value.trim();
+      const duration = parseInt(document.getElementById('gw-reg-duration').value, 10);
+      const btnText = document.getElementById('btn-gw-reg-submit');
+      const spinner = document.getElementById('gw-reg-spinner');
+
+      btnText.innerText = 'Registering patron...';
+      spinner.style.display = 'inline-block';
+
+      try {
+        await ensureTokens();
+        const res = await authFetch('/api/v1/members', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            membershipDurationMonths: duration
+          })
+        });
+
+        const json = await res.json();
+        if (json.success && json.data) {
+          const newMember = json.data;
+          window.latestRegisteredMember = newMember;
+          triggerConfetti();
+
+          document.getElementById('gw-reg-result-card-num').innerText = newMember.membershipNumber || 'MEM-2026-NEW';
+          document.getElementById('gw-reg-result-name').innerText = newMember.name;
+          document.querySelector('#gw-panel-register form').style.display = 'none';
+          document.getElementById('gw-reg-success-container').style.display = 'block';
+
+          showToast('Patron registered successfully: ' + newMember.name);
+        } else {
+          showToast(json.detail || 'Failed to complete registration.', true);
+        }
+      } catch (err) {
+        showToast('Registration service error.', true);
+      } finally {
+        btnText.innerText = 'Register & Generate Membership Pass';
+        spinner.style.display = 'none';
+      }
+    }
+
+    function continueAsRegisteredGatewayMember() {
+      if (window.latestRegisteredMember) {
+        const m = window.latestRegisteredMember;
+        currentSession.displayName = m.name;
+        currentSession.memberId = m.id;
+        currentSession.role = 'MEMBER';
+        currentSession.avatar = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+        const nameEl = document.querySelector('.pass-name');
+        if (nameEl) nameEl.innerText = m.name;
+        const idEl = document.querySelector('.pass-id');
+        if (idEl) idEl.innerText = 'CARD ID: ' + m.membershipNumber + ' • Active Patron';
+        const avatarEl = document.querySelector('.pass-avatar');
+        if (avatarEl) avatarEl.innerText = currentSession.avatar;
+
+        executeRedirection(m.name, 'MEMBER', 'patron-home', currentSession.avatar);
+      } else {
+        quickGatewayLogin('member_elena', 'Password@123');
+      }
+    }
+
     function openAuthModal() {
       const modal = document.getElementById('auth-overlay');
       const alertBox = document.getElementById('auth-alert-box');
@@ -3202,6 +3799,7 @@
       updateUserDisplay();
       showToast('You have been logged out.');
       openAuthModal();
+      showFullpageLogin();
     }
 
     async function handleRegisterSubmit(event) {
@@ -3583,7 +4181,13 @@
         'admin-reports': 'Audit & Analytics',
         'security': 'Privacy Protection'
       };
-      breadcrumb.innerText = titles[viewName] || (viewName.charAt(0).toUpperCase() + viewName.slice(1));
+      const rolePrefixes = {
+        'MEMBER': 'Patron Portal / ',
+        'LIBRARIAN': 'Staff Circulation / ',
+        'ADMIN': 'Executive Administration / '
+      };
+      const prefix = rolePrefixes[activeRole] || '';
+      breadcrumb.innerText = prefix + (titles[viewName] || (viewName.charAt(0).toUpperCase() + viewName.slice(1)));
 
       if (updateHash) {
         window.location.hash = viewName;
@@ -4393,7 +4997,6 @@
     // INITIALIZATION
     // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
-      // Check saved session in localStorage
       const saved = localStorage.getItem('infinity_auth_session');
       if (saved) {
         try {
@@ -4411,9 +5014,26 @@
         updateUserDisplay();
         renderSidebarNav(activeRole);
         renderMobileBottomNav(activeRole);
-        const initialView = window.location.hash.replace('#', '') || ROLES[activeRole].defaultView;
-        switchView(initialView, false);
+
+        const hash = window.location.hash.replace('#', '');
+        if (!currentSession.token || hash === 'login') {
+          showFullpageLogin();
+        } else {
+          hideFullpageLogin();
+          const initialView = hash || ROLES[activeRole].defaultView;
+          switchView(initialView, false);
+        }
       });
+    });
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'login' || !currentSession.token) {
+        showFullpageLogin();
+      } else if (hash) {
+        hideFullpageLogin();
+        switchView(hash, false);
+      }
     });
   </script>
 
